@@ -14,7 +14,7 @@ from typing import List, Optional, Sequence, Tuple, Union
 import torch
 from torch import Tensor, nn
 
-from megatron.core.context_parallel import ContextParallelLayoutManager
+from megatron.core.context_parallel import ContextParallelLayoutManager, CPLayout, THDCPLayoutPlan
 from megatron.core.dist_checkpointing.mapping import ShardedStateDict
 from megatron.core.dist_checkpointing.utils import replace_prefix_for_sharding
 from megatron.core.enums import Fp8Recipe
@@ -95,6 +95,7 @@ class HybridStack(MegatronModule):
         pg_collection (ProcessGroupCollection): the required model communication
             process groups to use.
         is_mtp_layer (bool, optional): whether this is an MTP layer. Defaults to False.
+        boundary_layout (CPLayout, optional): CP layout at the stack boundary.
     """
 
     def __init__(
@@ -112,6 +113,7 @@ class HybridStack(MegatronModule):
         is_mtp_layer: bool = False,
         name: str | None = None,
         layer_config_list: Sequence[TransformerConfig] | None = None,
+        boundary_layout: CPLayout | None = None,
     ) -> None:
         """
         Args:
@@ -145,6 +147,9 @@ class HybridStack(MegatronModule):
         self.post_layer_norm = post_layer_norm
         self.post_process = post_process
         self.is_mtp_layer = is_mtp_layer
+        boundary_layout = (
+            self.config.linear_cp_layout if boundary_layout is None else boundary_layout
+        )
 
         assert pg_collection is not None, "pg_collection must be provided for HybridStack"
 
@@ -172,7 +177,7 @@ class HybridStack(MegatronModule):
             )
             self._cp_layout_manager = ContextParallelLayoutManager(
                 layer_layouts=layer_layouts,
-                boundary_layout=self.config.linear_cp_layout,
+                boundary_layout=boundary_layout,
                 sequence_parallel=self.config.sequence_parallel,
                 cp_group=self.cp_group,
                 tp_group=self.tp_group,
@@ -419,6 +424,8 @@ class HybridStack(MegatronModule):
         inference_params: Optional[BaseInferenceContext] = None,
         packed_seq_params: Optional[PackedSeqParams] = None,
         padding_mask=None,
+        packed_seq_params_by_layout: dict[CPLayout, PackedSeqParams | None] | None = None,
+        cp_layout_plan: THDCPLayoutPlan | None = None,
     ):
         """
         Forward function of the HybridStack class.
@@ -442,7 +449,11 @@ class HybridStack(MegatronModule):
 
         cp_layout_state = None
         if self._cp_layout_manager is not None:
-            cp_layout_state = self._cp_layout_manager.build_forward_state(packed_seq_params)
+            cp_layout_state = self._cp_layout_manager.build_forward_state(
+                packed_seq_params,
+                packed_seq_params_by_layout=packed_seq_params_by_layout,
+                thd_plan=cp_layout_plan,
+            )
 
         if not self.pre_process:
             # See set_input_tensor()
