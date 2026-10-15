@@ -7,7 +7,9 @@ import torch
 
 from megatron.core.models.gpt.gpt_layer_specs import get_gpt_layer_with_transformer_engine_spec
 from megatron.core.models.vision.radio import RADIOViTModel
+from megatron.core.packed_seq_params import PackedSeqParams
 from megatron.core.tensor_parallel.random import model_parallel_cuda_manual_seed
+from megatron.core.transformer.enums import AttnBackend
 from megatron.core.transformer.transformer_config import TransformerConfig
 from tests.unit_tests.test_utilities import Utils
 
@@ -476,8 +478,7 @@ class TestRADIODynamicResAndTemporal:
         "num_frames", [[1, 4, 1, 3], [4], [1, 1]], ids=["mixed", "video_only", "image_only"]
     )
     def test_separate_video_embedder_forward_gathers_once(self, num_frames, tp_size):
-        """Chunks are embedded without a gather and gathered together once, which
-        must match gathering every chunk's embedding separately."""
+        """All-still inputs use one image GEMM; mixed/video inputs gather chunks once."""
         if Utils.world_size < tp_size:
             pytest.skip(f"requires at least {tp_size} GPUs")
         Utils.destroy_model_parallel()
@@ -517,6 +518,12 @@ class TestRADIODynamicResAndTemporal:
                 autospec=True,
                 side_effect=type(model.embedder).gather_tensor_parallel_output,
             ) as gather_spy,
+            mock.patch.object(
+                model.embedder, "forward", wraps=model.embedder.forward
+            ) as image_embedder_spy,
+            mock.patch.object(
+                model.video_embedder, "forward", wraps=model.video_embedder.forward
+            ) as video_embedder_spy,
         ):
             out, out_sizes, out_num_frames = model(x, imgs_sizes=imgs_sizes, num_frames=num_frames)
 
@@ -526,20 +533,155 @@ class TestRADIODynamicResAndTemporal:
             grouped, _sizes, _nf, _packed, is_image = model._apply_temporal_grouping(
                 x, imgs_sizes, num_frames, None, skip_image_duplication=True
             )
-            expected = torch.cat(
-                [
-                    (model.embedder if img else model.video_embedder)(chunk)[0]
-                    for chunk, img in zip(grouped, is_image)
-                ],
-                dim=1,
-            )
+            if all(is_image):
+                expected = model.embedder(x)[0]
+            else:
+                expected = torch.cat(
+                    [
+                        (model.embedder if img else model.video_embedder)(chunk)[0]
+                        for chunk, img in zip(grouped, is_image)
+                    ],
+                    dim=1,
+                )
         embedded = torch.cat([call.args[0] for call in pos_enc_spy.call_args_list], dim=1)
         torch.testing.assert_close(embedded, expected, rtol=0, atol=0)
+
+        if all(is_image):
+            assert image_embedder_spy.call_count == 1
+            assert video_embedder_spy.call_count == 0
+            assert image_embedder_spy.call_args.args[0] is x
+        else:
+            assert image_embedder_spy.call_count == sum(nf == 1 for nf in num_frames)
+            assert video_embedder_spy.call_count == sum(-(-nf // 2) for nf in num_frames if nf > 1)
 
         expected_num_frames = [1 if nf == 1 else -(-nf // 2) for nf in num_frames]
         assert out_num_frames == expected_num_frames
         assert out_sizes.shape[0] == len(is_image)
         assert out.shape == (1, expected.shape[1], self.transformer_config.hidden_size)
+
+    @pytest.mark.internal
+    @pytest.mark.parametrize("tp_size", [1, 2])
+    def test_all_still_temporal_path_matches_image_path(self, tp_size):
+        """All-one temporal metadata preserves canonical packed-image semantics."""
+        if Utils.world_size < tp_size:
+            pytest.skip(f"requires at least {tp_size} GPUs")
+        Utils.destroy_model_parallel()
+        Utils.initialize_model_parallel(tp_size, 1)
+        model_parallel_cuda_manual_seed(123)
+        patch_dim = 14
+        transformer_config = TransformerConfig(
+            num_layers=2,
+            hidden_size=64,
+            num_attention_heads=4,
+            tensor_model_parallel_size=tp_size,
+            params_dtype=torch.bfloat16,
+            bf16=True,
+            attention_backend=AttnBackend.flash,
+            use_cpu_initialization=True,
+        )
+        common_kwargs = dict(
+            img_h=224,
+            img_w=224,
+            patch_dim=patch_dim,
+            add_class_token=True,
+            class_token_len=10,
+            dynamic_resolution=True,
+        )
+        temporal_model = RADIOViTModel(
+            transformer_config,
+            self.layer_spec,
+            temporal_patch_dim=2,
+            separate_video_embedder=True,
+            **common_kwargs,
+        ).cuda()
+        image_model = RADIOViTModel(
+            transformer_config, self.layer_spec, temporal_patch_dim=1, **common_kwargs
+        ).cuda()
+        image_state = {
+            name: value
+            for name, value in temporal_model.state_dict().items()
+            if not name.startswith("video_embedder.")
+        }
+        image_model.load_state_dict(image_state)
+        temporal_model.eval()
+        image_model.eval()
+
+        # Nonuniform grids make image-order or boundary mistakes observable.
+        frame_sizes = [(28, 56), (42, 28), (56, 56)]
+        patch_counts = [(h // patch_dim) * (w // patch_dim) for h, w in frame_sizes]
+        imgs_sizes = torch.tensor(frame_sizes, dtype=torch.int32)
+        generator = torch.Generator().manual_seed(0)
+        x = torch.randn(
+            1,
+            sum(patch_counts),
+            3 * patch_dim * patch_dim,
+            generator=generator,
+            dtype=torch.bfloat16,
+        ).cuda()
+
+        def packed_seq_params():
+            cumulative = [0]
+            for count in patch_counts:
+                cumulative.append(cumulative[-1] + count)
+            cu_seqlens = torch.tensor(cumulative, dtype=torch.int32, device="cuda")
+            return PackedSeqParams(
+                qkv_format="thd",
+                cu_seqlens_q=cu_seqlens,
+                cu_seqlens_kv=cu_seqlens,
+                max_seqlen_q=max(patch_counts),
+                max_seqlen_kv=max(patch_counts),
+            )
+
+        temporal_packed = packed_seq_params()
+        image_packed = packed_seq_params()
+        packed_cache_sentinel = object()
+        for packed in (temporal_packed, image_packed):
+            packed.local_cp_size = 1
+            packed.cp_group = None
+            packed.pad_between_seqs = False
+        temporal_packed.cp_scatter_cache = packed_cache_sentinel
+        num_frames = torch.ones(len(frame_sizes), dtype=torch.int32)
+        with (
+            torch.no_grad(),
+            mock.patch.object(
+                temporal_model.decoder, "forward", wraps=temporal_model.decoder.forward
+            ) as temporal_decoder_spy,
+            mock.patch.object(
+                image_model.decoder, "forward", wraps=image_model.decoder.forward
+            ) as image_decoder_spy,
+        ):
+            temporal_out, out_sizes, out_num_frames = temporal_model(
+                x, imgs_sizes=imgs_sizes, packed_seq_params=temporal_packed, num_frames=num_frames
+            )
+            image_out = image_model(x, imgs_sizes=imgs_sizes, packed_seq_params=image_packed)
+
+        temporal_decoder_input = temporal_decoder_spy.call_args.args[0]
+        image_decoder_input = image_decoder_spy.call_args.args[0]
+        torch.testing.assert_close(temporal_decoder_input, image_decoder_input, rtol=0, atol=0)
+        torch.testing.assert_close(temporal_out, image_out, rtol=0, atol=0)
+
+        expected_cumulative = [0]
+        for count in patch_counts:
+            expected_cumulative.append(expected_cumulative[-1] + count + 10)
+        expected_cu_seqlens = torch.tensor(expected_cumulative, dtype=torch.int32, device="cuda")
+        temporal_decoder_packed = temporal_decoder_spy.call_args.kwargs["packed_seq_params"]
+        image_decoder_packed = image_decoder_spy.call_args.kwargs["packed_seq_params"]
+        assert temporal_decoder_packed is temporal_packed
+        assert temporal_decoder_packed.local_cp_size == 1
+        assert temporal_decoder_packed.cp_group is None
+        assert temporal_decoder_packed.pad_between_seqs is False
+        assert temporal_decoder_packed.cp_scatter_cache is packed_cache_sentinel
+        assert torch.equal(temporal_decoder_packed.cu_seqlens_q, expected_cu_seqlens)
+        assert torch.equal(image_decoder_packed.cu_seqlens_q, expected_cu_seqlens)
+        assert int(temporal_decoder_packed.max_seqlen_q) == max(patch_counts) + 10
+        assert int(image_decoder_packed.max_seqlen_q) == max(patch_counts) + 10
+        assert out_sizes is imgs_sizes
+        assert out_num_frames is num_frames
+        assert temporal_out.shape == (
+            1,
+            sum(patch_counts) + len(patch_counts) * 10,
+            transformer_config.hidden_size,
+        )
 
     @pytest.mark.internal
     def test_constructor_with_temporal_ckpt_compat_registers_pre_hook(self):

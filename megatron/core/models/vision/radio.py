@@ -352,34 +352,58 @@ class RADIOViTModel(VisionModule):
             )
 
         is_image = None
+        all_still_images = False
         if self.temporal_patch_dim > 1:
             assert num_frames is not None, "num_frames is required when temporal_patch_dim > 1"
             if not self.dynamic_resolution:
                 raise NotImplementedError(
                     "Temporal compression is only supported for dynamic resolution"
                 )
-            x, imgs_sizes, num_frames, packed_seq_params, is_image = self._apply_temporal_grouping(
-                x,
-                imgs_sizes,
-                num_frames,
-                packed_seq_params,
-                skip_image_duplication=self.separate_video_embedder,
+            all_still_images = (
+                self.separate_video_embedder
+                and len(num_frames) > 0
+                and all(int(frame_count) == 1 for frame_count in num_frames)
             )
+            if all_still_images:
+                assert (
+                    imgs_sizes is not None
+                ), "imgs_sizes is required for dynamic-resolution temporal inputs"
+                total_frames = sum(int(frame_count) for frame_count in num_frames)
+                num_imgs_sizes = len(imgs_sizes)
+                assert total_frames == num_imgs_sizes, (
+                    f"imgs_sizes must have one entry per frame (ungrouped). "
+                    f"Got {num_imgs_sizes} entries but sum(num_frames)={total_frames}."
+                )
+            else:
+                x, imgs_sizes, num_frames, packed_seq_params, is_image = (
+                    self._apply_temporal_grouping(
+                        x,
+                        imgs_sizes,
+                        num_frames,
+                        packed_seq_params,
+                        skip_image_duplication=self.separate_video_embedder,
+                    )
+                )
 
         if self.separate_video_embedder and self.temporal_patch_dim > 1:
-            # Compute image and video embeddings per temporal patch.
-            # x: list of [1, num_patches_for_chunk, 3TP^2 or 3P^2] where
-            # the hidden dimension is the flat concat of patch features
-            # and image -> embedder and video -> video_embedder.
-            local_chunks = [
-                (self.embedder if is_img else self.video_embedder)(
-                    chunk, runtime_gather_output=False
-                )[0]
-                for chunk, is_img in zip(x, is_image)
-            ]
-            # One all-gather for every chunk: back-to-back inference-optimized
-            # gathers on the shared symmetric buffer race across TP ranks.
-            x = self.embedder.gather_tensor_parallel_output(torch.cat(local_chunks, dim=1))
+            if all_still_images:
+                # Match the dynamic image path exactly: preserve the original packed
+                # tensor and metadata, and embed all still-image patches in one GEMM.
+                x, _ = self.embedder(x)
+            else:
+                # Compute image and video embeddings per temporal patch.
+                # x: list of [1, num_patches_for_chunk, 3TP^2 or 3P^2] where
+                # the hidden dimension is the flat concat of patch features
+                # and image -> embedder and video -> video_embedder.
+                local_chunks = [
+                    (self.embedder if is_img else self.video_embedder)(
+                        chunk, runtime_gather_output=False
+                    )[0]
+                    for chunk, is_img in zip(x, is_image)
+                ]
+                # One all-gather for every chunk: back-to-back inference-optimized
+                # gathers on the shared symmetric buffer race across TP ranks.
+                x = self.embedder.gather_tensor_parallel_output(torch.cat(local_chunks, dim=1))
         else:
             x, _ = self.embedder(x)
 
