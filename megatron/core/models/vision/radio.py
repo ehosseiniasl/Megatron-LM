@@ -462,7 +462,28 @@ class RADIOViTModel(VisionModule):
         x = x.permute(1, 0, 2)  # [b, s, h] -> [s, b, h]
         x = x.contiguous()
 
-        x = self.decoder(x, attention_mask=attention_mask, packed_seq_params=packed_seq_params)
+        decoder_packed_seq_params = packed_seq_params
+        if self.dynamic_resolution:
+            # vLLM only enables its packed/masked RADIO attention path when a
+            # call contains more than one image (or contains video tubelets).
+            # Forcing a learner microbatch containing one still image through
+            # TE's THD path therefore makes rollout and learner use different
+            # attention kernels.  The discrepancy is small for ordinary images
+            # but becomes large for long dynamic grids such as a 1280x720
+            # contact sheet.  Keep packed metadata above while class/register-
+            # token boundaries are constructed, then match vLLM's unmasked
+            # single-sequence decoder path.
+            single_still_image = len(seq_lens) == 1 and (
+                self.temporal_patch_dim == 1 or all_still_images
+            )
+            if single_still_image:
+                decoder_packed_seq_params = None
+
+        x = self.decoder(
+            x,
+            attention_mask=attention_mask,
+            packed_seq_params=decoder_packed_seq_params,
+        )
 
         x = x.permute(1, 0, 2)  # [s, b, h] -> [b, s, h]
         x = x.contiguous()
