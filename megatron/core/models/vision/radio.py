@@ -334,6 +334,41 @@ class RADIOViTModel(VisionModule):
             return True
         return is_image == [True]
 
+    @staticmethod
+    def _packed_seq_params_to_device(
+        packed_seq_params: Optional[PackedSeqParams], device: torch.device
+    ) -> Optional[PackedSeqParams]:
+        """Move packed-attention tensor metadata onto the decoder device.
+
+        Dynamic RADIO image sizes and frame counts intentionally remain on the
+        host in the learner input pipeline.  Consequently, the per-image THD
+        boundaries derived from them can also be CPU tensors even though the
+        patch embeddings are on CUDA.  Transformer Engine chooses a CUDA
+        device from those boundaries in its fused-attention entry point and
+        rejects CPU metadata with ``CUDAGuardImpl initialized with non-CUDA
+        DeviceType: cpu``.  Keep scalar/process-group metadata unchanged and
+        colocate every tensor field that attention may consume with ``x``.
+        """
+        if packed_seq_params is None:
+            return None
+
+        tensor_fields = (
+            "cu_seqlens_q",
+            "cu_seqlens_kv",
+            "cu_seqlens_q_padded",
+            "cu_seqlens_kv_padded",
+            "seq_idx",
+        )
+        for field_name in tensor_fields:
+            value = getattr(packed_seq_params, field_name, None)
+            if torch.is_tensor(value) and value.device != device:
+                setattr(
+                    packed_seq_params,
+                    field_name,
+                    value.to(device=device, non_blocking=True),
+                )
+        return packed_seq_params
+
     def forward(
         self,
         x: torch.Tensor,
@@ -459,6 +494,10 @@ class RADIOViTModel(VisionModule):
             # metadata is still used above to construct class-token boundaries
             # but must not select TE's THD attention kernel for this call.
             decoder_packed_seq_params = None
+        else:
+            decoder_packed_seq_params = self._packed_seq_params_to_device(
+                decoder_packed_seq_params, x.device
+            )
 
         x = run_vision_transformer(
             self.decoder,

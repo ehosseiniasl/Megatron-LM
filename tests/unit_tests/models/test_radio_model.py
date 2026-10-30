@@ -6,6 +6,7 @@ import torch
 
 from megatron.core.models.gpt.gpt_layer_specs import get_gpt_layer_with_transformer_engine_spec
 from megatron.core.models.vision.radio import RADIOViTModel
+from megatron.core.packed_seq_params import PackedSeqParams
 from megatron.core.tensor_parallel.random import model_parallel_cuda_manual_seed
 from megatron.core.transformer.transformer_config import TransformerConfig
 from tests.unit_tests.test_utilities import Utils
@@ -622,3 +623,35 @@ class TestRADIOSingleStillImageAttention:
             RADIOViTModel._is_single_still_image(seq_lens, temporal_patch_dim, is_image)
             is expected
         )
+
+    @pytest.mark.internal
+    def test_packed_attention_metadata_moves_to_decoder_device(self):
+        params = PackedSeqParams(
+            qkv_format="thd",
+            cu_seqlens_q=torch.tensor([0, 16, 40], dtype=torch.int32),
+            cu_seqlens_kv=torch.tensor([0, 16, 40], dtype=torch.int32),
+            cu_seqlens_q_padded=torch.tensor([0, 16, 48], dtype=torch.int32),
+            cu_seqlens_kv_padded=torch.tensor([0, 16, 48], dtype=torch.int32),
+            max_seqlen_q=24,
+            max_seqlen_kv=24,
+            seq_idx=torch.arange(40, dtype=torch.int32).unsqueeze(0),
+        )
+
+        actual = RADIOViTModel._packed_seq_params_to_device(params, torch.device("meta"))
+
+        assert actual is params
+        assert actual.qkv_format == "thd"
+        assert actual.max_seqlen_q == 24
+        assert actual.max_seqlen_kv == 24
+        for field_name in (
+            "cu_seqlens_q",
+            "cu_seqlens_kv",
+            "cu_seqlens_q_padded",
+            "cu_seqlens_kv_padded",
+            "seq_idx",
+        ):
+            assert getattr(actual, field_name).device.type == "meta"
+
+    @pytest.mark.internal
+    def test_missing_packed_attention_metadata_is_unchanged(self):
+        assert RADIOViTModel._packed_seq_params_to_device(None, torch.device("meta")) is None
