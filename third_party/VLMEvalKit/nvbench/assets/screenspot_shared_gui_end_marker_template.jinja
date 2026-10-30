@@ -1,0 +1,28 @@
+{# ScreenSpot few-shot end-marker: shared instruction once; answers end with ten underscores. #}
+{%- set shared_instruction = "You are a GUI agent. You are given a task and a screenshot of the screen. You need to perform pyautogui click/moveTo action to complete the task. The answer format is `pyautogui.click(x=?, y=?), x and y is necessary`" -%}
+{%- set task_prefix = "Please complete the following tasks by clicking using `pyautogui.click`:\n" -%}
+{%- set state = namespace(first_user=true) -%}
+{%- set screenspot = shared_instruction in messages[0]['content'] -%}
+{%- for message in messages -%}
+{%- if message['role'] == 'system' -%}
+{{ message['content'] + '\n' }}
+{%- elif message['role'] == 'user' -%}
+{%- if state.first_user -%}
+{%- if screenspot -%}
+{{ shared_instruction + '\nEnd each answer with a line containing exactly __________.\n' + task_prefix }}
+{%- endif -%}
+{%- set state.first_user = false -%}
+{%- endif -%}
+{%- if screenspot -%}
+{{ message['content'].replace(shared_instruction, '', 1).replace(task_prefix, '', 1).strip() + '\n' }}
+{%- else -%}
+{{ message['content'] + '\n' }}
+{%- endif -%}
+{%- elif message['role'] == 'assistant' -%}
+{%- if screenspot -%}
+{{ message['content'] + '\n__________\n\n' }}
+{%- else -%}
+{{ message['content'] + '\n\n' }}
+{%- endif -%}
+{%- endif -%}
+{%- endfor -%}

@@ -1,0 +1,40 @@
+{
+  "complete": [
+    {"index": 0, "prediction": "answer 0"},
+    {"index": 1, "prediction": "answer 1"},
+    {"index": 2, "prediction": "answer 2"},
+    {"index": 3, "prediction": "answer 3"},
+    {"index": 4, "prediction": "answer 4"},
+    {"index": 5, "prediction": "answer 5"},
+    {"index": 6, "prediction": "answer 6"},
+    {"index": 7, "prediction": "answer 7"},
+    {"index": 8, "prediction": "answer 8"},
+    {"index": 9, "prediction": "answer 9"}
+  ],
+  "partial": [
+    {"index": 0, "prediction": "answer 0"},
+    {"index": 1, "prediction": "answer 1"}
+  ],
+  "extra": [
+    {"index": 0, "prediction": "answer 0"},
+    {"index": 1, "prediction": "answer 1"},
+    {"index": 2, "prediction": "answer 2"}
+  ],
+  "duplicate": [
+    {"index": 0, "prediction": "answer 0"},
+    {"index": 0, "prediction": "answer 1"}
+  ],
+  "reordered": [
+    {"index": 1, "prediction": "answer 1"},
+    {"index": 0, "prediction": "answer 0"}
+  ],
+  "failure_sentinel": [
+    {"index": 0, "prediction": "Failed to obtain answer via API"}
+  ],
+  "nonstring": [
+    {"index": 0, "prediction": false}
+  ],
+  "missing_field": [
+    {"index": 0}
+  ]
+}

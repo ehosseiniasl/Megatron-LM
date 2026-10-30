@@ -1,0 +1,13 @@
+group: mmlu_redux_fewshot_cot
+task:
+  - mmlu_redux_fewshot_cot_stem
+  - mmlu_redux_fewshot_cot_humanities
+  - mmlu_redux_fewshot_cot_social_sciences
+  - mmlu_redux_fewshot_cot_other
+aggregate_metric_list:
+  - aggregation: mean
+    metric: exact_match
+    weight_by_size: true
+    filter_list: tigerlab-extract
+metadata:
+  version: 1

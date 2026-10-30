@@ -1,0 +1,36 @@
+task: aptbench_tool_bfcl_v4_api_param
+tag:
+  - aptbench
+  - tool
+dataset_path: nvidia/APTBench
+dataset_name: null
+dataset_kwargs:
+  data_files: tool/bfcl_v4_api_param.jsonl
+training_split: null
+validation_split: null
+test_split: train
+output_type: generate_until
+doc_to_text: !function utils.doc_to_text_bfcl_v4_api_param
+doc_to_target: !function utils.doc_to_target_bfcl_v4_api_param
+process_results: !function utils.process_results_bfcl_v4_api_param
+generation_kwargs:
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 200
+  until:
+    - "```"
+    - "</s>"
+    - "<|im_end|>"
+    - "<|endoftext|>"
+    - "<|eot_id|>"
+num_fewshot: 0
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  description: "APTBench Tool Use - BFCL v4 API Param: Generate appropriate parameters for BFCL v4 function calls. Tests parameter generation for function calling."

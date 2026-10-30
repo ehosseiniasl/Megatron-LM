@@ -1,0 +1,22 @@
+output_type: generate_until
+# BigCodeBench HF dataset has splits v0.1.0_hf, v0.1.1, ..., v0.1.4 (not "test")
+test_split: v0.1.4
+doc_to_text: !function utils.build_text_instruct
+doc_to_target: !function utils.build_references
+process_results: !function metrics.code_eval.estimate_pass_at_k_dynamic
+generation_kwargs:
+  until:
+    - "</s>"
+  max_gen_toks: 1024
+  do_sample: true
+  temperature: 0.2
+  top_p: 0.95
+repeats: 20
+num_fewshot: 0
+filter_list:
+  - name: "bigcodebench_instruct_sanitized"
+    filter:
+      - function: custom
+        filter_fn: !function utils.score_predictions_instruct
+metadata:
+  version: 1.0

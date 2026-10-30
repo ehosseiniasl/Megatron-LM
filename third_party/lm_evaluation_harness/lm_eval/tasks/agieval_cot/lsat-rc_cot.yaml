@@ -1,0 +1,39 @@
+include: aqua-rat_cot.yaml
+description: "The following are multiple choice questions (with answers) from Law School Admission Test (LSAT), testing the reading comphrehension capability. 
+            It requires understanding long-form, complex passages and distinguishing what is the correct statement by synthesis, comparison, and application of principles. 
+            Think step by step and then finish your answer with \"The answer is (X)\" where X is the correct letter choice.\n"
+
+task: agieval_lsat_rc_cot
+dataset_path: hails/agieval-lsat-rc
+
+num_fewshot: 3
+fewshot_config:
+  doc_to_text: !function utils.cot_fewshot_to_text
+  doc_to_target: !function utils.empty_str
+  sampler: first_n
+  samples:
+    - query: "    Question: According to the passage, which one of the following distinguished the de futuro contract from the de praesenti contract? \nOptions: \nA. One was recognized by Alexandrine doctrine, while the other was considered a secular contract.\nB. One required the permission of parents, while the other concerned only the couple involved.\nC. One required the announcement of marriage banns, while the other could be entered into solely through a verbal contract.\nD. One expressed future intent, while the other established an immediate, binding union.\nE. One allowed the solemnization of Church ritual, while the other resulted in excommunication.\n"
+      explanation: "(A) Both contracts were recognized by Alexandrine doctrine, so this option is incorrect.
+                  (B) Neither contract required parental consent, so this option is incorrect.
+                  (C) The de praesenti contract did not require Church ritual, but it is not stated that it could be entered into solely through a verbal contract. The de futuro contract was expressed by words of future consent and did not create an immediate, binding union. However, both contracts were recognized by Alexandrine doctrine. So, this option is partially correct.
+                  (D) The de futuro contract expressed future intent, while the de praesenti contract established an immediate, binding union. So, this option is correct.
+                  (E) Neither contract required Church ritual, and ignoring the requirement to publish marriage banns resulted in excommunication. So, this option is incorrect.. The answer is (D)."
+      gold: [ "D" ]
+      few_shot: 1
+    - query: "    Question: Which one of the following most accurately expresses the main point of the passage? \nOptions: \nA. The Disciples at Emmaus, van Meegeren's forgery of a Vermeer, was a failure in both aesthetic and artistic terms.\nB. The aesthetic value of a work of art is less dependent on the work's visible characteristics than on certain intangible characteristics.\nC. Forged artworks are artistically inferior to originals because artistic value depends in large part on originality of vision.\nD. The most skilled forgers can deceive even highly qualified art experts into accepting their work as original.\nE. Art critics tend to be unreliable judges of the aesthetic and artistic quality of works of art.\n"
+      explanation: "(A) van Meegeren's forgery of a Vermeer, while initially praised as one of Vermeer's finest works, lacks originality and is artistically inferior to an original.
+                  (B) Partially accurate, but too broad. A forgery can possess aesthetic qualities, but the lack of originality is what makes it artistically inferior.
+                  (C) The most accurate option. Forged artworks are artistically inferior due to the lack of originality of vision.
+                  (D) Mentioned but not the main point. The focus is on van Meegeren's forgery and its artistic inferiority.
+                  (E) Not accurate. The passage does not make a blanket statement about the reliability of art critics.. The answer is (C)."
+      gold: [ "C" ]
+      few_shot: 1
+    - query: "    Question: The author refers to the meteorological data gathered in North America over the past century in order to \nOptions: \nA. show how differing views on the extent of the rise in global temperature can be resolved\nB. argue that any warming detected over the past century has most likely been the result of a natural climatic fluctuation\nC. argue against the prevailing view that the amount of atmospheric CO has increased by about 20 percent over the past century\nD. suggest that there should be more numerous and accurate observation points outside of North America\nE. present evidence that casts doubt on the view that global temperature has increased over the past century\n"
+      explanation: "A) show how differing views on the extent of the rise in global temperature can be resolved: Incorrect. The passage does not provide a solution for resolving the differing views on this topic.
+                    B) argue that any warming detected over the past century has most likely been the result of a natural climatic fluctuation: Incorrect. The passage does not make this argument.
+                    C) argue against the prevailing view that the amount of atmospheric CO2 has increased by about 20% over the past century: Incorrect. The passage presents this as a fact.
+                    D) suggest that there should be more numerous and accurate observation points outside of North America: Incorrect. The passage does not make this suggestion.
+                    E) present evidence that casts doubt on the view that global temperature has increased over the past century: Correct. The passage notes that while the temperature record over the past century for the entire globe reveals a net increase in temperature, data gathered over the past century in North America does not confirm such an increase.. The answer is (E)."
+      gold: [ "E" ]
+      few_shot: 1
+

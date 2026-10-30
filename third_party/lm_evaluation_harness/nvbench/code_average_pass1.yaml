@@ -1,0 +1,35 @@
+# Stable setup for the code evaluations.
+version: 1.0
+tasks:
+  - task_name: humanevalplus_sampled
+    task_group: code
+    batch_size: 128
+    overrides:
+      repeats: 64
+    report_metric:
+      - alias: humanevalplus_sampled
+        metric: pass@1[64],evalplus_sanitized
+  - task_name: mbppplus_sampled
+    task_group: code
+    batch_size: 128
+    overrides:
+      repeats: 30
+    report_metric:
+      - alias: mbppplus_sampled
+        metric: pass@1[30],evalplus_sanitized
+  - task_name: mbpp_sanitized_3shot_sampled
+    task_group: code
+    batch_size: 128
+    overrides:
+      repeats: 30
+    report_metric:
+      - alias: mbpp_sanitized_3shot_sampled
+        metric: pass@1[30],evalplus_sanitized
+  - task_name: humaneval_sampled
+    task_group: code
+    batch_size: 128
+    overrides:
+      repeats: 64
+    report_metric:
+      - alias: humaneval_sampled
+        metric: pass@1[64],evalplus_sanitized

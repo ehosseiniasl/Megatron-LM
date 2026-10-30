@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "default_bucket_prefix": "s3://nv-00-10603-sandia-cmh/mistral-data-260701/image_buckets/",
+  "bucket_mappings": {
+    "nv-00-10603-sandia": "s3://nv-00-10603-sandia-cmh/"
+  },
+  "dropped_buckets": [
+    "laion2b-en-images-by-jsonl-112824",
+    "laion2b-multi-images-by-jsonl-112824",
+    "laion1b-nolang-images-by-jsonl-112824",
+    "datacomp1b-images-by-jsonl-112824",
+    "images-crawl-v4-unseen-260206"
+  ],
+  "dropped_path_prefixes": [],
+  "passthrough_buckets": ["nv-00-10603-sandia-cmh"]
+}

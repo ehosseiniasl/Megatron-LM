@@ -1,0 +1,18 @@
+task: piqa_mistral
+dataset_path: ybisk/piqa
+dataset_kwargs:
+  revision: refs/convert/parquet
+output_type: multiple_choice
+training_split: train
+validation_split: validation
+doc_to_text: "Question: {{goal}}\nAnswer:"
+doc_to_target: label
+doc_to_choice: "{{[sol1.strip(), sol2.strip()]}}"
+process_results: !function utils.process_piqa_results
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  source_task: thunderdome:piqa

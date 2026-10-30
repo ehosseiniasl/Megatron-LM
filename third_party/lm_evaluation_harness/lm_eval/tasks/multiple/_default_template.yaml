@@ -1,0 +1,18 @@
+dataset_path: nuprl/MultiPL-E
+test_split: test
+output_type: generate_until
+doc_to_text: !function multiple_utils.doc_to_text
+doc_to_target: !function multiple_utils.doc_to_target
+process_results: !function metrics.code_eval.estimate_pass_at_k_dynamic
+generation_kwargs:
+  max_gen_toks: 512
+  do_sample: true
+  temperature: 0.2
+  top_p: 0.95
+repeats: 64
+num_fewshot: 0
+filter_list:
+  - name: "multiple"
+    filter:
+      - function: custom
+        filter_fn: !function multiple_utils.score_predictions

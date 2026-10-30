@@ -1,0 +1,38 @@
+version: 1.0
+tasks:
+  - task_name: minerva_math_nemo
+    task_group: math
+    batch_size: 32
+    num_fewshot: 4
+    report_metric:
+      - alias: minerva_math_nemo
+        metric: exact_match,none # all math
+      - alias: minerva_math_nemo
+        metric: math500_exact_match,none # math-500
+      - alias: minerva_math_nemo
+        metric: level_5_exact_match,none # math-hard
+  - task_name: gsm8k_cot_nemo
+    task_group: math
+    batch_size: 32
+    num_fewshot: 8
+    report_metric:
+      - alias: gsm8k_cot_nemo
+        metric: exact_match,none
+
+# - task_name: agieval_math
+#   task_group: aggregate
+#   num_fewshot: 5
+#   batch_size: 8
+#   report_metric:
+#     - alias: agieval_math
+#       metric: acc,none
+
+# - task_name: agieval_sat_math
+#   task_group: aggregate
+#   num_fewshot: 5
+#   batch_size: 8
+#   report_metric:
+#     - alias: agieval_sat_math
+#       metric: acc,none
+
+# TODO: amc, aime

@@ -1,0 +1,19 @@
+output_type: generate_until
+test_split: test
+doc_to_text: !function utils.build_text
+doc_to_target: !function utils.build_references_mbppplus
+process_results: !function metrics.code_eval.estimate_pass_at_k_dynamic
+generation_kwargs:
+  until:
+    - "</s>"
+  max_gen_toks: 768
+  do_sample: false
+  temperature: 0.0
+repeats: 1
+filter_list:
+  - name: "evalplus_sanitized"
+    filter:
+      - function: custom
+        filter_fn: !function utils.score_predictions
+metadata:
+  version: 1.2

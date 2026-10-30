@@ -1,0 +1,3 @@
+include: _sample_config
+task: amc23
+dataset_path: gitlab:algebra222/test.parquet

@@ -1,0 +1,139 @@
+version: 1.0
+tasks:
+  - task_name: humaneval_greedy
+    task_group: code
+    batch_size: 64
+    report_metric:
+      - alias: humaneval_greedy
+        metric: pass@1[1],evalplus_sanitized
+  - task_name: humanevalplus_greedy
+    task_group: code
+    batch_size: 64
+    report_metric:
+      - alias: humanevalplus_greedy
+        metric: pass@1[1],evalplus_sanitized
+  - task_name: mbpp_sanitized_3shot_greedy
+    task_group: code
+    batch_size: 64
+    report_metric:
+      - alias: mbpp_sanitized_3shot_greedy
+        metric: pass@1[1],evalplus_sanitized
+  - task_name: mbppplus_greedy
+    task_group: code
+    batch_size: 64
+    report_metric:
+      - alias: mbppplus_greedy
+        metric: pass@1[1],evalplus_sanitized
+  - task_name: gsm8k_cot_nemo
+    task_group: math
+    batch_size: 32
+    report_metric:
+      - alias: gsm8k_cot_nemo
+        metric: exact_match,none
+  - task_name: minerva_math_nemo
+    task_group: math
+    batch_size: 32
+    num_fewshot: 4
+    report_metric:
+      - alias: minerva_math_nemo
+        metric: exact_match,none # all math
+      - alias: minerva_math_nemo
+        metric: level_5_exact_match,none # correct math-hard
+      - alias: minerva_math_nemo
+        metric: math500_exact_match,none # correct math-hard
+  - task_name: commonsense_qa
+    task_group: reasoning
+    num_fewshot: 7
+    batch_size: 32
+    report_metric:
+      - alias: commonsense_qa
+        metric: acc,none
+  - task_name: arc_challenge_llama
+    task_group: reasoning
+    batch_size: 16
+    num_fewshot: 25
+    report_metric:
+      - alias: arc_challenge_llama
+        metric: acc_norm,none
+  - task_name: hellaswag
+    task_group: reasoning
+    batch_size: 8
+    num_fewshot: 10
+    report_metric:
+      - alias: hellaswag
+        metric: acc_norm,none
+  - task_name: openbookqa
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: openbookqa
+        metric: acc_norm,none
+  - task_name: piqa
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: piqa
+        metric: acc_norm,none
+  - task_name: race
+    task_group: reading
+    batch_size: 16
+    report_metric:
+      - alias: race
+        metric: acc,none
+  - task_name: truthfulqa_mc2
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: truthfulqa_mc2
+        metric: acc,none
+  - task_name: winogrande
+    task_group: reasoning
+    batch_size: 32
+    num_fewshot: 5
+    report_metric:
+      - alias: winogrande
+        metric: acc,none
+  - task_name: social_iqa
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: social_iqa
+        metric: acc,none
+  - task_name: mmlu_pro_5_shot_base
+    task_group: aggregate
+    batch_size: 32
+    cache_requests: true
+    report_metric:
+      - alias: mmlu_pro_5_shot_base
+        metric: exact_match,tigerlab-extract
+      - alias: mmlu_pro_5_shot_base
+        metric: macro-exact_match,tigerlab-extract
+  - task_name: mmlu
+    task_group: aggregate
+    batch_size: 32
+    num_fewshot: 5
+    cache_requests: true
+    report_metric:
+      - alias: mmlu
+        metric: acc,none
+      - alias: mmlu_stem
+        metric: acc,none
+        # macro is only for comparing with llama reports
+        # - alias: mmlu
+        #   metric: macro-acc,none
+        # - alias: mmlu_stem
+        #   metric: macro-acc,none
+
+# - task_name: bbh
+#   num_fewshot: 3
+#   batch_size: 8
+#   report_metric:
+#     - alias: bbh
+#       metric: acc,none
+
+# - task_name: agieval_en
+#   num_fewshot: 5
+#   batch_size: 8
+#   report_metric:
+#     - alias: agieval_en
+#       metric: acc,none

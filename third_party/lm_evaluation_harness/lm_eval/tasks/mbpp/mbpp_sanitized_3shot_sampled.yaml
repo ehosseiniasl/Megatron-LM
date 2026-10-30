@@ -1,0 +1,13 @@
+include: _sample_config
+task: mbpp_sanitized_3shot_sampled
+dataset_path: google-research-datasets/mbpp
+dataset_name: sanitized
+fewshot_split: prompt
+doc_to_target: !function utils.build_references
+target_delimiter: ""
+generation_kwargs:
+  temperature: 0.6
+repeats: 20
+num_fewshot: 3
+fewshot_config:
+  sampler: !function utils.FewShotSampler

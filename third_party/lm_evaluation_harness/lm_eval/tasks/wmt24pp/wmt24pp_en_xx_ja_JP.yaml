@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_ja_JP
+include: _base_config.yaml
+dataset_name: en-ja_JP
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Japanese follows.\n\nThe translation is:"

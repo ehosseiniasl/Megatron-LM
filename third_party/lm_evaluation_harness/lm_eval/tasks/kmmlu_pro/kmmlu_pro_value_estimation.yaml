@@ -1,0 +1,5 @@
+description: "The following are multiple choice questions (with answers) about value estimation. Think step by step and then finish your answer with \"the answer is (X)\" where X is the correct letter choice.\n"
+include: "_default_kmmlu_pro.yaml"
+task: "kmmlu_pro_value_estimation"
+task_alias: "value_estimation"
+process_docs: !function utils.process_value_estimation

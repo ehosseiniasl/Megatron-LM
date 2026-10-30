@@ -1,0 +1,3 @@
+Request: This is a math question and its solution. Please judge whether the solution is correct or wrong. If correct, just answer "##correct##"; if wrong, just answer "##wrong##".
+Math question and its solution: $REPO_INFO$
+The judgement result is ##

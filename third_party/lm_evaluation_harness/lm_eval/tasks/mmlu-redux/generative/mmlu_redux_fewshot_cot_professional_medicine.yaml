@@ -1,0 +1,8 @@
+"dataset_name": "professional_medicine"
+"description": "The following are multiple choice questions (with answers) about professional\
+  \ medicine.\n\n"
+"tag": "mmlu_redux_fewshot_cot_other_tasks"
+"include": "_default_template_yaml"
+"task": "mmlu_redux_fewshot_cot_professional_medicine"
+"task_alias": "professional_medicine"
+process_docs: !function utils.process_professional_medicine

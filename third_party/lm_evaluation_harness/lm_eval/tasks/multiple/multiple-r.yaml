@@ -1,0 +1,9 @@
+include: _default_template.yaml
+task: multiple-r
+dataset_name: humaneval-r
+generation_kwargs:
+  until:
+    - "\n#"
+    - "\n```"
+metadata:
+  language: r

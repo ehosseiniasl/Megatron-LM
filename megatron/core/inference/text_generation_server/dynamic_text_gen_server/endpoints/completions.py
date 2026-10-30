@@ -1,0 +1,464 @@
+# Copyright (c) 2025, NVIDIA CORPORATION. All rights reserved.
+
+import asyncio
+import base64
+import logging
+import time
+
+from megatron.core.inference.inference_request import unwrap_serialized_tensors
+from megatron.core.inference.sampling_params import SamplingParams
+
+from ..incremental_detokenizer import HuggingFaceFastIncrementalDetokenizer
+from ..openai_streaming import openai_stream
+from .common import abort_requests
+
+logger = logging.getLogger(__name__)
+
+
+def _tokenize_user_prompt(tokenizer, prompt):
+    """Tokenize an external string as ordinary text, not trusted control syntax."""
+    tokenize_user_text = getattr(tokenizer, "tokenize_user_text", None)
+    if tokenize_user_text is None:
+        return tokenizer.tokenize(prompt)
+    return tokenize_user_text(prompt)
+
+
+def _text_offsets(tokenizer, token_ids, tokens, text):
+    """Return character offsets, preserving support for tokenizers without offsets()."""
+    offsets_fn = getattr(tokenizer, "offsets", None)
+    tokenizer_impl = getattr(tokenizer, "_tokenizer", None)
+    if tokenizer_impl is not None and getattr(tokenizer_impl, "offsets", None) is None:
+        offsets_fn = None
+    if offsets_fn is not None:
+        try:
+            return offsets_fn(token_ids, text)
+        except NotImplementedError:
+            pass
+
+    offsets = []
+    current_offset = 0
+    for token in tokens:
+        offsets.append(current_offset)
+        current_offset += len(token)
+    return offsets
+
+
+def _detokenize_top_n_keys(top_n_logprobs, tokenizer):
+    """Re-key id-keyed top-n logprob dicts by detokenized string for the OpenAI wire format.
+
+    The engine keys these by token id so that byte-fallback tokens don't collide.
+    This endpoint's response schema is string-keyed, so convert back at the edge.
+    Distinct ids that detokenize to the same string (byte fallbacks) still collide
+    here; use /raw_completions when exact token identity matters.
+    """
+    return [
+        {tokenizer.detokenize([int(token_id)]): logprob for token_id, logprob in entry.items()}
+        for entry in top_n_logprobs
+    ]
+
+
+try:
+    from quart import Blueprint, Response, current_app, jsonify, request
+
+    bp = Blueprint('completions_api', __name__)
+
+    @bp.route('/completions', methods=['POST'])
+    @bp.route('/v1/completions', methods=['POST'])
+    async def completions():
+        """Handles async POST requests for completions."""
+        client = current_app.config['client']
+        tokenizer = current_app.config['tokenizer']
+
+        req = await request.get_json(force=True)
+        if req is None:
+            return "Invalid or missing JSON body", 400
+
+        # --- 1. Parse Prompt ---
+        prompt_data = req.get("prompt")
+        if not prompt_data:
+            return "Missing 'prompt' field", 400
+        add_BOS = req.get("add_BOS", False)
+        if not isinstance(add_BOS, bool):
+            return "add_BOS must be a boolean value", 400
+
+        def normalize_bos(prompt_tokens):
+            if add_BOS:
+                bos = getattr(tokenizer, 'bos', None)
+                if bos is None:
+                    raise ValueError("Tokenizer does not define a BOS token")
+                while prompt_tokens and prompt_tokens[0] == bos:
+                    prompt_tokens.pop(0)
+                prompt_tokens = [bos] + prompt_tokens
+            return prompt_tokens
+
+        def tokenize_prompt(prompt):
+            return normalize_bos(_tokenize_user_prompt(tokenizer, prompt))
+
+        try:
+            if isinstance(prompt_data, str):
+                prompts_as_tokens = [tokenize_prompt(prompt_data)]
+                prompts_as_strings = [prompt_data]
+            elif isinstance(prompt_data, list):
+                if not prompt_data:
+                    return "'prompt' list is empty", 400
+                if all(isinstance(p, str) for p in prompt_data):
+                    prompts_as_tokens = [tokenize_prompt(p) for p in prompt_data]
+                    prompts_as_strings = prompt_data
+                elif all(isinstance(p, int) for p in prompt_data):
+                    prompts_as_tokens = [normalize_bos(prompt_data.copy())]
+                    prompts_as_strings = [tokenizer.detokenize(prompt_data)]
+                elif all(
+                    isinstance(p, list) and all(isinstance(t, int) for t in p) for p in prompt_data
+                ):
+                    prompts_as_tokens = [normalize_bos(p.copy()) for p in prompt_data]
+                    prompts_as_strings = [tokenizer.detokenize(p) for p in prompt_data]
+                else:
+                    return (
+                        (
+                            "Invalid 'prompt' format. Must be str, list[str], "
+                            "list[int], or list[list[int]]"
+                        ),
+                        400,
+                    )
+            else:
+                return "Invalid 'prompt' type. Must be str or list", 400
+        except Exception as e:
+            return f"Error tokenizing prompt: {e}", 500
+
+        # --- 2. Parse Sampling Params ---
+        try:
+            temperature = float(req.get("temperature", 1.0))
+            top_p = float(req.get("top_p", 1.0))
+            top_k = int(req.get("top_k", 0))
+            echo = bool(req.get("echo", False))
+
+            if temperature == 0.0:
+                top_k = 1
+                top_p = 0.0
+
+            # Parse logprobs - can be an integer (number of top logprobs to return) or None
+            logprobs_param = req.get("logprobs", None)
+
+            if logprobs_param is not None:
+                top_n_logprobs = int(logprobs_param)
+                return_log_probs = True
+            else:
+                top_n_logprobs = 0
+                return_log_probs = False
+
+            # When echo=True and logprobs are requested, we need prompt logprobs
+            # skip_prompt_log_probs=False ensures the engine computes logprobs for prompt tokens
+            skip_prompt_log_probs = not (echo and return_log_probs)
+
+            # Parse stop sequences
+            stop = req.get("stop", None)
+            if isinstance(stop, str):
+                stop = [stop]
+
+            ignore_eos = bool(req.get("ignore_eos", False))
+
+            # Optional vLLM-style multimodal input. Image entries are
+            # base64-encoded bytes ordered to match prompt placeholders.
+            request_multi_modal_data = req.get("multi_modal_data") or {}
+            if not isinstance(request_multi_modal_data, dict):
+                raise ValueError("multi_modal_data must be a dictionary.")
+            unsupported_modalities = set(request_multi_modal_data) - {"image"}
+            if unsupported_modalities:
+                raise ValueError(
+                    "Unsupported multimodal modalities: "
+                    f"{sorted(unsupported_modalities)}; only 'image' is supported."
+                )
+            encoded_images = request_multi_modal_data.get("image") or []
+            if isinstance(encoded_images, str):
+                encoded_images = [encoded_images]
+            if not isinstance(encoded_images, list):
+                raise ValueError("multi_modal_data.image must be a string or list.")
+            image_bytes_list = [base64.b64decode(encoded_image) for encoded_image in encoded_images]
+            multi_modal_data = {"image": image_bytes_list} if image_bytes_list else None
+
+            sampling_params = SamplingParams(
+                temperature=temperature,
+                top_k=top_k,
+                top_p=top_p,
+                return_log_probs=return_log_probs,
+                top_n_logprobs=top_n_logprobs,
+                skip_prompt_log_probs=skip_prompt_log_probs,
+                num_tokens_to_generate=int(req.get("max_tokens", 16)),
+                stop_words=stop,
+                termination_id=-1 if ignore_eos else None,
+                streaming_interval=int(req.get("streaming_interval", 1)),
+            )
+        except ValueError as e:
+            return f"Invalid sampling parameter: {e}", 400
+
+        # --- 3. Send Requests to Engine ---
+        stream_requested = bool(req.get("stream", False))
+        incremental_detokenizers = []
+        if stream_requested:
+            # Streaming currently supports only Hugging Face fast tokenizers.
+            try:
+                incremental_detokenizers = [
+                    HuggingFaceFastIncrementalDetokenizer(tokenizer, prompt_tokens)
+                    for prompt_tokens in prompts_as_tokens
+                ]
+            except ValueError as error:
+                return str(error), 400
+
+        tasks = []
+        # Populated on the non-streaming path only; the streaming path aborts
+        # through the AsyncStream callback its generator already owns.
+        request_ids = []
+        # The submission loop itself can fail partway -- the zmq send, or
+        # multimodal serialization on a malformed payload -- with the earlier
+        # prompts already submitted to the engine. Without this the exception
+        # escapes the handler and those requests generate to their token limit
+        # holding batch slots, the same leak the abort below closes.
+        #
+        # TODO: streaming submissions made before a mid-loop failure are not
+        # covered. Their handles are AsyncStreams, not ids, and they abort
+        # through openai_stream's finally, which never runs because the
+        # generator is never started.
+        try:
+            for prompt_tokens in prompts_as_tokens:
+                per_req_params = SamplingParams(
+                    temperature=sampling_params.temperature,
+                    top_k=sampling_params.top_k,
+                    top_p=sampling_params.top_p,
+                    return_log_probs=sampling_params.return_log_probs,
+                    top_n_logprobs=sampling_params.top_n_logprobs,
+                    skip_prompt_log_probs=sampling_params.skip_prompt_log_probs,
+                    num_tokens_to_generate=sampling_params.num_tokens_to_generate,
+                    stop_words=sampling_params.stop_words,
+                    termination_id=sampling_params.termination_id,
+                    # This endpoint always echoes prompt_token_ids in its response, so
+                    # keep the prompt tokens on the payload (default is now to drop them).
+                    return_prompt_tokens=True,
+                    streaming_interval=sampling_params.streaming_interval,
+                )
+                if stream_requested:
+                    tasks.append(
+                        client.add_request_streaming(
+                            prompt_tokens, per_req_params, multi_modal_data=multi_modal_data
+                        )
+                    )
+                else:
+                    # add_request_with_id, not add_request: a non-streaming response
+                    # writes nothing to the socket while generating, so a disconnect
+                    # is never discovered as a broken pipe. Aborting needs the ids.
+                    request_id, future = client.add_request_with_id(
+                        prompt_tokens, per_req_params, multi_modal_data=multi_modal_data
+                    )
+                    request_ids.append(request_id)
+                    tasks.append(future)
+        except Exception as e:
+            abort_requests(client, request_ids, f"submission failed: {e}")
+            logger.error(f"Error submitting request: {e}")
+            return f"Error submitting request: {e}", 500
+
+        if stream_requested:
+            include_usage = bool((req.get("stream_options") or {}).get("include_usage", False))
+            response = Response(
+                openai_stream(
+                    tasks,
+                    tokenizer,
+                    incremental_detokenizers,
+                    chat=False,
+                    return_log_probs=return_log_probs,
+                    include_usage=include_usage,
+                    echo_prompts=prompts_as_strings if echo else None,
+                    prompt_token_ids=prompts_as_tokens if echo else None,
+                ),
+                content_type="text/event-stream",
+            )
+            response.timeout = None
+            return response
+
+        if current_app.config['verbose']:
+            start_time = time.perf_counter()
+
+        try:
+            batch_results = await asyncio.gather(*tasks)
+        except asyncio.CancelledError:
+            # Quart cancels this handler when the peer goes away (its ASGI
+            # connection races handle_messages against handle_request and
+            # cancels the loser). Without this the engine would keep generating
+            # for a client that is gone, holding a slot until it hit the token
+            # limit -- orphans then accumulate faster than they retire and the
+            # batch saturates.
+            abort_requests(client, request_ids, "client disconnected")
+            raise
+        except Exception as e:
+            return f"Error during inference: {e}", 500
+
+        if current_app.config['verbose']:
+            logging.info(
+                f"Batch of {len(tasks)} requests processed in "
+                f"{time.perf_counter() - start_time:.2f}s"
+            )
+
+        # --- 4. Check for failed requests ---
+        failed_errors = []
+        has_nontransient_error = False
+        for i, record in enumerate(batch_results):
+            if record.get("status") == "FAILED":
+                events = record.get("events", [])
+                error_events = [
+                    e for e in events if e.get("type") in ("ERROR_NONTRANSIENT", "ERROR_TRANSIENT")
+                ]
+                if any(e.get("type") == "ERROR_NONTRANSIENT" for e in error_events):
+                    has_nontransient_error = True
+                error_msg = (
+                    str(error_events[-1].get("payload", "Unknown error"))
+                    if error_events
+                    else "Unknown error"
+                )
+                failed_errors.append(f"Request {i}: {error_msg}")
+
+        if failed_errors:
+            error_detail = "; ".join(failed_errors)
+            status = 400 if has_nontransient_error else 500
+            logger.error(f"Inference request(s) failed: {error_detail}")
+            return f"Inference request(s) failed: {error_detail}", status
+
+        # --- 5. Format Response (matching old_completions.py) ---
+        choices = []
+        total_completion_tokens = 0
+        prompt_tokens_counts = []
+
+        request_idx = 0
+        response_uid = None
+        for completed_request in batch_results:
+            result = unwrap_serialized_tensors(completed_request)
+            if response_uid is None:
+                response_uid = result["uid"]
+            full_text = result["generated_text"] or ""
+            text_output = (prompts_as_strings[request_idx] + full_text) if echo else full_text
+
+            generated_tokens = result.get("generated_tokens") or []
+            prompt_tokens_list = result.get("prompt_tokens") or []
+            total_completion_tokens += len(generated_tokens)
+            prompt_tokens_counts.append(len(prompt_tokens_list))
+
+            finish_reason = "length"
+            sampling_params_result = result.get("sampling_params") or {}
+            num_tokens_requested = sampling_params_result.get("num_tokens_to_generate")
+            if num_tokens_requested is None or len(generated_tokens) < num_tokens_requested:
+                finish_reason = "stop"
+
+            logprobs_data = None
+            if sampling_params.return_log_probs:
+                # Get prompt tokens and logprobs
+                prompt_tokens_list = result["prompt_tokens"] or []
+
+                prompt_log_probs = result.get('prompt_log_probs') or []
+                prompt_top_n_logprobs = _detokenize_top_n_keys(
+                    result.get('prompt_top_n_logprobs') or [], tokenizer
+                )
+
+                # Get generated tokens and logprobs
+                generated_tokens_list = result["generated_tokens"] or []
+                generated_log_probs = result.get('generated_log_probs') or []
+                generated_top_n_logprobs = _detokenize_top_n_keys(
+                    result.get('generated_top_n_logprobs') or [], tokenizer
+                )
+
+                if echo:
+                    # When echo=True, include prompt tokens and their logprobs
+                    # Prompt logprobs are for tokens [1:] (first token has no logprob)
+                    visible_prompt_tokens = prompt_tokens_list
+                    first_logprob = [None]
+                    first_top_logprobs = [None]
+                    if (
+                        add_BOS
+                        and visible_prompt_tokens
+                        and visible_prompt_tokens[0] == getattr(tokenizer, 'bos', None)
+                    ):
+                        # BOS conditions the first text token, but is not part of the
+                        # OpenAI text prompt. Hide it while retaining that first
+                        # text token's model logprob, matching Thunderdome.
+                        visible_prompt_tokens = visible_prompt_tokens[1:]
+                        first_logprob = []
+                        first_top_logprobs = []
+                    all_token_ids = visible_prompt_tokens + generated_tokens_list
+                    tokens = [tokenizer.detokenize([tok]) for tok in all_token_ids]
+                    text_offset = _text_offsets(tokenizer, all_token_ids, tokens, text_output)
+
+                    # Build token_logprobs: [None] for first token, then prompt logprobs,
+                    # then generated logprobs
+                    token_logprobs = (
+                        first_logprob + list(prompt_log_probs) + list(generated_log_probs)
+                    )
+
+                    # Build top_logprobs: [None] for first token, then prompt top_n,
+                    # then generated top_n
+                    top_logprobs = None
+                    if prompt_top_n_logprobs or generated_top_n_logprobs:
+                        top_logprobs = (
+                            first_top_logprobs
+                            + list(prompt_top_n_logprobs)
+                            + list(generated_top_n_logprobs)
+                        )
+
+                else:
+                    # When echo=False, only return generated tokens and their logprobs
+                    tokens = [tokenizer.detokenize([tok]) for tok in generated_tokens_list]
+                    text_offset = _text_offsets(
+                        tokenizer, generated_tokens_list, tokens, text_output
+                    )
+
+                    # Prepend [None] to match OpenAI format
+                    token_logprobs = [None] + list(generated_log_probs)
+
+                    # Build top_logprobs
+                    top_logprobs = None
+                    if generated_top_n_logprobs:
+                        top_logprobs = [None] + list(generated_top_n_logprobs)
+
+                logprobs_data = {
+                    "token_logprobs": token_logprobs,
+                    "tokens": tokens,
+                    "text_offset": text_offset,
+                    "top_logprobs": top_logprobs,
+                }
+
+            choice_data = {
+                "index": request_idx,
+                "text": text_output,
+                "logprobs": logprobs_data,
+                "finish_reason": finish_reason,
+                "prompt_token_ids": result["prompt_tokens"],
+                "generation_token_ids": result["generated_tokens"],
+                "generation_log_probs": result.get("generated_log_probs", []),
+            }
+
+            if result["routing_indices"] is not None:
+                choice_data["moe_topk_indices"] = result["routing_indices"]
+                prompt_length = (
+                    len(result["prompt_tokens"]) if result["prompt_tokens"] is not None else 0
+                )
+                if prompt_length:
+                    choice_data["prompt_moe_topk_indices"] = result["routing_indices"][
+                        :prompt_length
+                    ]
+
+            choices.append(choice_data)
+            request_idx += 1
+
+        prompt_token_count = max(prompt_tokens_counts) if prompt_tokens_counts else 0
+        return jsonify(
+            {
+                "id": response_uid,
+                "object": "text_completion",  # as per the openAI spec
+                "created": int(time.time()),
+                "model": "EMPTY",
+                "choices": choices,
+                "usage": {
+                    "prompt_tokens": prompt_token_count,
+                    "completion_tokens": total_completion_tokens,
+                    "total_tokens": prompt_token_count + total_completion_tokens,
+                },
+            }
+        )
+
+except ImportError as e:
+    logger.warning(f"Could not import quart: {e}")

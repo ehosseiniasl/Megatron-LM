@@ -1,0 +1,3 @@
+include: _sample_config
+task: answer_judge
+dataset_path: gitlab:answer_judge/test.parquet

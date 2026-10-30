@@ -1,0 +1,319 @@
+### Reduced N4 evaluation suite sized for high-throughput dynamic inference.
+version: 1.0
+tasks:
+  - task_name: mmlu_pro_cot_mini_5_shot_base
+    task_group: aggregate
+    batch_size: 32
+    num_fewshot: 5
+    report_metric:
+      - alias: mmlu_pro_cot_mini_5_shot_base
+        metric: exact_match,tigerlab-extract
+  - task_name: mbpp_sanitized_3shot_sampled
+    task_group: code
+    batch_size: 128
+    overrides:
+      repeats: 20
+    report_metric:
+      - alias: mbpp_sanitized_3shot_sampled
+        metric: pass@1[20],evalplus_sanitized
+  - task_name: humaneval_sampled
+    task_group: code
+    batch_size: 128
+    overrides:
+      repeats: 20
+    report_metric:
+      - alias: humaneval_sampled
+        metric: pass@1[20],evalplus_sanitized
+  - task_name: math_500_sampled
+    task_group: math
+    batch_size: 128
+    num_fewshot: 4
+    overrides:
+      repeats: 4
+    report_metric:
+      - alias: math_500_sampled
+        metric: pass@1[4],math_verify
+  - task_name: gsm8k_cot_nemo
+    task_group: math
+    batch_size: 64
+    num_fewshot: 8
+    report_metric:
+      - alias: gsm8k_cot_nemo
+        metric: exact_match,none
+  - task_name: race
+    task_group: reading_comprehension
+    batch_size: 32
+    report_metric:
+      - alias: race
+        metric: acc,none
+  - task_name: arc_challenge_llama
+    task_group: base_reasoning
+    batch_size: 32
+    num_fewshot: 25
+    report_metric:
+      - alias: arc_challenge_llama
+        metric: acc_norm,none
+  - task_name: winogrande
+    task_group: reasoning
+    batch_size: 64
+    report_metric:
+      - alias: winogrande
+        metric: acc,none
+  - task_name: adlr_global_mmlu
+    task_group: aggregate
+    batch_size: 32
+    num_fewshot: 5
+    report_metric:
+      - alias: global_mmlu_de
+        metric: acc,none
+      - alias: global_mmlu_es
+        metric: acc,none
+      - alias: global_mmlu_fr
+        metric: acc,none
+      - alias: global_mmlu_it
+        metric: acc,none
+      - alias: global_mmlu_ja
+        metric: acc,none
+      - alias: global_mmlu_ko
+        metric: acc,none
+      - alias: global_mmlu_pt
+        metric: acc,none
+      - alias: global_mmlu_zh
+        metric: acc,none
+  - task_name: adlr_mgsm
+    task_group: aggregate
+    batch_size: 32
+    num_fewshot: 8
+    report_metric:
+      - alias: mgsm_native_cot_es
+        metric: exact_match,symbolic-match
+      - alias: mgsm_native_cot_de
+        metric: exact_match,symbolic-match
+      - alias: mgsm_native_cot_fr
+        metric: exact_match,symbolic-match
+      - alias: mgsm_native_cot_zh
+        metric: exact_match,symbolic-match
+      - alias: mgsm_native_cot_ja
+        metric: exact_match,symbolic-match
+      - alias: mgsm_native_cot_ru
+        metric: exact_match,symbolic-match
+  - task_name: mmlu_str
+    task_group: aggregate
+    batch_size: 32
+    num_fewshot: 5
+    report_metric:
+      - alias: mmlu_str
+        metric: exact_match,none
+      - alias: mmlu_str_stem
+        metric: exact_match,none
+  - task_name: llm_compression_2026_cc_interleaved
+    task_group: compression
+    batch_size: 8
+    report_metric:
+      - alias: llm_compression_2026_cc_interleaved
+        metric: bits_per_byte
+  - task_name: llm_compression_2026_arxiv_interleaved
+    task_group: compression
+    batch_size: 32
+    limit: 1500
+    report_metric:
+      - alias: llm_compression_2026_arxiv_interleaved
+        metric: bits_per_byte
+  - task_name: llm_compression_2026_code_repo_packed
+    task_group: compression
+    batch_size: 8
+    report_metric:
+      - alias: llm_compression_2026_code_repo_packed
+        metric: bits_per_byte
+  - task_name: mistral_ppl
+    task_group: compression
+    batch_size: 8
+    report_metric:
+      - alias: mistral_ppl_arxiv_val_ppl
+        metric: bits_per_byte
+      - alias: mistral_ppl_catlm_v2
+        metric: bits_per_byte
+  - task_name: milu_chunk0
+    task_group: aggregate
+    batch_size: 32
+    num_fewshot: 5
+    report_metric:
+      - alias: milu_Hindi
+        metric: acc,none
+      - alias: milu_Tamil
+        metric: acc,none
+      - alias: milu_Marathi
+        metric: acc,none
+      - alias: milu_Gujarati
+        metric: acc,none
+      - alias: milu_Punjabi
+        metric: acc,none
+      - alias: milu_Odia
+        metric: acc,none
+  - task_name: milu_chunk1
+    task_group: aggregate
+    batch_size: 32
+    num_fewshot: 5
+    report_metric:
+      - alias: milu_English
+        metric: acc,none
+      - alias: milu_Bengali
+        metric: acc,none
+      - alias: milu_Telugu
+        metric: acc,none
+      - alias: milu_Malayalam
+        metric: acc,none
+      - alias: milu_Kannada
+        metric: acc,none
+  - task_name: wmt24pp_en_xx_south_asia
+    task_group: multilingual
+    batch_size: 32
+    num_fewshot: 3
+    generation_kwargs:
+      max_gen_toks: 384
+    report_metric:
+      - alias: wmt24pp_en_xx_ta_IN
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_ml_IN
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_ur_PK
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_kn_IN
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_bn_IN
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_te_IN
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_gu_IN
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_mr_IN
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_pa_IN
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_hi_IN
+        metric: chrf++,none
+  - task_name: wmt24pp_en_xx_northern_europe
+    task_group: multilingual
+    batch_size: 32
+    num_fewshot: 3
+    generation_kwargs:
+      max_gen_toks: 384
+    report_metric:
+      - alias: wmt24pp_en_xx_da_DK
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_is_IS
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_no_NO
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_sv_SE
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_fi_FI
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_et_EE
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_lt_LT
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_lv_LV
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_nl_NL
+        metric: chrf++,none
+  - task_name: wmt24pp_en_xx_central_eastern_europe
+    task_group: multilingual
+    batch_size: 32
+    num_fewshot: 3
+    generation_kwargs:
+      max_gen_toks: 384
+    report_metric:
+      - alias: wmt24pp_en_xx_uk_UA
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_ru_RU
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_hu_HU
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_pl_PL
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_de_DE
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_sl_SI
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_sk_SK
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_sr_RS
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_ro_RO
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_cs_CZ
+        metric: chrf++,none
+  - task_name: wmt24pp_en_xx_southern_europe_americas
+    task_group: multilingual
+    batch_size: 32
+    num_fewshot: 3
+    generation_kwargs:
+      max_gen_toks: 384
+    report_metric:
+      - alias: wmt24pp_en_xx_fr_CA
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_el_GR
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_it_IT
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_es_MX
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_ca_ES
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_pt_BR
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_fr_FR
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_pt_PT
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_bg_BG
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_hr_HR
+        metric: chrf++,none
+  - task_name: wmt24pp_en_xx_middle_east_africa
+    task_group: multilingual
+    batch_size: 32
+    num_fewshot: 3
+    generation_kwargs:
+      max_gen_toks: 384
+    report_metric:
+      - alias: wmt24pp_en_xx_tr_TR
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_fa_IR
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_ar_EG
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_ar_SA
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_he_IL
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_sw_KE
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_sw_TZ
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_zu_ZA
+        metric: chrf++,none
+  - task_name: wmt24pp_en_xx_east_southeast_asia
+    task_group: multilingual
+    batch_size: 32
+    num_fewshot: 3
+    generation_kwargs:
+      max_gen_toks: 384
+    report_metric:
+      - alias: wmt24pp_en_xx_id_ID
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_vi_VN
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_zh_TW
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_th_TH
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_ja_JP
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_zh_CN
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_ko_KR
+        metric: chrf++,none
+      - alias: wmt24pp_en_xx_fil_PH
+        metric: chrf++,none

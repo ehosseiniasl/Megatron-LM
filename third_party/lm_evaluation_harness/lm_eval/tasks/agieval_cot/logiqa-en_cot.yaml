@@ -1,0 +1,53 @@
+description: "The following are multiple choice questions (with answers) from Chinese civil service examinations examining logical comprehension capability. 
+            Think step by step and then finish your answer with \"The answer is (X)\" where X is the correct letter choice.\n"
+include: aqua-rat_cot.yaml
+task: agieval_logiqa_en_cot
+dataset_path: hails/agieval-logiqa-en
+
+doc_to_choice: ["A","B","C","D"]
+
+
+num_fewshot: 3
+fewshot_config:
+  doc_to_text: !function utils.cot_fewshot_to_text
+  doc_to_target: !function utils.empty_str
+
+  sampler: first_n
+  samples:
+    - query: "    Question: Which of the following, if true, would weaken the above argument most? \nOptions: \nA. Photography technology is constantly evolving.In theory, panoramic photos can reflect the full reality of objects from the appearance.\nB. Any evidence only needs to reflect a certain aspect of the fact.\nC. In the court hearing, some photos, although they cannot be evidence, have important reference value.\nD. Some photos are synthesized or forged by technical means.\n"
+      explanation: "The passage argues that photos are not reliable evidence because they only reflect one side of an object and not the whole truth. Therefore, it is inappropriate to use them as evidence, especially in court.
+                    The question asks which option would weaken the argument the most.
+                    Option A argues that panoramic photos can reflect the full reality of objects, which would not necessarily weaken the argument since the passage acknowledges that photos reflect reality to some extent.
+                    Option B states that any evidence only needs to reflect a certain aspect of the fact. This option would weaken the argument the most because it directly contradicts the premise that evidence needs to reflect the whole truth. If only a certain aspect of a fact needs to be reflected, then photos would be sufficient evidence in some cases.
+                    Option C suggests that some photos may not be evidence but have important reference value in court. This option may provide some support for the use of photos in court, but it would not necessarily weaken the argument that photos are not reliable evidence.
+                    Option D argues that some photos may be synthesized or forged, which is consistent with the argument that photos may not reflect the whole truth. However, it does not necessarily weaken the argument that photos should not be used as evidence.
+                    Therefore, option B is the correct answer because it directly contradicts the premise that evidence needs to reflect the whole truth, which is the main premise of the argument.. The answer is (B)."
+      gold: [ "B" ]
+      few_shot: 1
+    - query: "    Question: Which of the following is true if it is the most doubtful? \nOptions: \nA. The working methods of different positions are different, and there must be an adaptation process for new positions\nB. The department manager Mr.Wang has outstanding performance and is still outstanding after being promoted to general manager of the company\nC. Personal promotion often affects the development of the institution to a certain extent\nD. Li Ming's sports performance is not satisfactory, but he did it well after entering the management\n"
+      explanation: "A) The working methods of different positions are different, and there must be an adaptation process for new positions.
+                    This option is likely true, as it is common for different job positions to require different skills and working methods. Therefore, an adaptation process for new positions is necessary.
+                    B) The department manager Mr. Wang has outstanding performance and is still outstanding after being promoted to general manager of the company.
+                    This option is the answer to the question, and it is the most doubtful. While it is possible for someone to excel in one position and not in another, the passage suggests that promotions are not always effective and can result in inefficiencies in the organization.
+                    C) Personal promotion often affects the development of the institution to a certain extent.
+                    This option is likely true, as promotions can impact the dynamics and functioning of an organization.
+                    D) Li Ming's sports performance is not satisfactory, but he did it well after entering the management.
+                    This option is not directly related to the topic discussed in the passage, and there is no information to suggest whether it is true or false.
+                    Therefore, the most doubtful option is B) The department manager Mr. Wang has outstanding performance and is still outstanding after being promoted to general manager of the company.. The answer is (B)."
+      gold: [ "B" ]
+      few_shot: 1
+    - query: "    Question: According to the above requirements, which of the following crops can the country import? \nOptions: \nA. A.B, C.\nB. B, C, D.\nC. A.E, and E.\nD. A.D, and yourself.\n"
+      explanation: "The passage describes a country's requirements for importing six crops, A, B, C, D, E, and H, for use in their animal feed industry. The requirements are as follows:
+                      Import all crops that do not contain prohibited ingredients.
+                      If A or B contain prohibited ingredients, import E and H.
+                      If C contains prohibited ingredients, do not import it.
+                      If E is imported, import B and D.
+                      If D is not imported, import C. If C is imported, do not import D.
+                      To determine which crops the country can import, we can analyze each option:
+                      Option (A) A.B, C: This option includes crops A, B, and C. If A or B contain prohibited ingredients, the country must import E and H instead, as per requirement (2). If C contains prohibited ingredients, it cannot be imported, as per requirement (3). Therefore, option (A) is only valid if A and B do not contain prohibited ingredients, and C does not contain prohibited ingredients. This satisfies requirement (1), and option (A) is the only option that meets these conditions.
+                      Option (B) B, C, D: This option includes crops B, C, and D. If D is not imported, the country must import C, as per requirement (5). However, if C is imported, D cannot be imported, as per requirement (5). Therefore, option (B) is not valid.
+                      Option (C) A, E, and E: This option includes crops A, D, and E. If A contains prohibited ingredients, the country must import E and H instead, as per requirement (2). If E is imported, B and D must also be imported, as per requirement (4). However, this conflicts with requirement (5), which states that if D is not imported, C must be imported. Therefore, option (C) is not valid.
+                      Option (D) A, D, and H: This option includes crops A, D, and H. If A contains prohibited ingredients, the country must import E and H instead, as per requirement (2). If E is imported, B and D must also be imported, as per requirement (4). However, this conflicts with requirement (5), which states that if D is not imported, C must be imported. Therefore, option (D) is not valid.
+                      Thus, based on the country's requirements, the only valid option is (A) A.B, C. The country can import A and B as long as they do not contain prohibited ingredients, and C can also be imported as long as it does not contain prohibited ingredients. If A or B contain prohibited ingredients, then the country must import E and H instead, as per requirement (2). Option (A) is the only option that satisfies these requirements, and therefore it is the correct answer.. The answer is (A)."
+      gold: [ "A" ]
+      few_shot: 1

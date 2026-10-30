@@ -1,0 +1,39 @@
+task: mmlu_pro_cot_mini_5_shot_base_sampled
+dataset_path: TIGER-Lab/MMLU-Pro
+test_split: test
+fewshot_split: validation
+fewshot_delimiter: "\n"
+fewshot_config:
+  sampler: !function utils.CategorySampler
+  doc_to_text: !function utils.fewshot_to_text
+  doc_to_target: !function utils.empty_str
+output_type: generate_until
+process_docs: !function utils.subsample_train_dataset_10p
+doc_to_text: !function utils.doc_to_text
+doc_to_target: answer
+filter_list:
+  - name: "tigerlab-extract"
+    filter:
+      - function: "fallback-regex"
+        regex_patterns:
+          - 'answer is \(?([A-J])\)?'
+          - '.*[aA]nswer:\s*([A-J])'
+          - '\b[A-J]\b(?!.*\b[A-J]\b)'
+        group_select: [1, 1, 0]
+        fallback: "[invalid]"
+generation_kwargs:
+  max_gen_toks: 1024
+  until:
+    - "</s>"
+    - "Q:"
+    - "Question:"
+    - "<|im_end|>"
+    - "\n\n\n"
+  do_sample: false
+  temperature: 0.7
+  top_p: 0.95
+num_fewshot: 5
+repeats: 4
+process_results: !function utils.exact_match
+metadata:
+  version: 1.2

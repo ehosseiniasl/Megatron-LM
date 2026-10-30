@@ -1,0 +1,13 @@
+version: 1
+tokenizer_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/n4-v6-262k.json
+jsonl_root_data_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260701
+sources:
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260701/aggressive_rewrites_math_high/chunk.02113.jsonl
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null

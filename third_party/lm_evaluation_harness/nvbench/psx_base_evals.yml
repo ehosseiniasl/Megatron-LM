@@ -1,0 +1,35 @@
+version: 1.0
+tasks:
+  - task_name: mmlu_str
+    task_group: aggregate
+    batch_size: 8
+    num_fewshot: 5
+    report_metric:
+      - alias: mmlu_str
+        metric: exact_match,none
+      - alias: mmlu_str_stem
+        metric: exact_match,none
+  - task_name: mmlu_pro_cot_mini_5_shot_base
+    task_group: aggregate
+    batch_size: 8
+    num_fewshot: 5
+    report_metric:
+      - alias: mmlu_pro_cot_mini_5_shot_base
+        metric: exact_match,tigerlab-extract
+  - task_name: humaneval_sampled
+    task_group: code
+    batch_size: 8
+    overrides:
+      repeats: 20
+    report_metric:
+      - alias: humaneval_sampled
+        metric: pass@1[20],evalplus_sanitized
+  - task_name: math_500_sampled
+    task_group: math
+    batch_size: 8
+    num_fewshot: 4
+    overrides:
+      repeats: 4
+    report_metric:
+      - alias: math_500_sampled
+        metric: pass@1[4],math_verify

@@ -1,0 +1,208 @@
+schema_version: 1
+suite:
+  name: n4_v6
+  request:
+    chat_template: minimal
+    temperature: 0
+    retry: 10
+    image_size: -1
+    image_detail: low
+    max_new_tokens: 64
+    stop: ["\n\n"]
+    enable_thinking: false
+  benchmarks:
+    - dataset: OCRBench
+      class: OCRBench
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n1
+      answer_format: raw
+      result_reader: ocrbench_score_json
+      result_suffix: _score.json
+      result_metric_unit: reader_defined
+      judge: exact_matching
+    - dataset: DocVQA_VAL
+      class: ImageVQADataset
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n4
+      answer_format: raw
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: percent
+      judge: exact_matching
+    - dataset: ChartQA_TEST
+      class: ImageVQADataset
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n4
+      answer_format: raw
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: percent
+      judge: exact_matching
+    - dataset: ChartQAPro
+      class: ChartQAPro
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n4
+      answer_format: raw
+      result_reader: chartqapro_primary_csv
+      result_suffix: _acc.csv
+      result_metric_unit: fraction
+      judge: exact_matching
+    - dataset: RealWorldQA
+      class: ImageMCQDataset
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n1
+      answer_format: label
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: fraction
+      judge: exact_matching
+    - dataset: WorldVQA
+      class: WorldVQA
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n4
+      answer_format: raw
+      result_reader: worldvqa_primary_csv
+      result_suffix: _us_azure_openai_eccn-gpt-4_1-mini_score.csv
+      result_metric_unit: fraction
+      judge: us/azure/openai/eccn-gpt-4.1-mini
+    - dataset: AI2D_TEST
+      class: ImageMCQDataset
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n4
+      answer_format: label
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: fraction
+      judge: exact_matching
+    - dataset: SEEDBench_IMG
+      class: ImageMCQDataset
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n8
+      answer_format: label
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: fraction
+      judge: exact_matching
+    - dataset: GQA_TestDev_Balanced
+      class: ImageVQADataset
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n8
+      answer_format: raw
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: percent
+      judge: exact_matching
+    - dataset: MMStar
+      class: ImageMCQDataset
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n1
+      answer_format: label
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: fraction
+      judge: exact_matching
+    - dataset: InfoVQA_VAL
+      class: ImageVQADataset
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n1
+      answer_format: raw
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: percent
+      judge: exact_matching
+    - dataset: MMMU_Pro_10c
+      class: MMMUProDataset
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      server: {context_length: 16384}
+      resource: n1
+      answer_format: label
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: fraction
+      judge: exact_matching
+    - dataset: MMMU_Pro_10c_COT
+      class: MMMUProDataset
+      num_shot: 2
+      demonstration:
+        type: reasoning
+        include_images: true
+        prepend_reasoning_cue: true
+      server: {context_length: 16384}
+      resource: n1
+      answer_format: raw
+      request: {max_new_tokens: 512}
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: fraction
+      judge: exact_matching
+    - dataset: MathVista_MINI
+      class: MathVista
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n1
+      answer_format: raw
+      result_reader: mathvista_primary_csv
+      result_suffix: _us_azure_openai_eccn-gpt-4_1-mini_score.csv
+      result_metric_unit: percent
+      judge: us/azure/openai/eccn-gpt-4.1-mini
+    - dataset: TextVQA_VAL
+      class: ImageVQADataset
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n4
+      answer_format: raw
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: percent
+      judge: exact_matching
+    - dataset: CV-Bench-2D
+      class: CVBench
+      prompt_adapter: cvbench_explicit_options
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n1
+      answer_format: label
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: fraction
+      judge: exact_matching
+    - dataset: MMMU_DEV_VAL
+      class: MMMUDataset
+      num_shot: 2
+      demonstration: {type: benchmark, include_images: true}
+      resource: n1
+      answer_format: label
+      result_reader: vlmeval_accuracy_csv
+      result_suffix: _acc.csv
+      result_metric_unit: fraction
+      judge: exact_matching
+    - dataset: ScreenSpot_Mobile
+      class: ScreenSpot
+      num_shot: 4
+      demonstration:
+        type: benchmark
+        include_images: true
+        indices: [94, 9, 24, 66]
+      server: {context_length: 16384}
+      resource: n1
+      answer_format: screenspot_click_normalized
+      request:
+        chat_template: assets/screenspot_shared_gui_end_marker_template.jinja
+        max_new_tokens: 128
+        stop: ["__________"]
+      result_reader: screenspot_score_json
+      result_suffix: _score.json
+      result_metric_unit: reader_defined
+      judge: exact_matching

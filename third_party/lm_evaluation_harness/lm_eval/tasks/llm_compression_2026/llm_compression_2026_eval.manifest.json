@@ -1,0 +1,305 @@
+{
+  "format_version": 1,
+  "parquet_file": "llm_compression_2026_eval.parquet",
+  "parquet_bytes": 213457042,
+  "parquet_sha256": "db9c9722b4451e626a501e4c698bf8aa72dda54671e2a44e77c81cd7a4c9f7d0",
+  "schema": {
+    "dataset": "string",
+    "doc_id": "string",
+    "source": "string",
+    "content": "large_string",
+    "image_count": "int32"
+  },
+  "source_repo": "nvidia/llm-compression-intelligence-2026",
+  "source_revision": "330b761522f9da0617afdbe1614202e27d8d877e",
+  "omitted_columns": [
+    "images",
+    "meta_json",
+    "subset"
+  ],
+  "datasets": {
+    "cc_interleaved": {
+      "rows": 9000,
+      "row_sha256": "da339a9ab167d50d6a83a1664dd35255770aa26df36410ff642f2b59621eefa4",
+      "source_files": [
+        {
+          "path": "cc_interleaved/test-00000-of-00003.parquet",
+          "bytes": 376424672,
+          "sha256": "9aca515b7ed810e10e1d8afc3aa731e034854a85ac5504141543be3da60c39e6",
+          "rows": 3000,
+          "selected_column_compressed_bytes": 10322417
+        },
+        {
+          "path": "cc_interleaved/test-00001-of-00003.parquet",
+          "bytes": 310216912,
+          "sha256": "0b78205b22a36de9fd8d9ca8b407877edc546f4ffad592a6fcc0942bf1f40516",
+          "rows": 3000,
+          "selected_column_compressed_bytes": 9834188
+        },
+        {
+          "path": "cc_interleaved/test-00002-of-00003.parquet",
+          "bytes": 384579488,
+          "sha256": "c92e304b917b87a7d39436647ae29fa4b8f40244c21988c445874a98a4ec28dc",
+          "rows": 3000,
+          "selected_column_compressed_bytes": 10333743
+        }
+      ]
+    },
+    "arxiv_math_interleaved": {
+      "rows": 5000,
+      "row_sha256": "3555c5b5c13dcf7a12be598179722fb286f9b7d4022707f52f1b12eb5a0aafb8",
+      "source_files": [
+        {
+          "path": "data_interleaved/arxiv_math_interleaved/part-00000.parquet",
+          "bytes": 304925862,
+          "sha256": "452606b2ca72ee5fe9e60e3ef689a6c0faf717c9195902b5d217f0bfe01022f1",
+          "rows": 503,
+          "selected_column_compressed_bytes": 11707854
+        },
+        {
+          "path": "data_interleaved/arxiv_math_interleaved/part-00001.parquet",
+          "bytes": 334500518,
+          "sha256": "2311d6d3945cd4b7c34dc29f580b7c39608e29f683caf0314a26a73a4662d722",
+          "rows": 682,
+          "selected_column_compressed_bytes": 16917622
+        },
+        {
+          "path": "data_interleaved/arxiv_math_interleaved/part-00002.parquet",
+          "bytes": 310363269,
+          "sha256": "3568b23889a39e35fc48789dbd5cdbb81702015b1763d8560dfd780d747823ad",
+          "rows": 597,
+          "selected_column_compressed_bytes": 14770487
+        },
+        {
+          "path": "data_interleaved/arxiv_math_interleaved/part-00003.parquet",
+          "bytes": 313322150,
+          "sha256": "3482343ef90be9434898381be58dda5e9fad6c9fc8ec9f924227f45b4e747d3d",
+          "rows": 853,
+          "selected_column_compressed_bytes": 22007120
+        },
+        {
+          "path": "data_interleaved/arxiv_math_interleaved/part-00004.parquet",
+          "bytes": 337780504,
+          "sha256": "d315acca9f4ab6f274363ee290ac98d02d252f6be1ec8c8799b645ba3e5199c4",
+          "rows": 741,
+          "selected_column_compressed_bytes": 18316370
+        },
+        {
+          "path": "data_interleaved/arxiv_math_interleaved/part-00005.parquet",
+          "bytes": 326904049,
+          "sha256": "c1c1bea9691d59de3dba8744562c2609b21e0e4f62e7e59d2ee652141a75bbdc",
+          "rows": 755,
+          "selected_column_compressed_bytes": 18147495
+        },
+        {
+          "path": "data_interleaved/arxiv_math_interleaved/part-00006.parquet",
+          "bytes": 325818692,
+          "sha256": "dc08700eac7e96b3cc5aeff1d89991f7a40ffd3414f22fe49cb42c4e98f1f7d4",
+          "rows": 686,
+          "selected_column_compressed_bytes": 17113673
+        },
+        {
+          "path": "data_interleaved/arxiv_math_interleaved/part-00007.parquet",
+          "bytes": 73580003,
+          "sha256": "c88ccb75f99790cacca4ed4334000c1f0266f6d791d637f9455a1ac0923d9b62",
+          "rows": 183,
+          "selected_column_compressed_bytes": 4118348
+        }
+      ]
+    },
+    "arxiv_physics_interleaved": {
+      "rows": 5000,
+      "row_sha256": "30972cb99914f9cab677df7e4d55af491509d7fe317bc9d5c5fdc8cc6113d752",
+      "source_files": [
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00000.parquet",
+          "bytes": 327595323,
+          "sha256": "70819f07cf257bf502a3c627be5862b4e446d837fe7e63d5be7f13ea5c923a35",
+          "rows": 221,
+          "selected_column_compressed_bytes": 4117143
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00001.parquet",
+          "bytes": 350806635,
+          "sha256": "36a5e3c52994e2fa0a4050788690a25b1b10e363b6790d77abcaefc8f599e9ae",
+          "rows": 199,
+          "selected_column_compressed_bytes": 4173363
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00002.parquet",
+          "bytes": 365466461,
+          "sha256": "4c68900f7e7932fe96827c1e472c966a8f23b325484c284e037e180346342d0b",
+          "rows": 285,
+          "selected_column_compressed_bytes": 5793709
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00003.parquet",
+          "bytes": 362010196,
+          "sha256": "5765edc19c69363b1354ed75da60b5311a1ba7e8984bb4f9e988ee512196d8e5",
+          "rows": 247,
+          "selected_column_compressed_bytes": 5007451
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00004.parquet",
+          "bytes": 359680320,
+          "sha256": "53a735ceaac1ba1565a9f4a1aaba16d18f92ef37dc59e5dd79e8c1933c08b90a",
+          "rows": 202,
+          "selected_column_compressed_bytes": 3785914
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00005.parquet",
+          "bytes": 368101799,
+          "sha256": "39ad723e9df10c5ba73f53ed38cf4069d2a083cc628d57be7299672815507a0c",
+          "rows": 192,
+          "selected_column_compressed_bytes": 3598696
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00006.parquet",
+          "bytes": 356328771,
+          "sha256": "99488cba0cf45eca6df2f870b533b85e37aefdea4f32a4f53d391797024b6ef4",
+          "rows": 176,
+          "selected_column_compressed_bytes": 3452620
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00007.parquet",
+          "bytes": 341628845,
+          "sha256": "290f9ebc5de9f17e382555dfa7ae37918bcc61fb4d108e1e737e9df9b875d1e4",
+          "rows": 188,
+          "selected_column_compressed_bytes": 3887038
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00008.parquet",
+          "bytes": 337594337,
+          "sha256": "72078d65d08ae72d0ed2fe4ee3d3f759ae2dc96f25cdc88d92eacec3c7d56bae",
+          "rows": 167,
+          "selected_column_compressed_bytes": 3007158
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00009.parquet",
+          "bytes": 369475540,
+          "sha256": "68a3a8508e075aaad60292838be0c3ab5d47a5004a30655a1cb611cce4145848",
+          "rows": 176,
+          "selected_column_compressed_bytes": 3064063
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00010.parquet",
+          "bytes": 373418263,
+          "sha256": "2882c798893e812780ee3f010453811b3997b8ae040adc6c15dcf2470a902dad",
+          "rows": 175,
+          "selected_column_compressed_bytes": 3597833
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00011.parquet",
+          "bytes": 365726941,
+          "sha256": "14306341d0ba1764b702bc2488ea8668c892bac4ba01e8597a2d9b75ab269ec4",
+          "rows": 147,
+          "selected_column_compressed_bytes": 3459542
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00012.parquet",
+          "bytes": 359628914,
+          "sha256": "661bdc622103f3e6407fbc7967d3e1d622372e6c57963d79db4d1c21e75cbda1",
+          "rows": 250,
+          "selected_column_compressed_bytes": 4827976
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00013.parquet",
+          "bytes": 337941905,
+          "sha256": "a951a0bf5cf236f855339a2968eb037fdbe971b3c8da8488beafb4a8c80db93e",
+          "rows": 151,
+          "selected_column_compressed_bytes": 3134014
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00014.parquet",
+          "bytes": 334350242,
+          "sha256": "a7ba580015781a057e973c074ef4593ae7db8acb80cb8b96ecb3702ffa281bc2",
+          "rows": 235,
+          "selected_column_compressed_bytes": 4681314
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00015.parquet",
+          "bytes": 371252226,
+          "sha256": "8d04d4f1ee082e00ea4ce9f0ac42f3251c2291e88655aa868b8b61fd207039c8",
+          "rows": 205,
+          "selected_column_compressed_bytes": 3825410
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00016.parquet",
+          "bytes": 371207590,
+          "sha256": "17c8b5a49ff1881806c8259607eda1f922fb3062a29a6f639e196f775c1607be",
+          "rows": 184,
+          "selected_column_compressed_bytes": 3865989
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00017.parquet",
+          "bytes": 370076545,
+          "sha256": "677ac45e8cff8877ffc7e0cd88f21a8c1a51ab26130c4e9ef5645601c3f8fc2f",
+          "rows": 218,
+          "selected_column_compressed_bytes": 4357143
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00018.parquet",
+          "bytes": 365861751,
+          "sha256": "0919dd7874d965765febfa14df9e570d0768d95f7dcd185ed9d22dd9cf888d8a",
+          "rows": 259,
+          "selected_column_compressed_bytes": 5296720
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00019.parquet",
+          "bytes": 364216251,
+          "sha256": "15b94e5af2fa465ca20f8c55ace709a7356b0c6e10bb30fb2bbd0bc16f14649e",
+          "rows": 200,
+          "selected_column_compressed_bytes": 3524642
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00020.parquet",
+          "bytes": 360407289,
+          "sha256": "d57dfe6040317cbb871507101ad7d52311b0bc3603ef85fc7a2185a59bd54d25",
+          "rows": 149,
+          "selected_column_compressed_bytes": 2927388
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00021.parquet",
+          "bytes": 325008459,
+          "sha256": "e9319a69db61006a38cda80827818c584002b031022c8545a4f67e358648d38a",
+          "rows": 210,
+          "selected_column_compressed_bytes": 3993882
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00022.parquet",
+          "bytes": 375559604,
+          "sha256": "6b03510270c7b310adf50c1bccaadc7222fb2020e32b5c05a3a743168b15a088",
+          "rows": 211,
+          "selected_column_compressed_bytes": 4540402
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00023.parquet",
+          "bytes": 315840767,
+          "sha256": "69815b1665a114ee734bf9bc28e7c7b840769027bf70a24cce8b337f10913758",
+          "rows": 205,
+          "selected_column_compressed_bytes": 4029941
+        },
+        {
+          "path": "data_interleaved/arxiv_physics_interleaved/part-00024.parquet",
+          "bytes": 282629585,
+          "sha256": "2d7b177a6edecaae2f9c41bd4f82583e967b353c0b8b356ebf81c2a01d8b3a89",
+          "rows": 148,
+          "selected_column_compressed_bytes": 2684465
+        }
+      ]
+    },
+    "code_repo_packed": {
+      "rows": 74,
+      "row_sha256": "66a78bf445fad8613427c3836c6027b1ba6e4668f10225aec7e605500dfb3db8",
+      "source_files": [
+        {
+          "path": "data_interleaved/code_repo_packed/part-00000.parquet",
+          "bytes": 28362677,
+          "sha256": "a175786d10e418ec6b59f2a1132d3a55797b0648877de15dac348b6c89d1ae50",
+          "rows": 74,
+          "selected_column_compressed_bytes": 28263636
+        }
+      ]
+    }
+  }
+}

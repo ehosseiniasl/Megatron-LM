@@ -1,0 +1,43 @@
+version: 1.0
+tasks:
+  - task_name: humaneval_sampled
+    task_group: code
+    batch_size: 64
+    cache_requests: refresh
+    overrides:
+      repeats: 10
+    report_metric:
+      - alias: humaneval_sampled
+        metric: pass@10[10],evalplus_sanitized
+  - task_name: humanevalplus_sampled
+    task_group: code
+    batch_size: 64
+    cache_requests: refresh
+    overrides:
+      repeats: 10
+    report_metric:
+      - alias: humanevalplus_sampled
+        metric: pass@10[10],evalplus_sanitized
+  - task_name: mbpp_sanitized_sampled
+    task_group: code
+    batch_size: 64
+    overrides:
+      repeats: 10
+    report_metric:
+      - alias: mbpp_sanitized_sampled
+        metric: pass@10[10],evalplus_sanitized
+  - task_name: mbppplus_sampled
+    task_group: code
+    batch_size: 64
+    overrides:
+      repeats: 10
+    report_metric:
+      - alias: mbppplus_sampled
+        metric: pass@10[10],evalplus_sanitized
+  - task_name: gsm8k_cot
+    task_group: math
+    batch_size: 32
+    num_fewshot: 8
+    report_metric:
+      - alias: gsm8k_cot
+        metric: exact_match,strict-match

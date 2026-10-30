@@ -1,0 +1,176 @@
+# Full-turn agentic bits-per-byte (agentic_bpb).
+#
+# Conditional per-byte NLL of an agent's real action at every tool-call turn of a
+# captured trajectory, given the prefix. Lower = more "in distribution" with
+# authentic agent behavior. See lm_eval/tasks/agentic_bpb/README.md.
+#
+# Self-contained: each task loads its vendored bundles/<benchmark>/<corpus>.jsonl.gz
+# and expands turns in memory (no build step, no external repo). Covers both
+# SWE-bench Pro (swe-pro) and SWE-bench Verified (swe-verified), 7 corpora each.
+#
+# Use the `megatron` engine (notok-completions) so logprob(target|prefix) is
+# scored over the completions endpoint:
+#   python nvbench/launch_evals.py -e megatron -c nvbench/agentic_bpb.yml \
+#       -r /results -m <model> -i $SERVER_IP -p $SERVER_PORT
+#
+# bpb_median is the headline metric (all-turns BPB is right-skewed with a fragile
+# tail; mean for reference, p99 flags calibration collapse). Absolute levels are
+# NOT comparable across corpora/benchmarks — only within-corpus rankings hold.
+version: 1.0
+tasks:
+  # --- SWE-bench Pro ---
+  - task_name: agentic_bpb_swe-pro_ocdsv4
+    task_group: agentic_bpb_swe-pro
+    batch_size: 8
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-pro_ocdsv4
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-pro_ocdsv4_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-pro_ocdsv4_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-pro_ocgpt55
+    task_group: agentic_bpb_swe-pro
+    batch_size: 8
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-pro_ocgpt55
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-pro_ocgpt55_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-pro_ocgpt55_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-pro_codexgpt55
+    task_group: agentic_bpb_swe-pro
+    batch_size: 8
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-pro_codexgpt55
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-pro_codexgpt55_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-pro_codexgpt55_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-pro_haiku45
+    task_group: agentic_bpb_swe-pro
+    batch_size: 4
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-pro_haiku45
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-pro_haiku45_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-pro_haiku45_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-pro_sonnet46
+    task_group: agentic_bpb_swe-pro
+    batch_size: 4
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-pro_sonnet46
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-pro_sonnet46_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-pro_sonnet46_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-pro_opus47
+    task_group: agentic_bpb_swe-pro
+    batch_size: 4
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-pro_opus47
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-pro_opus47_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-pro_opus47_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-pro_opus48
+    task_group: agentic_bpb_swe-pro
+    batch_size: 4
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-pro_opus48
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-pro_opus48_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-pro_opus48_p99
+        metric: bpb_p99,none
+  # --- SWE-bench Verified ---
+  - task_name: agentic_bpb_swe-verified_ocdsv4
+    task_group: agentic_bpb_swe-verified
+    batch_size: 8
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-verified_ocdsv4
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-verified_ocdsv4_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-verified_ocdsv4_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-verified_ocgpt55
+    task_group: agentic_bpb_swe-verified
+    batch_size: 8
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-verified_ocgpt55
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-verified_ocgpt55_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-verified_ocgpt55_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-verified_codexgpt55
+    task_group: agentic_bpb_swe-verified
+    batch_size: 8
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-verified_codexgpt55
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-verified_codexgpt55_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-verified_codexgpt55_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-verified_haiku45
+    task_group: agentic_bpb_swe-verified
+    batch_size: 4
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-verified_haiku45
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-verified_haiku45_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-verified_haiku45_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-verified_sonnet46
+    task_group: agentic_bpb_swe-verified
+    batch_size: 4
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-verified_sonnet46
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-verified_sonnet46_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-verified_sonnet46_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-verified_opus47
+    task_group: agentic_bpb_swe-verified
+    batch_size: 4
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-verified_opus47
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-verified_opus47_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-verified_opus47_p99
+        metric: bpb_p99,none
+  - task_name: agentic_bpb_swe-verified_opus48
+    task_group: agentic_bpb_swe-verified
+    batch_size: 4
+    num_fewshot: 0
+    report_metric:
+      - alias: agentic_bpb_swe-verified_opus48
+        metric: bpb_median,none
+      - alias: agentic_bpb_swe-verified_opus48_mean
+        metric: bpb_mean,none
+      - alias: agentic_bpb_swe-verified_opus48_p99
+        metric: bpb_p99,none

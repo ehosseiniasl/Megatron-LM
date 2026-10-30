@@ -1,0 +1,18 @@
+group: llm_compression
+task:
+  - llm_compression_arxiv_math
+  - llm_compression_cc
+  - llm_compression_python
+aggregate_metric_list:
+  - metric: word_perplexity
+    aggregation: mean
+    weight_by_size: true
+  - metric: byte_perplexity
+    aggregation: mean
+    weight_by_size: true
+  - metric: bits_per_byte
+    aggregation: mean
+    weight_by_size: true
+metadata:
+  version: 1.0
+

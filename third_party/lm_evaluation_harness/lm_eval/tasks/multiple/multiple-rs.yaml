@@ -1,0 +1,8 @@
+include: _default_template.yaml
+task: multiple-rs
+dataset_name: humaneval-rs
+generation_kwargs:
+  until:
+    - "\n}"
+metadata:
+  language: rs

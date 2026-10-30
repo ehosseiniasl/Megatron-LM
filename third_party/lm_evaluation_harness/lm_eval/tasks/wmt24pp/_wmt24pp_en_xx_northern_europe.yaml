@@ -1,0 +1,16 @@
+group: wmt24pp_en_xx_northern_europe
+task:
+  - wmt24pp_en_xx_da_DK
+  - wmt24pp_en_xx_is_IS
+  - wmt24pp_en_xx_no_NO
+  - wmt24pp_en_xx_sv_SE
+  - wmt24pp_en_xx_fi_FI
+  - wmt24pp_en_xx_et_EE
+  - wmt24pp_en_xx_lt_LT
+  - wmt24pp_en_xx_lv_LV
+  - wmt24pp_en_xx_nl_NL
+aggregate_metric_list:
+  - metric: chrf++
+    weight_by_size: true
+metadata:
+  version: 1.0

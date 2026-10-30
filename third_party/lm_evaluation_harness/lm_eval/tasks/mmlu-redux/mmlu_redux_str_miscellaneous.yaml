@@ -1,0 +1,46 @@
+task: mmlu_redux_str_miscellaneous
+task_alias: miscellaneous
+dataset_name: miscellaneous
+description: 'The following are multiple choice questions (with answers) about miscellaneous.
+
+
+  '
+include: _mmlu_redux_str_template_yaml
+fewshot_config:
+  sampler: first_n
+  samples:
+  - question: How many axles does a standard automobile have?
+    choices:
+    - one
+    - two
+    - four
+    - eight
+    answer: 1
+  - question: What place is named in the title of the 1979 live album by rock legends Cheap Trick?
+    choices:
+    - Budapest
+    - Budokan
+    - Bhutan
+    - Britain
+    answer: 1
+  - question: Who is the shortest man to ever win an NBA slam dunk competition?
+    choices:
+    - Anthony 'Spud' Webb
+    - Michael 'Air' Jordan
+    - Tyrone 'Muggsy' Bogues
+    - Julius 'Dr J' Erving
+    answer: 0
+  - question: What is produced during photosynthesis?
+    choices:
+    - hydrogen
+    - nylon
+    - oxygen
+    - light
+    answer: 2
+  - question: Which of these songs was a Top 10 hit for the rock band The Police?
+    choices:
+    - '''Radio Ga-Ga'''
+    - '''Ob-la-di Ob-la-da'''
+    - '''De Do Do Do De Da Da Da'''
+    - '''In-a-Gadda-Da-Vida'''
+    answer: 2

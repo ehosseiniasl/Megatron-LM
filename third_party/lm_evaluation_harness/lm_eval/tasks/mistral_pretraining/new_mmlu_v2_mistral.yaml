@@ -1,0 +1,24 @@
+task: new_mmlu_v2_mistral
+dataset_path: cais/mmlu
+dataset_name: all
+output_type: multiple_choice
+fewshot_split: dev
+test_split: test
+process_docs: !function utils.process_new_mmlu
+description: "The following are multiple choice questions (with answers) about {{subject | replace('_', ' ')}}.\n{{ '' }}"
+doc_to_text: "{{query}}\nAnswer:"
+doc_to_target: gold
+doc_to_choice: choices
+target_delimiter: " "
+fewshot_delimiter: ""
+num_fewshot: 5
+fewshot_config:
+  sampler: !function utils.SameSubjectFirstNSampler
+process_results: !function utils.process_mistral_mc_results
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  source_task: thunderdome:new_mmlu_v2

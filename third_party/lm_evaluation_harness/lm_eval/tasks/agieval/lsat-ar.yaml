@@ -1,0 +1,17 @@
+include: aqua-rat.yaml
+task: agieval_lsat_ar
+dataset_path: hails/agieval-lsat-ar
+
+num_fewshot: 3
+fewshot_config:
+  sampler: first_n
+  samples:
+    - query: "    If J, O, and Y are the first three concertos to be played, not necessarily in the order given, which one of the following is a concerto that CANNOT be played on the fifth Sunday? \n   A. H\n   B. K\n   C. N\n   D. P\n   E. X\n"
+      gold: [ "Answer: E" ]
+      few_shot: 1
+    - query: "    If N is the second book discussed and it is not summarized, which one of the following could be true? \n   A. F is summarized.\n   B. K is summarized.\n   C. O is summarized.\n   D. T is discussed earlier than F.\n   E. The third book discussed is not summarized.\n"
+      gold: [ "Answer: A" ]
+      few_shot: 1
+    - query: "    Which one of the following is a pair of products that could be advertised during the same week as each other? \n   A. G and H\n   B. H and J\n   C. H and O\n   D. K and O\n   E. M and O\n"
+      gold: [ "Answer: E" ]
+      few_shot: 1

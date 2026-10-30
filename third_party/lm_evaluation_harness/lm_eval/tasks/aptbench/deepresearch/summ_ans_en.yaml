@@ -1,0 +1,36 @@
+task: aptbench_deepresearch_summ_ans_en
+tag:
+  - aptbench
+  - deepresearch
+dataset_path: nvidia/APTBench
+dataset_name: null
+dataset_kwargs:
+  data_files: deepresearch/summ_ans_en.jsonl
+training_split: null
+validation_split: null
+test_split: train
+output_type: generate_until
+doc_to_text: !function utils.doc_to_text_summ_ans_en
+doc_to_target: !function utils.doc_to_target_summ_ans_en
+process_results: !function utils.process_results_summ_ans_en
+generation_kwargs:
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 100
+  until:
+    - "]"
+    - "</s>"
+    - "<|im_end|>"
+    - "<|endoftext|>"
+    - "<|eot_id|>"
+num_fewshot: 0
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  description: "APTBench Deep Research - Summarize Answer (EN): Extract and summarize the answer from a search and browsing trajectory. Tests information synthesis in English."

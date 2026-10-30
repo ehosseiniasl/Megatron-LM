@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_pa_IN
+include: _base_config.yaml
+dataset_name: en-pa_IN
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Punjabi follows.\n\nThe translation is:"

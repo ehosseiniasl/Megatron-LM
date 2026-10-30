@@ -1,0 +1,17 @@
+group: wmt24pp_en_xx_southern_europe_americas
+task:
+  - wmt24pp_en_xx_fr_CA
+  - wmt24pp_en_xx_el_GR
+  - wmt24pp_en_xx_it_IT
+  - wmt24pp_en_xx_es_MX
+  - wmt24pp_en_xx_ca_ES
+  - wmt24pp_en_xx_pt_BR
+  - wmt24pp_en_xx_fr_FR
+  - wmt24pp_en_xx_pt_PT
+  - wmt24pp_en_xx_bg_BG
+  - wmt24pp_en_xx_hr_HR
+aggregate_metric_list:
+  - metric: chrf++
+    weight_by_size: true
+metadata:
+  version: 1.0

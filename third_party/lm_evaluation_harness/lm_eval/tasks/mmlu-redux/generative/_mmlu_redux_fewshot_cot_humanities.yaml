@@ -1,0 +1,9 @@
+group: mmlu_redux_fewshot_cot_humanities
+task:
+  - mmlu_redux_fewshot_cot_humanities_tasks
+aggregate_metric_list:
+  - metric: exact_match
+    weight_by_size: true
+    filter_list: tigerlab-extract
+metadata:
+  version: 1

@@ -1,0 +1,15 @@
+group: wmt24pp_en_xx_east_southeast_asia
+task:
+  - wmt24pp_en_xx_id_ID
+  - wmt24pp_en_xx_vi_VN
+  - wmt24pp_en_xx_zh_TW
+  - wmt24pp_en_xx_th_TH
+  - wmt24pp_en_xx_ja_JP
+  - wmt24pp_en_xx_zh_CN
+  - wmt24pp_en_xx_ko_KR
+  - wmt24pp_en_xx_fil_PH
+aggregate_metric_list:
+  - metric: chrf++
+    weight_by_size: true
+metadata:
+  version: 1.0

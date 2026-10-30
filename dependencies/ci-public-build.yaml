@@ -1,0 +1,11 @@
+# Copyright (c) 2026, NVIDIA CORPORATION. All rights reserved.
+# Docker build arguments for the advisory public training-image build.
+# Production training defaults remain in install.sh.
+build_args:
+  INSTALL_INTERNAL_DEPS: "0"
+  NCCL_REPO_URL: https://github.com/NVIDIA/nccl.git
+  NCCL_REPO_SHA: 7b83616df3ae082a1f32bb74c27458bfe8153a13
+  CUDNN_FRONTEND_REPO_URL: https://github.com/NVIDIA/cudnn-frontend.git
+  CUDNN_FRONTEND_REPO_SHA: c012ba87065d93315bc9463baf0935306e07afb4
+  TRANSFORMER_ENGINE_REPO_URL: https://github.com/NVIDIA/TransformerEngine.git
+  TRANSFORMER_ENGINE_REPO_SHA: ea1a165decdd09c1ef98b273d965796c89c47473

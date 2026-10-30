@@ -1,0 +1,3 @@
+include: _sample_config
+task: svamp
+dataset_path: gitlab:svamp/test.parquet

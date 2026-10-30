@@ -1,0 +1,8 @@
+"dataset_name": "professional_law"
+"description": "The following are multiple choice questions (with answers) about professional\
+  \ law.\n\n"
+"tag": "mmlu_str_humanities_tasks"
+"include": "_default_template_yaml"
+"task": "mmlu_str_professional_law"
+"task_alias": "professional law"
+num_fewshot: 3

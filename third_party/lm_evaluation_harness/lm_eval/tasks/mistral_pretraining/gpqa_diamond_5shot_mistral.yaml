@@ -1,0 +1,22 @@
+task: gpqa_diamond_5shot_mistral
+dataset_path: Idavidrein/gpqa
+dataset_name: gpqa_diamond
+output_type: multiple_choice
+validation_split: train
+fewshot_split: train
+process_docs: !function utils.process_gpqa_diamond
+doc_to_text: "{{query}}\nAnswer:"
+doc_to_target: !function utils.gpqa_fewshot_target
+doc_to_choice: !function utils.newline_choices
+num_fewshot: 5
+fewshot_delimiter: "\n"
+fewshot_config:
+  sampler: !function utils.ThunderdomeSampler
+process_results: !function utils.process_mistral_mc_results
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  source_task: thunderdome:gpqa_diamond_5shot_v2

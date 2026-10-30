@@ -1,0 +1,36 @@
+task: aptbench_agentic_math_planning_single
+tag:
+  - aptbench
+  - agentic_math
+dataset_path: nvidia/APTBench
+dataset_name: null
+dataset_kwargs:
+  data_files: agentic_math/planning_single.jsonl
+training_split: null
+validation_split: null
+test_split: train
+output_type: generate_until
+doc_to_text: !function utils.doc_to_text_planning_single
+doc_to_target: !function utils.doc_to_target_planning_single
+process_results: !function utils.process_results_planning_single
+generation_kwargs:
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 10
+  until:
+    - "\n"
+    - "</s>"
+    - "<|im_end|>"
+    - "<|endoftext|>"
+    - "<|eot_id|>"
+num_fewshot: 0
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  description: "APTBench Agentic Math - Planning Single: Identify the most critical mathematical atomic capability needed to solve a problem. Tests understanding of 10 mathematical tool categories: Symbol Recognition, Concept Understanding, Calculation Execution, Spatial Perception, Formal Math Language, Multi-Step Reasoning, Proof Construction, Theorem Application, Modeling Transformation, and New Knowledge Learning."

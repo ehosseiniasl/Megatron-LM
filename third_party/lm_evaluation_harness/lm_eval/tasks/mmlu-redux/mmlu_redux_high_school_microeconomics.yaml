@@ -1,0 +1,46 @@
+task: mmlu_redux_high_school_microeconomics
+task_alias: high_school_microeconomics
+dataset_name: high_school_microeconomics
+description: 'The following are multiple choice questions (with answers) about high school microeconomics.
+
+
+  '
+include: _mmlu_redux_template_yaml
+fewshot_config:
+  sampler: first_n
+  samples:
+  - question: In a competitive labor market for housepainters, which of the following would increase the demand for housepainters?
+    choices:
+    - An effective minimum wage imposed on this labor market.
+    - An increase in the price of gallons of paint.
+    - An increase in the construction of new houses.
+    - An increase in the price of mechanical painters so long as the output effect exceeds the substitution effect.
+    answer: 2
+  - question: If the government subsidizes producers in a perfectly competitive market, then
+    choices:
+    - the demand for the product will increase
+    - the demand for the product will decrease
+    - the consumer surplus will increase
+    - the consumer surplus will decrease
+    answer: 2
+  - question: The concentration ratio for a monopoly is
+    choices:
+    - '0'
+    - '5'
+    - '10'
+    - '100'
+    answer: 3
+  - question: Which of the following is true of a price floor?
+    choices:
+    - The price floor shifts the demand curve to the left.
+    - An effective floor creates a shortage of the good.
+    - The price floor shifts the supply curve of the good to the right.
+    - To be an effective floor, it must be set above the equilibrium price.
+    answer: 3
+  - question: Which of the following is necessarily a characteristic of oligopoly?
+    choices:
+    - Free entry into and exit from the market
+    - A few large producers
+    - One producer of a good with no close substitutes
+    - A homogenous product
+    answer: 1

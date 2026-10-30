@@ -1,0 +1,15 @@
+group: wmt24pp_en_xx_middle_east_africa
+task:
+  - wmt24pp_en_xx_tr_TR
+  - wmt24pp_en_xx_fa_IR
+  - wmt24pp_en_xx_ar_EG
+  - wmt24pp_en_xx_ar_SA
+  - wmt24pp_en_xx_he_IL
+  - wmt24pp_en_xx_sw_KE
+  - wmt24pp_en_xx_sw_TZ
+  - wmt24pp_en_xx_zu_ZA
+aggregate_metric_list:
+  - metric: chrf++
+    weight_by_size: true
+metadata:
+  version: 1.0

@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_sw_KE
+include: _base_config.yaml
+dataset_name: en-sw_KE
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Swahili (Kenya) follows.\n\nThe translation is:"

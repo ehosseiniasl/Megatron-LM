@@ -1,0 +1,13 @@
+group: adlr_mgsm # adlr because, we select a subset of languages
+task:
+  - mgsm_native_cot_es
+  - mgsm_native_cot_de
+  - mgsm_native_cot_fr
+  - mgsm_native_cot_zh
+  - mgsm_native_cot_ja
+  - mgsm_native_cot_ru
+#### tasks that current do not support yet
+# - task_name: mgsm_native_cot_it
+# - task_name: mgsm_native_cot_pt
+# - task_name: mgsm_native_cot_ko
+# - task_name: mgsm_native_cot_en

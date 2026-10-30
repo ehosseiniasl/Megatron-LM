@@ -1,0 +1,15 @@
+# Standalone retry for the JA/KO computer-science translation source.
+# The previous big merge failed because this source had no chunk directories.
+version: 1
+tokenizer_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/tokenizers/n4-v6-262k.json
+jsonl_root_data_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/
+sources:
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_translated_en_from_ja_ko_comp_sci
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: MASK_MMDOC_CONTENT

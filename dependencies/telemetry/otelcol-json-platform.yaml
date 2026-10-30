@@ -1,0 +1,39 @@
+# Create the job archive directory before starting the collector.
+# Length-prefixed zstd OTLP JSON records; keep nativeCompression disabled.
+# Rotate by size without deleting any archive files.
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+processors:
+  batch:
+    timeout: 1s
+exporters:
+  file:
+    path: ${env:OTEL_ARCHIVE_DIR}/job-${env:SLURM_JOB_ID}/node-${env:SLURMD_NODENAME}.otlp.zstd
+    format: json
+    compression: zstd
+    compression_params:
+      level: 3
+    rotation:
+      max_megabytes: 16
+      max_backups: 0  # Keep every rotated file.
+      max_days: 0     # Never expire rotated files.
+  otlp_grpc/node_local:
+    endpoint: ${env:OTEL_NODE_LOCAL_OTLP_ENDPOINT}
+    tls:
+      insecure: true
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+service:
+  extensions: [health_check]
+  telemetry:
+    logs:
+      level: warn
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [file, otlp_grpc/node_local]

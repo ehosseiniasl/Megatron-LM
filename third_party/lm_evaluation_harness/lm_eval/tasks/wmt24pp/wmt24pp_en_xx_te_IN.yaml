@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_te_IN
+include: _base_config.yaml
+dataset_name: en-te_IN
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Telugu follows.\n\nThe translation is:"

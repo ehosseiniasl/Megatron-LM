@@ -1,0 +1,13 @@
+group: mmlu_str
+task:
+  - mmlu_str_stem
+  - mmlu_str_other
+  - mmlu_str_social_sciences
+  - mmlu_str_humanities
+aggregate_metric_list:
+  - metric: exact_match
+    weight_by_size: True
+  - metric: exact_match
+    weight_by_size: False
+metadata:
+  version: 1

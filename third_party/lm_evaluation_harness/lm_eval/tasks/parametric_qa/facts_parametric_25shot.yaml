@@ -1,0 +1,14 @@
+include: _base_25shot.yaml
+task: facts_parametric_25shot
+dataset_path: csv
+dataset_kwargs:
+  data_files:
+    test: "https://www.kaggle.com/api/v1/datasets/download/kaggle/facts-parametric-public-examples?datasetVersionNumber=2"
+process_docs: !function utils.process_facts_parametric_docs
+test_split: test
+metadata:
+  version: 1.0
+  default_judge_model: openai/gpt-oss-120b
+  default_judge_concurrency: 128
+  judge_prompt_version: facts_parametric_kaggle_notebook_v10
+  judge_replicates: 3

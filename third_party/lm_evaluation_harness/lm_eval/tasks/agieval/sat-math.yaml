@@ -1,0 +1,44 @@
+include: aqua-rat.yaml
+task: agieval_sat_math
+dataset_path: hails/agieval-sat-math
+doc_to_choice: ["Answer: A",
+    "Answer: B",
+    "Answer: C",
+    "Answer: D",
+]
+
+num_fewshot: 5
+fewshot_config:
+  sampler: first_n
+  samples:
+    # - query: "Here are the answers for the problems in the exam.\nQ: $$(x-6)^{2}+(y+5)^{2}=16$$In the $x y$-plane, the graph of the equation above is a circle. Point $P$ is on the circle and has coordinates $(10,-5)$. If $\\overline{P Q}$ is a diameter of the circle, what are the coordinates of point $Q$ ? Answer Choices:  (A)$(2,-5)$ (B)$(6,-1)$ (C)$(6,-5)$ (D)$(6,-9)$\nA: Among A through E, the answer is "
+    #   gold: [ "(A)$(2,-5)$" ]
+    #   few_shot: 1
+    # - query: "Q: Two units of length used in ancient Egypt were cubits and palms, where 1 cubit is equivalent to 7 palms. The Great Sphinx statue in Giza is approximately 140 cubits long. Which of the following best approximates the length, in palms, of the Great Sphinx statue? Answer Choices:  (A)0.05 (B)20 (C)140 (D)980\nA: Among A through E, the answer is "
+    #   gold: [ "(D)980" ]
+    #   few_shot: 1
+    # - query: "Q: In the 1908 Olympic Games, the Olympic marathon was lengthened from 40 kilometers to approximately 42 kilometers. Of the following, which is closest to the increase in the distance of the Olympic marathon, in miles? ( 1 mile is approximately 1.6 kilometers.) Answer Choices:  (A)1.00 (B)1.25 (C)1.50 (D)1.75\nA: Among A through E, the answer is "
+    #   gold: [ "(B)1.25" ]
+    #   few_shot: 1
+    # - query: "Q: The expression $\frac{x^{-2} y^{\frac{1}{2}}}{x^{\frac{1}{3}} y^{-1}}$, where $x>1$ and $y>1$, is equivalent to which of the following? Answer Choices:  (A)$\frac{\\sqrt{y}}{\\sqrt[3]{x^{2}}}$ (B)$\frac{y \\sqrt{y}}{\\sqrt[3]{x^{2}}}$ (C)$\frac{y \\sqrt{y}}{x \\sqrt{x}}$ (D)$\frac{y \\sqrt{y}}{x^{2} \\sqrt[3]{x}}$\nA: Among A through E, the answer is "
+    #   gold: [ "(D)$\frac{y \\sqrt{y}}{x^{2} \\sqrt[3]{x}}$" ]
+    #   few_shot: 1
+    # - query: "Q: Which of the following is an example of a function whose graph in the $x y$-plane has no $x$-intercepts? Answer Choices:  (A)A linear function whose rate of change is not zero (B)A quadratic function with real zeros (C)A quadratic function with no real zeros (D)A cubic polynomial with at least one real zero\nA: Among A through E, the answer is "
+    #   gold: [ "(C)A quadratic function with no real zeros" ]
+    #   few_shot: 1
+
+    - query: "    $$(x-6)^{2}+(y+5)^{2}=16$$In the $x y$-plane, the graph of the equation above is a circle. Point $P$ is on the circle and has coordinates $(10,-5)$. If $\\overline{P Q}$ is a diameter of the circle, what are the coordinates of point $Q$ ? \n   A. $(2,-5)$\n   B. $(6,-1)$\n   C. $(6,-5)$\n   D. $(6,-9)$\n"
+      gold: [ "Answer: A" ]
+      few_shot: 1
+    - query: "    Two units of length used in ancient Egypt were cubits and palms, where 1 cubit is equivalent to 7 palms. The Great Sphinx statue in Giza is approximately 140 cubits long. Which of the following best approximates the length, in palms, of the Great Sphinx statue? \n   A. 0.05\n   B. 20\n   C. 140\n   D. 980\n"
+      gold: [ "Answer: D" ]
+      few_shot: 1
+    - query: "    In the 1908 Olympic Games, the Olympic marathon was lengthened from 40 kilometers to approximately 42 kilometers. Of the following, which is closest to the increase in the distance of the Olympic marathon, in miles? ( 1 mile is approximately 1.6 kilometers.) \n   A. 1.00\n   B. 1.25\n   C. 1.50\n   D. 1.75\n"
+      gold: [ "Answer: B" ]
+      few_shot: 1
+    - query: "    The expression $\frac{x^{-2} y^{\frac{1}{2}}}{x^{\frac{1}{3}} y^{-1}}$, where $x>1$ and $y>1$, is equivalent to which of the following? \n   A. $\frac{\\sqrt{y}}{\\sqrt[3]{x^{2}}}$\n   B. $\frac{y \\sqrt{y}}{\\sqrt[3]{x^{2}}}$\n   C. $\frac{y \\sqrt{y}}{x \\sqrt{x}}$\n   D. $\frac{y \\sqrt{y}}{x^{2} \\sqrt[3]{x}}$\n"
+      gold: [ "Answer: D" ]
+      few_shot: 1
+    - query: "    Which of the following is an example of a function whose graph in the $x y$-plane has no $x$-intercepts? \n   A. A linear function whose rate of change is not zero\n   B. A quadratic function with real zeros\n   C. A quadratic function with no real zeros\n   D. A cubic polynomial with at least one real zero\n"
+      gold: [ "Answer: C" ]
+      few_shot: 1

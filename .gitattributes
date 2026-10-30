@@ -1,0 +1,2 @@
+third_party/lm_evaluation_harness/lm_eval/tasks/mistral_ppl/mistral_ppl_eval.parquet filter=lfs diff=lfs merge=lfs -text
+third_party/lm_evaluation_harness/lm_eval/tasks/llm_compression_2026/llm_compression_2026_eval.parquet filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,3 @@
+include: _sample_config
+task: mawps
+dataset_path: gitlab:mawps/test.parquet

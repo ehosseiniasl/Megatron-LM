@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_sk_SK
+include: _base_config.yaml
+dataset_name: en-sk_SK
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Slovak follows.\n\nThe translation is:"

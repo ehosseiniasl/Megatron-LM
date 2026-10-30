@@ -1,0 +1,14 @@
+include: _base_25shot.yaml
+task: simpleqa_verified_25shot
+dataset_path: google/simpleqa-verified
+dataset_name: simpleqa_verified
+dataset_kwargs:
+  revision: 0dc97e0d28d8233463e005cdc4475cc2a13ba2dc
+process_docs: !function utils.process_simpleqa_verified_docs
+test_split: eval
+metadata:
+  version: 1.0
+  default_judge_model: openai/gpt-oss-120b
+  default_judge_concurrency: 128
+  judge_prompt_version: simpleqa_verified_kaggle_notebook_v9
+  judge_replicates: 1

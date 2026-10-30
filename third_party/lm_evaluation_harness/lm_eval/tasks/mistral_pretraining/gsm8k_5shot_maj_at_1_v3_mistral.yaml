@@ -1,0 +1,28 @@
+task: gsm8k_5shot_maj@1_v3_mistral
+dataset_path: openai/gsm8k
+dataset_name: main
+output_type: generate_until
+training_split: train
+fewshot_split: train
+test_split: test
+process_docs: !function utils.process_gsm8k
+doc_to_text: "Problem:\n{{question}}\nSolution:"
+doc_to_target: context_answer
+target_delimiter: "\n"
+fewshot_delimiter: "\n\n"
+num_fewshot: 5
+fewshot_config:
+  sampler: !function utils.ThunderdomeSampler
+generation_kwargs:
+  until: ["Problem"]
+  max_gen_toks: 256
+  do_sample: false
+  temperature: 0.0
+process_results: !function utils.process_gsm8k_results
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  source_task: thunderdome:gsm8k_5shot_maj@1_v3

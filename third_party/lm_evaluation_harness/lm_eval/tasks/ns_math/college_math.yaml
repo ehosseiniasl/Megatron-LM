@@ -1,0 +1,3 @@
+include: _sample_config
+task: college_math
+dataset_path: gitlab:college_math/test.parquet

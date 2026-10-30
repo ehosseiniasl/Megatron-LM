@@ -1,0 +1,42 @@
+include: aqua-rat.yaml
+task: agieval_logiqa_en
+dataset_path: hails/agieval-logiqa-en
+
+doc_to_choice: ["Answer: A",
+    "Answer: B",
+    "Answer: C",
+    "Answer: D",
+]
+
+num_fewshot: 3
+fewshot_config:
+  sampler: first_n
+  samples:
+    # - query: "Here are the answers for the problems in the exam.\n Because the image of the photo is formed by the contact between the light and the film, each photo has a certain authenticity.However, photos taken from different angles always reflect the reality of one side of the object rather than the whole truth.In this sense, the photo is unreal.Therefore, under current technical conditions, it is inappropriate to use photos as evidence, especially in court. Which of the following, if true, would weaken the above argument most?\n     A. Photography technology is constantly evolving.In theory, panoramic photos can reflect the full reality of objects from the appearance. \n     B. Any evidence only needs to reflect a certain aspect of the fact. \n     C. In the court hearing, some photos, although they cannot be evidence, have important reference value. \n     D. Some photos are synthesized or forged by technical means.\n"
+    #   gold: [ "\n     B. Any evidence only needs to reflect a certain aspect of the fact." ]
+    #   few_shot: 1
+    # - query: "Some people think that any organization includes different job levels or tiers, and everyone belongs to one of the tiers.If someone does a good job in the original level, they will be promoted, and the promoted will be reused But the future is humble and ineffective, which will result in inefficient institutions and overstaffing. Which of the following is true if it is the most doubtful?\n     A. The working methods of different positions are different, and there must be an adaptation process for new positions \n     B. The department manager Mr.Wang has outstanding performance and is still outstanding after being promoted to general manager of the company \n     C. Personal promotion often affects the development of the institution to a certain extent \n     D. Li Ming's sports performance is not satisfactory, but he did it well after entering the management\n"
+    #   gold: [ "\n     B. The department manager Mr.Wang has outstanding performance and is still outstanding after being promoted to general manager of the company" ]
+    #   few_shot: 1
+    # - query: "A country intends to import several of the six crops of A.B, C, D, E, and H for use in the country ’s huge animal feed industry, considering that some crops may contain prohibited ingredients and the complementarity that exists between them Or alternative factors, the country has the following requirements for the import of these crops? (1) All of them that do not contain prohibited ingredients are imported; (2) If A or B contain prohibited ingredients, then import E and H; (3) If C If it contains prohibited ingredients, then Ding will not be imported; (4) if E is imported, B and D will be imported; (5) if D is not imported, C will be imported; if C is imported, D will not be imported. According to the above requirements, which of the following crops can the country import?\n     A. A.B, C. \n     B. B, C, D. \n     C. A.E, and E. \n     D. A.D, and yourself.\n"
+    #   gold: [ "\n     A. A.B, C." ]
+    #   few_shot: 1
+    # - query: "Here are the answers for the problems in the exam.\n Because the image of the photo is formed by the contact between the light and the film, each photo has a certain authenticity.However, photos taken from different angles always reflect the reality of one side of the object rather than the whole truth.In this sense, the photo is unreal.Therefore, under current technical conditions, it is inappropriate to use photos as evidence, especially in court. Which of the following, if true, would weaken the above argument most?\n     A. Photography technology is constantly evolving.In theory, panoramic photos can reflect the full reality of objects from the appearance. \n     B. Any evidence only needs to reflect a certain aspect of the fact. \n     C. In the court hearing, some photos, although they cannot be evidence, have important reference value. \n     D. Some photos are synthesized or forged by technical means.\n"
+    #   gold: [ "Answer: B" ]
+    #   few_shot: 1
+    # - query: "Some people think that any organization includes different job levels or tiers, and everyone belongs to one of the tiers.If someone does a good job in the original level, they will be promoted, and the promoted will be reused But the future is humble and ineffective, which will result in inefficient institutions and overstaffing. Which of the following is true if it is the most doubtful?\n     A. The working methods of different positions are different, and there must be an adaptation process for new positions \n     B. The department manager Mr.Wang has outstanding performance and is still outstanding after being promoted to general manager of the company \n     C. Personal promotion often affects the development of the institution to a certain extent \n     D. Li Ming's sports performance is not satisfactory, but he did it well after entering the management\n"
+    #   gold: [ "Answer: B" ]
+    #   few_shot: 1
+    # - query: "A country intends to import several of the six crops of A.B, C, D, E, and H for use in the country ’s huge animal feed industry, considering that some crops may contain prohibited ingredients and the complementarity that exists between them Or alternative factors, the country has the following requirements for the import of these crops? (1) All of them that do not contain prohibited ingredients are imported; (2) If A or B contain prohibited ingredients, then import E and H; (3) If C If it contains prohibited ingredients, then Ding will not be imported; (4) if E is imported, B and D will be imported; (5) if D is not imported, C will be imported; if C is imported, D will not be imported. According to the above requirements, which of the following crops can the country import?\n     A. A.B, C. \n     B. B, C, D. \n     C. A.E, and E. \n     D. A.D, and yourself.\n"
+    #   gold: [ "Answer: A" ]
+    #   few_shot: 1
+
+    - query: "    Which of the following, if true, would weaken the above argument most? \n   A. Photography technology is constantly evolving.In theory, panoramic photos can reflect the full reality of objects from the appearance.\n   B. Any evidence only needs to reflect a certain aspect of the fact.\n   C. In the court hearing, some photos, although they cannot be evidence, have important reference value.\n   D. Some photos are synthesized or forged by technical means.\n"
+      gold: [ "Answer: B" ]
+      few_shot: 1
+    - query: "    Which of the following is true if it is the most doubtful? \n   A. The working methods of different positions are different, and there must be an adaptation process for new positions\n   B. The department manager Mr.Wang has outstanding performance and is still outstanding after being promoted to general manager of the company\n   C. Personal promotion often affects the development of the institution to a certain extent\n   D. Li Ming's sports performance is not satisfactory, but he did it well after entering the management\n"
+      gold: [ "Answer: B" ]
+      few_shot: 1
+    - query: "    According to the above requirements, which of the following crops can the country import? \n   A. A.B, C.\n   B. B, C, D.\n   C. A.E, and E.\n   D. A.D, and yourself.\n"
+      gold: [ "Answer: A" ]
+      few_shot: 1

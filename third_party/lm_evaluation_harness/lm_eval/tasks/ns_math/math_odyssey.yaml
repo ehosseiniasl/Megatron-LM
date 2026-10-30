@@ -1,0 +1,3 @@
+include: _sample_config
+task: math_odyssey
+dataset_path: gitlab:math_odyssey/test.parquet

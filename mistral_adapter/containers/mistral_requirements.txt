@@ -1,0 +1,32 @@
+# Mistral data loading dependencies needed inside the Megatron container.
+# These are transitively imported when using Mistral's PretokenizedDataLoader.
+av
+boto3
+cloudpickle
+dacite
+fasttext
+fire
+imagehash
+msgspec
+opencv-python-headless
+numpy<2.0
+orjson
+psutil
+pybase64
+safetensors
+soundfile
+soxr
+sympy
+tenacity
+zstandard
+
+# Dependencies from mistral_common (common/ package), transitively imported
+# through masking.py → mistral_common.tokens.tokenizers → protocol → chunk etc.
+fastjsonschema==2.19.1
+jsonschema
+openapi-pydantic
+partial-json-parser
+pydantic-extra-types[pycountry]
+regex
+structlog
+tiktoken

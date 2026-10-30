@@ -1,0 +1,3 @@
+include: _sample_config
+task: olympiadbench
+dataset_path: gitlab:olympiadbench/test.parquet

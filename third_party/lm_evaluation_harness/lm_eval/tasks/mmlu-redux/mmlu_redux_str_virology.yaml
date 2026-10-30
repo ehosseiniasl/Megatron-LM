@@ -1,0 +1,46 @@
+task: mmlu_redux_str_virology
+task_alias: virology
+dataset_name: virology
+description: 'The following are multiple choice questions (with answers) about virology.
+
+
+  '
+include: _mmlu_redux_str_template_yaml
+fewshot_config:
+  sampler: first_n
+  samples:
+  - question: Why are parvoviruses a highly impactful parasite?
+    choices:
+    - Because they have no nucleic acid
+    - They require a helper virus
+    - Only replicate in dividing cells
+    - Can integrate into host chromosomes
+    answer: 0
+  - question: Which of the following is a morphological characteristic of the paramyxoviruses.
+    choices:
+    - Fragile viruses often visualised with RNA spewing from the inside
+    - Elongate viruses
+    - Icosahedral viruses with envelope
+    - Very large viruses
+    answer: 0
+  - question: 'A key factor facilitating the application of nested case-control studies from the MACS was:'
+    choices:
+    - Data collection
+    - Establishment of a repository of biologic specimens
+    - Participant interest
+    - Administration of the questionnaire by staff
+    answer: 1
+  - question: 'The most important goal of a behavioral intervention is:'
+    choices:
+    - Change in behavior
+    - Comprehensive coverage
+    - Effective use of behavioral theory
+    - Sustained behavior change
+    answer: 3
+  - question: 'The median survival time to AIDS and death was established by following:'
+    choices:
+    - Seroprevalent HIV-infected individuals
+    - Seronegatives
+    - Seroconverters
+    - High-risk seronegatives
+    answer: 2

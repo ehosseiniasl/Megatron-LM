@@ -1,0 +1,51 @@
+schema_version: 1
+cluster:
+  name: aga
+  slurm:
+    account: nemotron_n4_pre
+    partition: batch
+  judge_scoring:
+    partition: cpu
+    cpus: 32
+    memory: 64G
+    time: "04:00:00"
+    array_concurrency: 2
+  # AGA GPU nodes have four GPUs, 144 CPUs, and 920 GiB allocatable memory.
+  # The logical n1/n4/n8 resources therefore map to literal node counts.
+  resources:
+    n1:
+      nodes: 1
+      gpus_per_node: 4
+      api_nproc: 16
+      expert_model_parallel_size: 4
+      server_cpus_per_node: 56
+      server_memory_per_node: 800G
+      client_cpus: 8
+      client_memory: 64G
+      allocation_memory_per_node: 900G
+      time: "02:00:00"
+      array_concurrency: 2
+    n4:
+      nodes: 4
+      gpus_per_node: 4
+      api_nproc: 16
+      expert_model_parallel_size: 16
+      server_cpus_per_node: 56
+      server_memory_per_node: 800G
+      client_cpus: 8
+      client_memory: 64G
+      allocation_memory_per_node: 900G
+      time: "04:00:00"
+      array_concurrency: 1
+    n8:
+      nodes: 8
+      gpus_per_node: 4
+      api_nproc: 16
+      expert_model_parallel_size: 32
+      server_cpus_per_node: 56
+      server_memory_per_node: 800G
+      client_cpus: 8
+      client_memory: 64G
+      allocation_memory_per_node: 900G
+      time: "04:00:00"
+      array_concurrency: 1

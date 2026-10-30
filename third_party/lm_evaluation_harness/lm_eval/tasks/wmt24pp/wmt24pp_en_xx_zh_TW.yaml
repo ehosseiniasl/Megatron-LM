@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_zh_TW
+include: _base_config.yaml
+dataset_name: en-zh_TW
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Mandarin (Taiwan) follows.\n\nThe translation is:"

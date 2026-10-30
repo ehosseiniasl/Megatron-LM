@@ -1,0 +1,17 @@
+include: aqua-rat.yaml
+task: agieval_lsat_lr
+dataset_path: hails/agieval-lsat-lr
+
+num_fewshot: 3
+fewshot_config:
+  sampler: first_n
+  samples:
+    - query: "    The statement that the law should require explicit safety labels on toys serves which one of the following functions in the consumer advocate's argument? \n   A. It is a general principle supporting the conclusion of the argument.\n   B. It is a proposed compromise between two conflicting goals.\n   C. It is the conclusion of the argument.\n   D. It is evidence that must be refuted in order to establish the conclusion of the argument.\n   E. It is a particular instance of the general position under discussion.\n"
+      gold: [ "Answer: C" ]
+      few_shot: 1
+    - query: "    Which one of the following is an assumption on which the argument depends? \n   A. It will eventually be possible to breed strains of bananas that are resistant to Sigatoka disease.\n   B. Large plantations produce most or all of the world's bananas.\n   C. Sigatoka disease spreads more slowly on large plantations than in small banana groves.\n   D. Sigatoka disease is the only disease that threatens bananas on a worldwide scale.\n   E. Most of the banana trees that have not been exposed to the Sigatoka fungus grow in small banana groves.\n"
+      gold: [ "Answer: B" ]
+      few_shot: 1
+    - query: "    Which one of the following is an assumption on which the argument depends? \n   A. Passengers feel no safer on airplanes equipped with the radar system than on comparable airplanes not so equipped.\n   B. Warnings given by a collision-avoidance system about phantom airplanes are not caused by distorted radar signals.\n   C. The frequency of invalid warnings will not cause pilots routinely to disregard the system's warnings.\n   D. Commercial passenger airplanes are not the only planes that can be equipped with a collision-avoidance system\n   E. The greatest safety risk for passengers traveling on commercial passenger airplanes is that of a midair collision.\n"
+      gold: [ "Answer: C" ]
+      few_shot: 1

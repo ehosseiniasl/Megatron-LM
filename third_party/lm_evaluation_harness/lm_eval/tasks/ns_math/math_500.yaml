@@ -1,0 +1,6 @@
+include: _sample_config
+task: math_500_sampled
+dataset_path: HuggingFaceH4/MATH-500
+num_fewshot: 4
+metadata:
+  version: 4.0

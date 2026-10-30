@@ -1,0 +1,17 @@
+group: wmt24pp_en_xx_central_eastern_europe
+task:
+  - wmt24pp_en_xx_uk_UA
+  - wmt24pp_en_xx_ru_RU
+  - wmt24pp_en_xx_hu_HU
+  - wmt24pp_en_xx_pl_PL
+  - wmt24pp_en_xx_de_DE
+  - wmt24pp_en_xx_sl_SI
+  - wmt24pp_en_xx_sk_SK
+  - wmt24pp_en_xx_sr_RS
+  - wmt24pp_en_xx_ro_RO
+  - wmt24pp_en_xx_cs_CZ
+aggregate_metric_list:
+  - metric: chrf++
+    weight_by_size: true
+metadata:
+  version: 1.0

@@ -1,0 +1,16 @@
+group: mistral_ppl
+task:
+  - mistral_ppl_arxiv_val_ppl
+  - mistral_ppl_catlm_v2
+aggregate_metric_list:
+  - metric: word_perplexity
+    aggregation: mean
+    weight_by_size: true
+  - metric: byte_perplexity
+    aggregation: mean
+    weight_by_size: true
+  - metric: bits_per_byte
+    aggregation: mean
+    weight_by_size: true
+metadata:
+  version: 1.0

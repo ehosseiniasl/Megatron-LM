@@ -1,0 +1,3 @@
+task: llm_compression_2026_arxiv_physics_interleaved
+dataset_name: arxiv_physics_interleaved
+include: _base_config.yaml

@@ -1,0 +1,8 @@
+task: mmlu_redux_cot_miscellaneous
+task_alias: miscellaneous
+dataset_name: miscellaneous
+description: 'The following are multiple choice questions (with answers) about miscellaneous.
+
+
+  '
+include: _mmlu_redux_cot_template_yaml

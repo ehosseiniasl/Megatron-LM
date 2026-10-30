@@ -1,0 +1,140 @@
+version: 1
+tokenizer_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/tokenizers/lobstenizer_hf
+jsonl_root_data_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721
+sources:
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl-n5.5-apr-2025/CC8-synthetic/diverse_qa
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl-n5.5-apr-2025/CC8-synthetic/diverse_qa_mn
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl-n5.5-apr-2025/CC8-synthetic/wrap_medium
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl/CC99-synthetic/diverse_qa_pairs_new/score_19
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl/CC99-synthetic/wrap_medium/score_19
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/code/nemotron-cc-code-2.0
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl-n5.5-apr-2025/CC8-synthetic/distill
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl-n5.5-apr-2025/CC8-synthetic/extract_knowledge
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl-n5.5-apr-2025/CC8-synthetic/knowledge_list
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl-synthetic
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl/CC99-synthetic/distill/score_19
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl/CC99-synthetic/extract_knowledge/score_19
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/crawl/CC99-synthetic/knowledge_list/score_19
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/math
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: pretrain_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+  # Disabled on 2026-08-05: this path is missing on the Coalition filesystem.
+  # - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/nvidia-data-260721/english/wiki-synthetic
+  #   weight: 1.0
+  #   percentage_data: 1.0
+  #   sample_type: pretrain
+  #   image_transform_type: null
+  #   filter: pretrain_v4__lobstral
+  #   rare_token_filter: null
+  #   pds_filter: null
+  #   masking_strategy: null

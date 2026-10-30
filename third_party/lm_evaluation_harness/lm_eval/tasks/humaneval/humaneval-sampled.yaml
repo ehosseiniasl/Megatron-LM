@@ -1,0 +1,7 @@
+include: _sample_config
+task: humaneval_sampled
+dataset_path: openai/openai_humaneval
+doc_to_text: !function utils.build_text
+generation_kwargs:
+  temperature: 0.6
+repeats: 20

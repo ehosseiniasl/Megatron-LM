@@ -1,0 +1,107 @@
+version: 1.0
+tasks:
+  - task_name: humaneval_greedy
+    task_group: code
+    batch_size: 64
+    report_metric:
+      - alias: humaneval_greedy
+        metric: pass@1[1],evalplus_sanitized
+  - task_name: humanevalplus_greedy
+    task_group: code
+    batch_size: 64
+    report_metric:
+      - alias: humanevalplus_greedy
+        metric: pass@1[1],evalplus_sanitized
+  - task_name: mbpp_sanitized_3shot_greedy
+    task_group: code
+    batch_size: 64
+    report_metric:
+      - alias: mbpp_sanitized_3shot_greedy
+        metric: pass@1[1],evalplus_sanitized
+  - task_name: mbppplus_greedy
+    task_group: code
+    batch_size: 64
+    report_metric:
+      - alias: mbppplus_greedy
+        metric: pass@1[1],evalplus_sanitized
+  - task_name: gsm8k
+    task_group: math
+    batch_size: 16
+    num_fewshot: 8
+    report_metric:
+      - alias: gsm8k
+        metric: exact_match,strict-match
+  - task_name: commonsense_qa
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: commonsense_qa
+        metric: acc,none
+  - task_name: arc_challenge
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: arc_challenge
+        metric: acc_norm,none
+  - task_name: arc_easy
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: arc_easy
+        metric: acc_norm,none
+  - task_name: hellaswag
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: hellaswag
+        metric: acc_norm,none
+  - task_name: openbookqa
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: openbookqa
+        metric: acc_norm,none
+  - task_name: piqa
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: piqa
+        metric: acc_norm,none
+  - task_name: race
+    task_group: reading
+    batch_size: 16
+    report_metric:
+      - alias: race
+        metric: acc,none
+  - task_name: truthfulqa_mc2
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: truthfulqa_mc2
+        metric: acc,none
+  - task_name: winogrande
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: winogrande
+        metric: acc,none
+  - task_name: social_iqa
+    task_group: reasoning
+    batch_size: 32
+    report_metric:
+      - alias: social_iqa
+        metric: acc,none
+  - task_name: mmlu
+    task_group: aggregate
+    batch_size: 8
+    num_fewshot: 5
+    report_metric:
+      - alias: mmlu
+        metric: acc,none
+      - alias: mmlu_stem
+        metric: acc,none
+        # macro is only for comparing with llama reports
+        # - alias: mmlu
+        #   metric: macro-acc,none
+        # - alias: mmlu_stem
+        #   metric: macro-acc,none

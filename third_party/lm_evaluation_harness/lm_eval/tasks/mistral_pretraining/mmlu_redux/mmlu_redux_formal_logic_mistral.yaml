@@ -1,0 +1,5 @@
+include: _mmlu_redux_mistral_template_yaml
+task: mmlu_redux_formal_logic_mistral
+task_alias: formal_logic
+dataset_name: formal_logic
+description: "The following are multiple choice questions (with answers) about formal logic.\n{{ '' }}"

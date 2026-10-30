@@ -1,0 +1,107 @@
+# Reduced N4-v6 config covering every active sample-type, image-transform,
+# masking, rare-token, and PDS-filter combination in the full Crabmo v1 config.
+# Use a PRETOKENIZED_DATA_DIR ending in _DEBUG when launching this config.
+version: 1
+tokenizer_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/tokenizers/n4-v6-262k.json
+jsonl_root_data_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/
+sources:
+  # Code: ordinary repository masking.
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/repos_v1_competition
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: null
+    masking_strategy: MASK_FILE_SEPARATOR
+
+  # Code: GitHub pull-request masking.
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/github4_pr_issue_commentdiff
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: null
+    masking_strategy: MASK_GITHUB_PR_EXPANDED_CONTEXT
+
+  # Code: Locodiff marker masking.
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/locodiff_short
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: null
+    masking_strategy: MASK_LOCODIFF_MARKERS
+
+  # NVIDIA synthetic text-only pretraining.
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/jsonl/n4/nvidia/synthetic/mistral-classified/diverse_qa_pairs_new_academic_qa_high
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: null
+    masking_strategy: null
+
+  # Reasoning traces with segment-level masking.
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/traces_harvestqa_code_high_cpp_v2
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: null
+    masking_strategy: MASK_MIDTRAINING_SEGMENTS
+
+  # Translation: multimodal crawl with document-content masking.
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_translated_en_from_fr_de_es_it_pt_nl_biology
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: MASK_MMDOC_CONTENT
+
+  # Multimodal crawl without masking.
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/stackexchange
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+
+  # Captioning. Pretokenization supports this transform, but epoch-index
+  # building intentionally fails until sometimes_high_res_default is added.
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/captioning_docs_chart_synth_v2
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: sometimes_high_res_default
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+
+  # Grounding remains disabled because multimodal_v1__grounding filter args
+  # are not implemented in Megatron yet.
+  # - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/grounding_cad_260505
+  #   weight: 1.0
+  #   percentage_data: 1.0
+  #   sample_type: pretrain_image
+  #   image_transform_type: grounding_default
+  #   filter: multimodal_v1__grounding
+  #   rare_token_filter: rare_tokens_n4_v6_262k_v1
+  #   pds_filter: nvidia_pds_quarantine_v1
+  #   masking_strategy: MASK_MMDOC_CONTENT

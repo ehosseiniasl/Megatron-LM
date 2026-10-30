@@ -1,0 +1,4 @@
+include: minerva_math_algebra_nemo.yaml
+dataset_name: prealgebra
+task: minerva_math_prealgebra_nemo
+

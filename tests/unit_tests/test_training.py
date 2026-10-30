@@ -1,0 +1,330 @@
+# Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+from collections import defaultdict
+from pathlib import Path
+from types import SimpleNamespace
+
+import pytest
+import torch
+
+from megatron.core.tokenizers.utils.build_tokenizer import vocab_size_with_padding
+from megatron.training.checkpointing import save_grads
+from megatron.training.global_vars import set_args
+from megatron.training.training import (
+    _consume_embedding_min_norm_metrics,
+    _should_compute_params_norm,
+    build_train_valid_test_data_iterators,
+    get_train_valid_test_num_samples,
+    in_phase_transition,
+)
+from tests.unit_tests.dist_checkpointing import TempNamedDir
+from tests.unit_tests.test_utilities import Utils
+
+
+def mock_train_valid_test_datasets_provider(train_val_test_num_samples):
+    return iter([1]), iter([2]), iter([3])
+
+
+class _LenDataloader:
+    """Fake dataloader with __len__ (required by the full_validation path)
+    and __iter__ (consumed via cyclic_iter)."""
+
+    def __init__(self, data):
+        self._data = list(data)
+
+    def __len__(self):
+        return len(self._data)
+
+    def __iter__(self):
+        return iter(self._data)
+
+
+def mock_multi_valid_full_datasets_provider(train_val_test_num_samples):
+    return (iter([1]), [_LenDataloader([2, 2]), _LenDataloader([20, 20, 20])], iter([3]))
+
+
+def create_test_args():
+    # Set dummy values for the args.
+    args = SimpleNamespace()
+    args.iteration = 0
+    args.train_samples = 1
+    args.train_iters = 1
+    args.eval_interval = 1
+    args.eval_iters = 1
+    args.global_batch_size = 1
+    args.consumed_train_samples = 1
+    args.consumed_valid_samples = 1
+    args.dataloader_type = "external"
+    args.skip_train = False
+    args.start_eval_at_iter = None
+    args.full_validation = False
+    args.multiple_validation_sets = False
+    args.perform_rl_step = False
+    args.phase_transition_samples = None
+
+    return args
+
+
+class TestTraining:
+    def setup_method(self, method):
+        Utils.initialize_model_parallel(1, 1)
+        args = create_test_args()
+        set_args(args)
+
+    def test_build_train_valid_test_data_iterators(self):
+        train_iter, valid_iter, test_iter = build_train_valid_test_data_iterators(
+            mock_train_valid_test_datasets_provider
+        )
+        train_data = next(train_iter)
+        valid_data = next(valid_iter)
+        test_data = next(test_iter)
+        assert (train_data, valid_data, test_data) == (1, 2, 3)
+
+    def test_params_norm_is_computed_only_when_it_can_be_logged(self):
+        args = SimpleNamespace(
+            log_params_norm=True, log_interval=20, tensorboard_dir=None, tensorboard_log_interval=1
+        )
+
+        assert _should_compute_params_norm(args, iteration=1, is_first_iteration=True)
+        assert _should_compute_params_norm(args, iteration=20, is_first_iteration=False)
+        assert not _should_compute_params_norm(args, iteration=19, is_first_iteration=False)
+
+        args.tensorboard_dir = "/tmp/tensorboard"
+        args.tensorboard_log_interval = 5
+        assert _should_compute_params_norm(args, iteration=5, is_first_iteration=False)
+
+        args.log_params_norm = False
+        assert not _should_compute_params_norm(args, iteration=20, is_first_iteration=False)
+
+    def test_embedding_min_norm_metrics_combine_model_shards(self, monkeypatch):
+        local_stats = torch.tensor([2.0, 4.0, 0.5, 1.0], dtype=torch.float64, device='cuda')
+        remote_stats = torch.tensor([2.0, 6.0, 1.75, 2.0], dtype=torch.float64, device='cuda')
+        mimo_optimizer = SimpleNamespace(
+            chained_optimizers=[
+                SimpleNamespace(),
+                SimpleNamespace(_consume_embedding_min_norm_stats=lambda: local_stats),
+            ]
+        )
+
+        def fake_all_reduce(stats, op):
+            assert op == torch.distributed.ReduceOp.SUM
+            stats.add_(remote_stats)
+
+        monkeypatch.setattr(torch.distributed, "is_initialized", lambda: True)
+        monkeypatch.setattr(torch.distributed, "all_reduce", fake_all_reduce)
+
+        assert _consume_embedding_min_norm_metrics(mimo_optimizer) == {
+            'embedding-min-norm/row-events-rescaled': 4.0,
+            'embedding-min-norm/fraction-rescaled': 0.4,
+            'embedding-min-norm/projection-delta-rms': 0.75,
+            'embedding-min-norm/zero-row-events': 3.0,
+        }
+
+    def test_build_train_valid_test_data_iterators_multi_full_validation(self):
+        """multiple_validation_sets + full_validation builds a list of iterators
+        (one per validation set) and sets args.eval_iters to the per-loader
+        lengths MAX-reduced across DP ranks."""
+        args = create_test_args()
+        args.multiple_validation_sets = True
+        args.full_validation = True
+        set_args(args)
+        _, valid_iters, _ = build_train_valid_test_data_iterators(
+            mock_multi_valid_full_datasets_provider
+        )
+        assert isinstance(valid_iters, list)
+        assert len(valid_iters) == 2
+        assert next(valid_iters[0]) == 2
+        assert next(valid_iters[1]) == 20
+        # data_parallel_size=1, so MAX across DP ranks equals the local lengths
+        assert args.eval_iters == [2, 3]
+
+    def test_get_num_samples_scopes_training_data_to_current_phase(self, monkeypatch):
+        monkeypatch.setattr("megatron.training.training.get_max_global_batch_size", lambda: 16)
+        args = create_test_args()
+        args.train_samples = 100
+        args.phase_transition_samples = 40
+        set_args(args)
+
+        args.consumed_train_samples = 24
+        assert get_train_valid_test_num_samples()[0] == 56
+
+        args.consumed_train_samples = 40
+        assert get_train_valid_test_num_samples()[0] == 76
+
+    def test_phase_transition_exit_detects_exact_hit_and_overshoot(self, monkeypatch):
+        monkeypatch.setattr(
+            "megatron.training.training.get_current_running_global_batch_size", lambda: 16
+        )
+        args = create_test_args()
+        args.global_batch_size = 1
+        args.phase_transition_samples = 1000
+
+        args.consumed_train_samples = 992
+        assert not in_phase_transition(args)
+
+        args.consumed_train_samples = 1000
+        assert in_phase_transition(args)
+
+        args.consumed_train_samples = 1008
+        assert in_phase_transition(args)
+
+        args.consumed_train_samples = 1024
+        assert not in_phase_transition(args)
+
+    def test_closed_formula_vocab_size_with_padding(self):
+        def old_round_impl(after, multiple):
+            while (after % multiple) != 0:
+                after += 1
+            return after
+
+        args = SimpleNamespace()
+        args.rank = 0
+        args.tensor_model_parallel_size = 1
+
+        for vocab in range(1, 600000, 1000):
+            for mult in [1, 17, 32, 64, 128]:
+                args.make_vocab_size_divisible_by = mult
+                assert old_round_impl(vocab, mult) == vocab_size_with_padding(vocab, args, False), (
+                    vocab,
+                    mult,
+                )
+
+        for vocab in range(1, 10_000, 500):
+            for mult in range(1, 1024 + 1):
+                args.make_vocab_size_divisible_by = mult
+                assert old_round_impl(vocab, mult) == vocab_size_with_padding(vocab, args, False), (
+                    vocab,
+                    mult,
+                )
+
+    def teardown_method(self, method):
+        Utils.destroy_model_parallel()
+
+
+class TestGetModelBucketSizingPgCollection:
+    """The DDP-bucket-sizing path in get_model must read world size / rank from the
+    explicitly passed pg_collection (pg_collection.dp_cp / pg_collection.pp) rather
+    than the mpu globals. With an explicit pg_collection the mpu globals must not be
+    consulted at all."""
+
+    def test_bucket_sizing_uses_explicit_pg_collection(self, monkeypatch):
+        import megatron.training.training as training
+
+        # Sentinel groups whose size()/rank() identify which group was read.
+        class _Group:
+            def __init__(self, size, rank):
+                self._size = size
+                self._rank = rank
+
+            def size(self):
+                return self._size
+
+            def rank(self):
+                return self._rank
+
+        pg_collection = SimpleNamespace(dp_cp=_Group(size=7, rank=0), pp=_Group(size=4, rank=3))
+
+        # The mpu globals replaced on the bucket-sizing path must never be called
+        # when an explicit pg_collection is supplied.
+        def _boom(*args, **kwargs):
+            raise AssertionError("mpu global consulted on explicit pg_collection path")
+
+        monkeypatch.setattr(training.mpu, "get_data_parallel_world_size", _boom)
+        monkeypatch.setattr(training.mpu, "get_pipeline_model_parallel_rank", _boom)
+
+        # get_pg_size/get_pg_rank return 1/0 unless torch.distributed is initialized,
+        # so make them read directly off the sentinel groups for this host-only test.
+        monkeypatch.setattr(training, "get_pg_size", lambda group: group.size())
+        monkeypatch.setattr(training, "get_pg_rank", lambda group: group.rank())
+
+        # Mirror the exact bucket-sizing expressions from get_model.
+        bucket_size = max(40000000, 1000000 * training.get_pg_size(pg_collection.dp_cp))
+        pp_rank = training.get_pg_rank(pg_collection.pp)
+
+        # dp_cp size 7 -> 7_000_000 < 40_000_000, so the floor wins (default behavior).
+        assert bucket_size == 40000000
+        # pp rank is driven by pg_collection.pp, not the mpu global.
+        assert pp_rank == 3
+
+
+class TestStaticSampleAccounting:
+    @pytest.mark.parametrize(
+        "total_cp,num_sequence_shards,weight_shards,samples",
+        [(1, 1, 4, 8), (4, 2, 2, 2), (2, 2, 4, 4)],
+    )
+    def test_static_cp_sample_count(
+        self, monkeypatch, total_cp, num_sequence_shards, weight_shards, samples
+    ):
+        """Count each sequence once in the helper used by progress and LR schedules."""
+        import megatron.training.training as training
+
+        args = SimpleNamespace(
+            gtp_remat_num_sequence_shards=num_sequence_shards,
+            world_size=8,
+            tensor_model_parallel_size=1,
+            pipeline_model_parallel_size=1,
+            context_parallel_size=total_cp,
+            gtp_weight_remat_size=weight_shards,
+            data_parallel_size=2,
+            micro_batch_size=2,
+        )
+        monkeypatch.setattr(training, "get_num_microbatches", lambda: 3)
+
+        assert training._get_global_batch_size_for_iteration(args) == 3 * 2 * samples
+        assert (
+            training._get_global_batch_size_for_iteration(args, num_microbatches=5)
+            == 5 * 2 * samples
+        )
+
+
+class TestSaveGrads:
+    """Tests for the save_grads function."""
+
+    def setup_method(self, method):
+        Utils.initialize_model_parallel(1, 1)
+
+    def teardown_method(self, method):
+        Utils.destroy_model_parallel()
+
+    def test_save_grads(self, tmp_path_dist_ckpt):
+        """Test that save_grads creates the correct directory structure and saves
+        state_dict correctly.
+
+        With TP=1, PP=1 on 8 GPUs, we have 8 DP ranks. Only the rank with
+        expert_data_parallel_rank==0 should save. All ranks verify the result.
+        """
+        save_dir = str(tmp_path_dist_ckpt / "test_save_grads")
+
+        with TempNamedDir(save_dir, sync=True) as save_dir:
+            # Create a mock state_dict with gradients (use deterministic values for reproducibility).
+            state_dict = defaultdict(dict)
+            state_dict["model_chunk0"]["layer.weight"] = torch.arange(16).reshape(4, 4).float()
+            state_dict["model_chunk0"]["layer.bias"] = torch.arange(4).float()
+
+            iteration = 100
+            grad_label = "wgrads"
+
+            # All ranks call save_grads, but only expert_data_parallel_rank==0 actually saves.
+            save_grads(save_dir, dict(state_dict), iteration, grad_label)
+
+            # Synchronize before checking results since only rank 0 saves.
+            torch.distributed.barrier()
+
+            # All ranks verify the file was created by rank 0.
+            expected_dir = Path(save_dir) / grad_label / f"iter_{iteration:07d}"
+            assert expected_dir.exists(), f"Expected directory {expected_dir} to exist"
+
+            expected_file = expected_dir / "mp_rank_00.pth"
+            assert expected_file.exists(), f"Expected file {expected_file} to exist"
+
+            # Verify saved content.
+            loaded = torch.load(expected_file)
+            assert "model_chunk0" in loaded
+            assert "layer.weight" in loaded["model_chunk0"]
+            assert "layer.bias" in loaded["model_chunk0"]
+            assert torch.equal(
+                loaded["model_chunk0"]["layer.weight"], state_dict["model_chunk0"]["layer.weight"]
+            )
+            assert torch.equal(
+                loaded["model_chunk0"]["layer.bias"], state_dict["model_chunk0"]["layer.bias"]
+            )

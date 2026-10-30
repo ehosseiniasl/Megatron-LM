@@ -1,0 +1,34 @@
+{
+  "format_version": 1,
+  "parquet_file": "mistral_ppl_eval.parquet",
+  "parquet_bytes": 23777347,
+  "parquet_sha256": "7d5458ce23f32c4b42decf8b1ab7b0e2f41c0de4453441c9a7804265ea37c8cb",
+  "schema": {
+    "dataset": "string",
+    "id": "string",
+    "text": "large_string",
+    "num_tokens": "int64",
+    "split": "string"
+  },
+  "datasets": {
+    "arxiv_val_ppl": {
+      "rows": 1095,
+      "source_uri": "s3://nvidia-mistral-sharing/arxiv_val_ppl/data.jsonl",
+      "source_bytes": 72110421,
+      "source_sha256": "dd56c38fef00fee1cfe9611c885c4491aa6c59885ee6ecfabbaea0ccb5997106"
+    },
+    "catlm_v2": {
+      "rows": 1890,
+      "source_uri": "s3://nvidia-mistral-sharing/share-bundle-muon-e32/eval_data/catlm_pretokenized_lobstenizer/merged_1099511627776b/",
+      "source_bytes": 36495977,
+      "source_sha256": "da511dd925ff6633055087bb713e7b4cad425ee465463caacdd2d3a4bde35f8f",
+      "source_token_count": 8208453,
+      "source_sequence_count": 1890,
+      "detokenized_with": "lobstenizer-tekken-hf",
+      "skip_special_tokens": false,
+      "scored_token_count": 8206563,
+      "bos_token_id": 1,
+      "removed_leading_bos_count": 1890
+    }
+  }
+}

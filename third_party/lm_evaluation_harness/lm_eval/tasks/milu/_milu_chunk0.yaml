@@ -1,0 +1,13 @@
+group: milu_chunk0
+task:
+  - milu_Hindi
+  - milu_Tamil
+  - milu_Marathi
+  - milu_Gujarati
+  - milu_Punjabi
+  - milu_Odia
+aggregate_metric_list:
+  - metric: acc
+    weight_by_size: true
+metadata:
+  version: 0.0

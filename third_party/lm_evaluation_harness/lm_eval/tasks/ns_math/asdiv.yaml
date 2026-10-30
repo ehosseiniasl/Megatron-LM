@@ -1,0 +1,3 @@
+include: _sample_config
+task: asdiv
+dataset_path: gitlab:asdiv/test.parquet

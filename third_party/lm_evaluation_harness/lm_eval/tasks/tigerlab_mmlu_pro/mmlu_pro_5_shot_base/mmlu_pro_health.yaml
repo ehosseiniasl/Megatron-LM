@@ -1,0 +1,5 @@
+description: "The following are multiple choice questions (with answers) about health. Think step by step and then output the answer in the format of \"The answer is (X)\" at the end.\n\n"
+include: "_default_template_yaml"
+task: "mmlu_pro_5_shot_base_health"
+task_alias: "health"
+process_docs: !function utils.process_health

@@ -1,0 +1,3 @@
+include: _sample_config
+task: aime24
+dataset_path: gitlab:aime24/test.parquet

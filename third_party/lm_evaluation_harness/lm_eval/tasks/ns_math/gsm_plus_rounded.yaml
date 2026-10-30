@@ -1,0 +1,7 @@
+include: _sample_config
+task: gsm_plus_rounded
+dataset_path: gitlab:gsm_plus_rounded/test.parquet
+num_fewshot: 8
+fewshot_config:
+  sampler: first_n
+  samples: !function utils.standard_gsm8k_fewshot_samples

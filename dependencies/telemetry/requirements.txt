@@ -1,0 +1,10 @@
+# grpcio-tools 1.76 supports protobuf 6, as required by CUTLASS.
+grpcio-tools==1.76.0
+googleapis-common-protos==1.75.3
+opentelemetry-api==1.44.0
+opentelemetry-sdk==1.44.0
+opentelemetry-exporter-otlp-proto-common==1.44.0
+opentelemetry-exporter-otlp-proto-grpc==1.44.0
+opentelemetry-exporter-otlp-proto-http==1.44.0
+opentelemetry-proto==1.44.0
+opentelemetry-semantic-conventions==0.65b0

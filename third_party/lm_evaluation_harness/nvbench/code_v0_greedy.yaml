@@ -1,0 +1,27 @@
+# Benchmark for evaluating code generation of base models.
+version: 1.0
+tasks:
+  - task_name: humaneval_greedy
+    task_group: code
+    batch_size: 128
+    report_metric:
+      - alias: humaneval_greedy
+        metric: pass@1[1],evalplus_sanitized
+  - task_name: humanevalplus_greedy
+    task_group: code
+    batch_size: 128
+    report_metric:
+      - alias: humanevalplus_greedy
+        metric: pass@1[1],evalplus_sanitized
+  - task_name: mbpp_sanitized_3shot_greedy
+    task_group: code
+    batch_size: 128
+    report_metric:
+      - alias: mbpp_sanitized_3shot_greedy
+        metric: pass@1[1],evalplus_sanitized
+  - task_name: mbppplus_greedy
+    task_group: code
+    batch_size: 128
+    report_metric:
+      - alias: mbppplus_greedy
+        metric: pass@1[1],evalplus_sanitized

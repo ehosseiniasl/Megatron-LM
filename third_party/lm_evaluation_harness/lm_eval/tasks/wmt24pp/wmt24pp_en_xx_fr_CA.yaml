@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_fr_CA
+include: _base_config.yaml
+dataset_name: en-fr_CA
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into French (Canada) follows.\n\nThe translation is:"

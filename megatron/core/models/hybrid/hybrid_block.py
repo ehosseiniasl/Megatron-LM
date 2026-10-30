@@ -1,0 +1,841 @@
+# Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# Copyright (c) 2024, Tri Dao, Albert Gu.
+
+# Some of this code was adopted from https://github.com/state-spaces/mamba/
+# This source code is licensed under the Apache license found in the
+# LICENSE file in the root directory of this source tree.
+
+import copy
+from contextlib import nullcontext
+from dataclasses import dataclass
+from typing import Optional, Tuple, Union
+
+import torch
+from torch import Tensor, nn
+
+from megatron.core.context_parallel import ContextParallelLayoutManager, CPLayout, THDCPLayoutPlan
+from megatron.core.dist_checkpointing.mapping import ShardedStateDict
+from megatron.core.dist_checkpointing.utils import replace_prefix_for_sharding
+from megatron.core.enums import Fp8Recipe
+from megatron.core.extensions.transformer_engine import (
+    TELayerNormColumnParallelLinear,
+    TENorm,
+    describe_layer,
+    is_log_quantization_types_enabled,
+    qtype_debug_note,
+)
+from megatron.core.fp4_utils import get_fp4_context
+from megatron.core.fp8_utils import get_fp8_context
+from megatron.core.inference.contexts import BaseInferenceContext
+from megatron.core.inference.utils import InferenceMode
+from megatron.core.models.hybrid.hybrid_layer_allocation import Symbols as LayerSymbols
+from megatron.core.models.hybrid.shortcut_block import (
+    ShortcutMoEBlock,
+    group_layers_into_shortcut_blocks,
+)
+from megatron.core.packed_seq_params import PackedSeqParams
+from megatron.core.process_groups_config import ProcessGroupCollection
+from megatron.core.recompute import checkpointed_forward
+from megatron.core.ssm.context_parallel.chunkwise import build_packed_sequence_cp_metadata
+from megatron.core.ssm.mamba_layer import MambaLayer
+from megatron.core.tensor_observation import (
+    observe_layer_residuals,
+    observe_residual_summary_boundary,
+)
+from megatron.core.transformer import TransformerConfig
+from megatron.core.transformer.cuda_graphs import annotate_first_last_layer
+from megatron.core.transformer.identity_op import IdentityOp
+from megatron.core.transformer.module import MegatronModule
+from megatron.core.transformer.multi_latent_attention import FusedMLASelfAttention
+from megatron.core.transformer.residual_recompute import (
+    build_residual_stream_recompute_plan,
+    residual_stream_recompute_enabled,
+)
+from megatron.core.transformer.spec_utils import ModuleSpec, build_module
+from megatron.core.transformer.transformer_layer import TransformerLayer
+from megatron.core.transformer.utils import sharded_state_dict_default
+from megatron.core.transformer.wide_residual_layer import (
+    build_wide_residual_readout,
+    expand_wide_residual_stream,
+    specialize_wide_residual_layer_spec,
+)
+from megatron.core.typed_torch import apply_module
+from megatron.core.utils import WrappedTensor, deprecate_inference_params, make_viewless_tensor
+
+
+@dataclass
+class HybridStackSubmodules:
+    """
+    A class for the module specs for the HybridStack.
+    """
+
+    mamba_layer: Union[ModuleSpec, type] = IdentityOp
+    gdn_layer: Union[ModuleSpec, type] = IdentityOp
+    attention_layer: Union[ModuleSpec, type] = IdentityOp
+    dsa_layer: Union[ModuleSpec, type] = IdentityOp
+    mla_layer: Union[ModuleSpec, type] = IdentityOp
+    mlp_layer: Union[ModuleSpec, type] = IdentityOp
+    moe_layer: Union[ModuleSpec, type] = IdentityOp
+    mtp_block_spec: Optional[ModuleSpec] = None
+
+
+class HybridStack(MegatronModule):
+    """
+    Constructor for the HybridStack class.
+
+    Args:
+        config (TransformerConfig): the model configuration
+        submodules (HybridStackSubmodules): the submodules for the stack
+        pre_process (bool, optional): whether to include an embedding layer.
+            Defaults to True.
+        layer_type_list (list, optional): pre-computed list of layer type symbols for
+            this pipeline segment. When provided (by HybridModel), pipeline stage
+            selection has already been done via '|' separators in the pattern.
+        pp_layer_offset (int, optional): the global layer offset for this pipeline
+            segment. Defaults to 0.
+        post_layer_norm (bool, optional): whether to include a final layer norm.
+            Defaults to True.
+        post_process (bool, optional): whether to include an output layer.
+            Defaults to True.
+        device (optional): the device to use. Defaults to None.
+        dtype (optional): the data type to use. Defaults to None.
+        pg_collection (ProcessGroupCollection): the required model communication
+            process groups to use.
+        is_mtp_layer (bool, optional): whether this is an MTP layer. Defaults to False.
+        boundary_layout (CPLayout, optional): CP layout at the stack boundary.
+        moe_layer_offset (int, optional): Number of MoE layers before this pipeline segment.
+            Required for limiting orthogonality loss on decoder segments with a nonzero offset.
+    """
+
+    def __init__(
+        self,
+        config: TransformerConfig,
+        submodules: HybridStackSubmodules,
+        pre_process: bool = True,
+        layer_type_list: Optional[list[str]] = None,
+        pp_layer_offset: int = 0,
+        post_layer_norm: bool = True,
+        post_process: bool = True,
+        device=None,
+        dtype=None,
+        pg_collection: ProcessGroupCollection = None,
+        is_mtp_layer: bool = False,
+        name: str | None = None,
+        boundary_layout: CPLayout | None = None,
+        moe_layer_offset: int | None = None,
+    ) -> None:
+        """
+        Args:
+            name (str | None): module instance name passed top-down from its paranet module
+        """
+        if is_mtp_layer and config.moe_shortcut_disable_mtp:
+            # MTP shares the decoder config; specialize it before constructing child layers.
+            config = copy.copy(config)
+            config.moe_shortcut_connection = False
+            config.moe_shortcut_parallel = False
+            config.moe_shortcut_post_norm = False
+        super().__init__(config=config)
+        # Kept so the quantization log can name a layer by the path a recipe would match
+        # it on, rather than by a bare index that repeats across blocks.
+        self.name = name
+        # The quantization log describes the model, not the iteration, so each block
+        # reports its layers once however many microbatches or MTP depths run.
+        self._logged_quantization_structure = False
+        self.pre_process = pre_process
+        self.post_layer_norm = post_layer_norm
+        self.post_process = post_process
+        self.is_mtp_layer = is_mtp_layer
+        # MTP consumes the main decoder readout and shifted-token embedding at hidden_size.
+        # Its auxiliary stack therefore remains ordinary width even when the decoder is wide.
+        self.uses_wide_residual_stream = self.config.wide_residual is not None and not is_mtp_layer
+        boundary_layout = (
+            self.config.linear_cp_layout if boundary_layout is None else boundary_layout
+        )
+
+        assert pg_collection is not None, "pg_collection must be provided for HybridStack"
+
+        self.pp_group = pg_collection.pp
+        self.tp_group = pg_collection.tp
+        self.cp_group = pg_collection.cp
+        self.tp_cp_group = pg_collection.tp_cp
+
+        # Required for pipeline parallel schedules
+        self.input_tensor = None
+        self.pg_collection = pg_collection
+
+        assert layer_type_list is not None, (
+            "layer_type_list must be provided. It should be pre-computed from "
+            "--hybrid-layer-pattern by HybridModel."
+        )
+        self.layer_type_list = layer_type_list
+        if moe_layer_offset is None:
+            if (
+                pp_layer_offset > 0
+                and not is_mtp_layer
+                and config.moe_router_orthogonality_loss_num_layers
+            ):
+                raise ValueError(
+                    "moe_layer_offset is required to limit orthogonality loss across "
+                    "pipeline stages."
+                )
+            moe_layer_offset = 0
+        self._has_linear_layer_with_chunkwise_cp = (
+            self.cp_group.size() > 1
+            and self.config.linear_cp_mode == "chunkwise"
+            and LayerSymbols.MAMBA in self.layer_type_list
+        )
+        self._cp_layout_manager = None
+        if self.cp_group.size() > 1:
+            layer_layouts = tuple(
+                (
+                    self.config.attention_cp_layout
+                    if layer_type in LayerSymbols.ATTENTION_LAYERS
+                    else self.config.linear_cp_layout
+                )
+                for layer_type in self.layer_type_list
+            )
+            self._cp_layout_manager = ContextParallelLayoutManager(
+                layer_layouts=layer_layouts,
+                boundary_layout=boundary_layout,
+                sequence_parallel=self.config.sequence_parallel,
+                cp_group=self.cp_group,
+                tp_group=self.tp_group,
+                tp_cp_group=self.tp_cp_group,
+            )
+        if getattr(self.config, "mla_down_proj_fusion", False):
+            submodules = self._fuse_mla_down_proj(submodules)
+
+        def configure_layer_spec(layer_spec: Union[ModuleSpec, type]) -> Union[ModuleSpec, type]:
+            if self.uses_wide_residual_stream:
+                return specialize_wide_residual_layer_spec(layer_spec, self.config)
+            return layer_spec
+
+        mtp_layer_kwargs = {"is_mtp_layer": True} if is_mtp_layer else {}
+
+        # Build layers from the pre-selected segment
+        self.layers = nn.ModuleList()
+        for i, layer_type in enumerate(self.layer_type_list):
+            layer_number = i + 1 + pp_layer_offset
+            if self.config.fp8:
+                quant_init_context = get_fp8_context(self.config, i + pp_layer_offset, is_init=True)
+            elif self.config.fp4:
+                quant_init_context = get_fp4_context(self.config, i + pp_layer_offset, is_init=True)
+            else:
+                quant_init_context = nullcontext()
+            with quant_init_context:
+                if layer_type == LayerSymbols.MAMBA:
+                    layer = build_module(
+                        configure_layer_spec(submodules.mamba_layer),
+                        config=self.config,
+                        layer_number=layer_number,
+                        pp_layer_offset=pp_layer_offset,
+                        pg_collection=pg_collection,
+                        name=(name + f".layers.{i}") if name is not None else None,
+                        **mtp_layer_kwargs,
+                    )
+                elif layer_type == LayerSymbols.ATTENTION:
+                    layer = build_module(
+                        configure_layer_spec(submodules.attention_layer),
+                        config=self.config,
+                        layer_number=layer_number,
+                        pg_collection=pg_collection,
+                        is_mtp_layer=is_mtp_layer,
+                        add_layer_offset=False,
+                        pp_layer_offset=pp_layer_offset,
+                        name=(name + f".layers.{i}") if name is not None else None,
+                    )
+                elif layer_type == LayerSymbols.DS_ATTENTION:
+                    layer = build_module(
+                        configure_layer_spec(submodules.dsa_layer),
+                        config=self.config,
+                        layer_number=layer_number,
+                        pg_collection=pg_collection,
+                        is_mtp_layer=is_mtp_layer,
+                        add_layer_offset=False,
+                        pp_layer_offset=pp_layer_offset,
+                        name=(name + f".layers.{i}") if name is not None else None,
+                    )
+                elif layer_type == LayerSymbols.MLA:
+                    layer = build_module(
+                        configure_layer_spec(submodules.mla_layer),
+                        config=self.config,
+                        layer_number=layer_number,
+                        pg_collection=pg_collection,
+                        is_mtp_layer=is_mtp_layer,
+                        add_layer_offset=False,
+                        pp_layer_offset=pp_layer_offset,
+                    )
+                elif layer_type == LayerSymbols.MLP:
+                    layer = build_module(
+                        configure_layer_spec(submodules.mlp_layer),
+                        config=self.config,
+                        layer_number=layer_number,
+                        pg_collection=pg_collection,
+                        add_layer_offset=False,
+                        name=(name + f".layers.{i}") if name is not None else None,
+                        **mtp_layer_kwargs,
+                    )
+                elif layer_type == LayerSymbols.MOE:
+                    layer = build_module(
+                        configure_layer_spec(submodules.moe_layer),
+                        config=self.config,
+                        layer_number=layer_number,
+                        pg_collection=pg_collection,
+                        is_mtp_layer=is_mtp_layer,
+                        add_layer_offset=False,
+                        name=(name + f".layers.{i}") if name is not None else None,
+                    )
+                elif layer_type == LayerSymbols.GDN:
+                    gdn_layer_spec = submodules.gdn_layer
+                    if self.config.experimental_attention_variant == "gdn2":
+                        # 'G' layers build the GDN2 variant when the gdn2 experimental
+                        # attention variant is selected.
+                        from megatron.core.ssm.gated_delta_net import GatedDeltaNet2
+
+                        gdn_layer_spec = copy.deepcopy(gdn_layer_spec)
+                        gdn_layer_spec.submodules.self_attention.module = GatedDeltaNet2
+                    layer = build_module(
+                        configure_layer_spec(gdn_layer_spec),
+                        config=self.config,
+                        layer_number=layer_number,
+                        pg_collection=pg_collection,
+                        # Set to False as we do not want to change offset.
+                        add_layer_offset=False,
+                        pp_layer_offset=pp_layer_offset,
+                        name=(name + f".layers.{i}") if name is not None else None,
+                        **mtp_layer_kwargs,
+                    )
+                else:
+                    raise ValueError("unexpected layer_type")
+            if (
+                layer_type == LayerSymbols.MOE
+                and config.moe_router_orthogonality_loss_num_layers
+                and not is_mtp_layer
+            ):
+                moe_layer_offset += 1
+                layer.mlp.router.moe_layer_number = moe_layer_offset
+            self.layers.append(layer)
+
+        if self.config.cuda_graph_impl == "local":
+            annotate_first_last_layer(self.layers)
+
+        # Required for activation recomputation
+        self.num_layers_per_pipeline_rank = len(self.layers)
+
+        self.residual_stream_readout = (
+            build_wide_residual_readout(self.config)
+            if self.post_process and self.uses_wide_residual_stream
+            else None
+        )
+
+        if self.post_process and self.post_layer_norm:
+            # Final layer norm before output.
+            self.final_norm = TENorm(
+                config=self.config,
+                hidden_size=self.config.hidden_size,
+                eps=self.config.layernorm_epsilon,
+            )
+
+        if self.config.moe_shortcut_connection:
+            self.layers = group_layers_into_shortcut_blocks(
+                self.layers, self.layer_type_list, self.config, pp_layer_offset=pp_layer_offset
+            )
+
+    def _fuse_mla_down_proj(self, submodules: HybridStackSubmodules) -> HybridStackSubmodules:
+        # Avoid modifying the original object so users don't get surprised about their `submodules`
+        # being modified underneath them.
+        submodules = copy.deepcopy(submodules)
+        mla_spec = submodules.mla_layer
+        # We always fuse the input layernorm because Hybrid always uses TransformerEngine.
+        mla_spec.submodules.input_layernorm = IdentityOp
+        mla_spec.submodules.self_attention.module = FusedMLASelfAttention
+        mla_spec.submodules.self_attention.submodules.linear_qkv_down_proj = (
+            TELayerNormColumnParallelLinear
+        )
+        mla_spec.submodules.self_attention.submodules.linear_q_down_proj = None
+        mla_spec.submodules.self_attention.submodules.linear_kv_down_proj = None
+        mla_spec.submodules.sharded_state_dict_keys_map = {
+            "self_attention.linear_q_down_proj.layer_norm_": "input_layernorm.",
+            "self_attention.linear_kv_down_proj.layer_norm_": "input_layernorm.",
+            "self_attention.linear_qkv_down_proj.layer_norm_": "input_layernorm.",
+        }
+        return submodules
+
+    def set_input_tensor(self, input_tensor: Tensor):
+        """Set input tensor to be used instead of forward()'s input.
+
+        When doing pipeline parallelism the input from the previous
+        stage comes from communication, not from the input, so the
+        model's forward_step_func won't have it. This function is thus
+        used by internal code to bypass the input provided by the
+        forward_step_func"""
+        self.input_tensor = input_tensor
+
+    def _shortcut_layer_pairs(self) -> tuple[tuple[int, int], ...]:
+        """Return physical layer indices that must share one residual replay block."""
+
+        pairs = []
+        physical_index = 0
+        for layer in self.layers:
+            if isinstance(layer, ShortcutMoEBlock):
+                pairs.append((physical_index, physical_index + 1))
+                physical_index += 2
+            else:
+                physical_index += 1
+        if physical_index != self.num_layers_per_pipeline_rank:
+            raise RuntimeError(
+                "The registered HybridStack hierarchy does not match its physical layer count."
+            )
+        return tuple(pairs)
+
+    def physical_layers(self) -> tuple[nn.Module, ...]:
+        """Return physical layers in execution order, expanding logical shortcut pairs."""
+
+        physical_layers = []
+        for layer in self.layers:
+            if isinstance(layer, ShortcutMoEBlock):
+                physical_layers.extend((layer.compute_layer, layer.moe_layer))
+            else:
+                physical_layers.append(layer)
+        if len(physical_layers) != self.num_layers_per_pipeline_rank:
+            raise RuntimeError(
+                "The registered HybridStack hierarchy does not match its physical layer count."
+            )
+        return tuple(physical_layers)
+
+    def mamba_state_shapes_per_request(self) -> Optional[Tuple[Tuple[int], Tuple[int]]]:
+        """
+        Returns the recurrent mixer's conv and SSM state shapes per input sequence
+        if this block contains Mamba or GDN layers (this may not be the case with PP > 1).
+        """
+        for layer_type, layer in zip(self.layer_type_list, self.physical_layers()):
+            if layer_type == LayerSymbols.MAMBA:
+                return layer.mamba_state_shapes_per_request()
+            if layer_type == LayerSymbols.GDN:
+                return layer.self_attention.mamba_state_shapes_per_request()
+        return None
+
+    def forward(
+        self,
+        hidden_states: Union[Tensor, WrappedTensor],
+        attention_mask: Tensor,
+        inference_context: Optional[BaseInferenceContext] = None,
+        rotary_pos_emb: Optional[Tensor] = None,
+        *,
+        inference_params: Optional[BaseInferenceContext] = None,
+        packed_seq_params: Optional[PackedSeqParams] = None,
+        padding_mask=None,
+        packed_seq_params_by_layout: dict[CPLayout, PackedSeqParams | None] | None = None,
+        cp_layout_plan: THDCPLayoutPlan | None = None,
+    ):
+        """
+        Forward function of the HybridStack class.
+
+        It either returns the Loss values if labels are given or the
+            final hidden units
+
+        Args:
+            hidden_states (Union[Tensor, WrappedTensor]): the input tensor.
+                Can be passed as a WrappedTensor during inference to avoid an obsolete
+                reference in the calling function.
+            attention_mask (Tensor): the attention mask.
+            inference_context (BaseInferenceContext): the inference parameters.
+            rotary_pos_emb (Tensor, optional): the rotary positional embeddings.
+                Defaults to None.
+        Returns:
+            Tensor: the output tensor.
+        """
+
+        inference_context = deprecate_inference_params(inference_context, inference_params)
+
+        if self._has_linear_layer_with_chunkwise_cp and padding_mask is not None:
+            raise NotImplementedError(
+                "Hybrid chunkwise context parallelism does not support padding masks."
+            )
+
+        cp_layout_state = None
+        if self._cp_layout_manager is not None:
+            cp_layout_state = self._cp_layout_manager.build_forward_state(
+                packed_seq_params,
+                packed_seq_params_by_layout=packed_seq_params_by_layout,
+                thd_plan=cp_layout_plan,
+            )
+
+        packed_sequence_cp_metadata = None
+        if self._has_linear_layer_with_chunkwise_cp and packed_seq_params is not None:
+            if packed_seq_params.seq_idx is None:
+                raise ValueError("Packed chunkwise CP requires packed_seq_params.seq_idx")
+            packed_sequence_cp_metadata = build_packed_sequence_cp_metadata(
+                packed_seq_params.seq_idx,
+                cp_rank=self.cp_group.rank(),
+                cp_size=self.cp_group.size(),
+            )
+
+        if not self.pre_process:
+            # See set_input_tensor()
+            hidden_states = self.input_tensor
+
+        # Delete the obsolete reference to the initial input tensor if necessary
+        if isinstance(hidden_states, WrappedTensor):
+            hidden_states = hidden_states.unwrap()
+
+        if self.uses_wide_residual_stream and self.pre_process:
+            hidden_states = expand_wide_residual_stream(
+                hidden_states, self.config.wide_residual.num_streams
+            )
+
+        if inference_context and inference_context.is_static_batching():
+            # NOTE(bnorick): match BaseInferenceContext attributes for
+            # mamba_ssm.utils.generation.BaseInferenceContext,
+            # this hack supports eval
+            inference_context.max_seqlen = inference_context.max_sequence_length
+            inference_context.seqlen_offset = inference_context.sequence_len_offset
+
+        if (
+            (self.config.cuda_graph_impl == "local" or self.config.flash_decode)
+            and inference_context
+            and inference_context.is_static_batching()
+            and InferenceMode.is_active()
+        ):
+            current_batch_size = hidden_states.shape[1]
+            sequence_len_offset = torch.tensor(
+                [inference_context.sequence_len_offset] * current_batch_size,
+                dtype=torch.int32,
+                device='cuda',
+            )
+        else:
+            sequence_len_offset = None
+
+        # If fp8_recipe is delayed, wrap the entire pass with get_fp8_context(),
+        # otherwise do nothing extra at the outer level
+        # if we are using other fp8 recipes, then the context manager enter&exit are free
+        # we can wrap fp8_context within the for loop over layers, so that we can fine-grained
+        # control which layer will be fp8 or bf16
+        # Report the layer structure on the first forward only. Later microbatches and
+        # repeated MTP depths re-run these same layers and would just repeat it.
+        log_structure = (
+            is_log_quantization_types_enabled() and not self._logged_quantization_structure
+        )
+        self._logged_quantization_structure = True
+
+        use_outer_fp8_context = self.config.fp8 and self.config.fp8_recipe == Fp8Recipe.delayed
+        use_inner_fp8_context = self.config.fp8 and self.config.fp8_recipe != Fp8Recipe.delayed
+        use_fp4_context = self.config.fp4 is not None
+        outer_fp8_context = (
+            get_fp8_context(self.config, pg_collection=self.pg_collection)
+            if use_outer_fp8_context
+            else nullcontext()
+        )
+
+        if use_inner_fp8_context:
+
+            def get_inner_quant_context(config, layer_number):
+                return get_fp8_context(config, layer_number, pg_collection=self.pg_collection)
+
+        elif use_fp4_context:
+
+            def get_inner_quant_context(config, layer_number):
+                return get_fp4_context(config, layer_number)
+
+        else:
+
+            def get_inner_quant_context(config, layer_number):
+                return nullcontext()
+
+        use_residual_stream_recompute = (
+            self.uses_wide_residual_stream
+            and residual_stream_recompute_enabled(self.config, self.training)
+        )
+        residual_recompute_plan_kwargs = {}
+        if use_residual_stream_recompute:
+            shortcut_layer_pairs = self._shortcut_layer_pairs()
+            if shortcut_layer_pairs:
+                residual_recompute_plan_kwargs["atomic_layer_pairs"] = shortcut_layer_pairs
+        residual_stream_recompute_plan = (
+            build_residual_stream_recompute_plan(
+                self.num_layers_per_pipeline_rank,
+                self.config.residual_stream_recompute_num_layers,
+                **residual_recompute_plan_kwargs,
+            )
+            if use_residual_stream_recompute
+            else [None] * self.num_layers_per_pipeline_rank
+        )
+
+        with outer_fp8_context:
+            if self.config.recompute_granularity == 'full' and self.training:
+                hidden_states = checkpointed_forward(
+                    self,
+                    hidden_states=hidden_states,
+                    attention_mask=attention_mask,
+                    context=None,
+                    context_mask=None,
+                    rotary_pos_emb=rotary_pos_emb,
+                    attention_bias=None,
+                    packed_seq_params=packed_seq_params,
+                    padding_mask=padding_mask,
+                    use_inner_quantization_context=(use_inner_fp8_context or use_fp4_context),
+                    cp_layout_state=cp_layout_state,
+                    packed_sequence_cp_metadata=packed_sequence_cp_metadata,
+                )
+            else:
+                physical_layer_index = 0
+                for layer in self.layers:
+                    if isinstance(layer, ShortcutMoEBlock):
+                        compute_layer_index = physical_layer_index
+                        moe_layer_index = physical_layer_index + 1
+                        compute_layer = layer.compute_layer
+                        moe_layer = layer.moe_layer
+                        compute_packed_sequence_cp_metadata = (
+                            packed_sequence_cp_metadata
+                            if isinstance(compute_layer, MambaLayer)
+                            else None
+                        )
+                        # This branch returns before the header below, so a shortcut block
+                        # announces the two layers it fuses itself. Both are named: their
+                        # linears interleave here, since the MoE runs against an activation
+                        # the compute layer produced partway through.
+                        if log_structure:
+                            for index, fused in (
+                                (compute_layer_index, compute_layer),
+                                (moe_layer_index, moe_layer),
+                            ):
+                                where = (
+                                    f"{self.name}.layers.{index}"
+                                    if self.name is not None
+                                    else f"[{index}]"
+                                )
+                                qtype_debug_note(
+                                    f"{where} ({describe_layer(fused)}, shortcut-fused)"
+                                )
+
+                        compute_hidden = hidden_states
+                        compute_packed_seq_params = packed_seq_params
+                        if cp_layout_state is not None:
+                            compute_hidden, compute_packed_seq_params = (
+                                cp_layout_state.prepare_layer(compute_layer_index, compute_hidden)
+                            )
+
+                        # The routed shortcut and compute branch both read X_l. Convert them
+                        # independently because their physical layers can use different CP
+                        # layouts.
+                        shortcut_hidden = compute_hidden
+                        moe_packed_seq_params = packed_seq_params
+                        if cp_layout_state is not None:
+                            shortcut_hidden, moe_packed_seq_params = cp_layout_state.prepare_layer(
+                                moe_layer_index, shortcut_hidden
+                            )
+
+                        compute_recompute_context = residual_stream_recompute_plan[
+                            compute_layer_index
+                        ]
+                        moe_recompute_context = residual_stream_recompute_plan[moe_layer_index]
+                        moe_input_holder = {}
+
+                        def prepare_moe_input(compute_output):
+                            observe_layer_residuals(compute_layer, compute_hidden, compute_output)
+                            if cp_layout_state is not None:
+                                compute_output, _ = cp_layout_state.prepare_layer(
+                                    moe_layer_index, compute_output
+                                )
+                            moe_input_holder["hidden_states"] = compute_output
+                            return compute_output
+
+                        hidden_states = layer(
+                            hidden_states=compute_hidden,
+                            shortcut_hidden=shortcut_hidden,
+                            attention_mask=attention_mask,
+                            inference_context=inference_context,
+                            rotary_pos_emb=rotary_pos_emb,
+                            sequence_len_offset=sequence_len_offset,
+                            compute_packed_seq_params=compute_packed_seq_params,
+                            compute_packed_sequence_cp_metadata=(
+                                compute_packed_sequence_cp_metadata
+                            ),
+                            moe_packed_seq_params=moe_packed_seq_params,
+                            padding_mask=padding_mask,
+                            quant_context_factory=get_inner_quant_context,
+                            quant_config=self.config,
+                            prepare_moe_input=prepare_moe_input,
+                            compute_recompute_context=compute_recompute_context,
+                            moe_recompute_context=moe_recompute_context,
+                        )
+                        if "hidden_states" not in moe_input_holder:
+                            raise RuntimeError("ShortcutMoE did not expose its X_mid activation.")
+                        observe_layer_residuals(
+                            moe_layer, moe_input_holder["hidden_states"], hidden_states
+                        )
+                        if cp_layout_state is not None:
+                            hidden_states = cp_layout_state.finalize_layer(
+                                moe_layer_index, hidden_states
+                            )
+                        if moe_recompute_context is not None:
+                            moe_recompute_context.finalize(hidden_states)
+
+                        physical_layer_index += 2
+                        continue
+
+                    layer_index = physical_layer_index
+                    layer_packed_seq_params = packed_seq_params
+                    if cp_layout_state is not None:
+                        hidden_states, layer_packed_seq_params = cp_layout_state.prepare_layer(
+                            layer_index, hidden_states
+                        )
+                    # Snapshot after the layout conversion so the residual is measured
+                    # against an input in the same layout as this layer's output.
+                    residual_accumulator = hidden_states
+                    residual_stream_recompute_context = residual_stream_recompute_plan[layer_index]
+                    residual_recompute_kwargs = {}
+                    if residual_stream_recompute_context is not None:
+                        residual_recompute_kwargs["residual_stream_recompute_context"] = (
+                            residual_stream_recompute_context
+                        )
+                    # Layers have 1-indexed layer numbers attribute.
+                    inner_quant_context = get_inner_quant_context(
+                        self.config, layer.layer_number - 1
+                    )
+                    layer_cp_metadata = (
+                        packed_sequence_cp_metadata if isinstance(layer, MambaLayer) else None
+                    )
+                    with inner_quant_context:
+                        if log_structure:
+                            where = (
+                                f"{self.name}.layers.{layer_index}"
+                                if self.name is not None
+                                else f"[{layer_index}]"
+                            )
+                            qtype_debug_note(f"{where} ({describe_layer(layer)})")
+                        if isinstance(layer, TransformerLayer):
+                            hidden_states, _ = layer(
+                                hidden_states=hidden_states,
+                                attention_mask=attention_mask,
+                                inference_context=inference_context,
+                                rotary_pos_emb=rotary_pos_emb,
+                                sequence_len_offset=sequence_len_offset,
+                                packed_seq_params=layer_packed_seq_params,
+                                padding_mask=padding_mask,
+                                **residual_recompute_kwargs,
+                            )
+                        elif isinstance(layer, MambaLayer):
+                            hidden_states = layer(
+                                hidden_states=hidden_states,
+                                attention_mask=attention_mask,
+                                inference_context=inference_context,
+                                packed_seq_params=layer_packed_seq_params,
+                                packed_sequence_cp_metadata=layer_cp_metadata,
+                                **residual_recompute_kwargs,
+                            )
+                        else:  # Expert or MLP
+                            if residual_stream_recompute_context is not None:
+                                raise TypeError(
+                                    "Residual-stream recomputation in HybridStack supports "
+                                    "TransformerLayer and MambaLayer modules only."
+                                )
+                            hidden_states = layer(
+                                hidden_states=hidden_states,
+                                attention_mask=attention_mask,
+                                inference_context=inference_context,
+                                packed_seq_params=layer_packed_seq_params,
+                            )
+
+                    # The attention layer (currently a simplified transformer layer)
+                    # outputs a tuple of (hidden_states, context). Context is intended
+                    # for cross-attention, and is not needed in our model.
+                    if isinstance(hidden_states, tuple):
+                        hidden_states = hidden_states[0]
+                    observe_layer_residuals(layer, residual_accumulator, hidden_states)
+                    if cp_layout_state is not None:
+                        hidden_states = cp_layout_state.finalize_layer(layer_index, hidden_states)
+                    if residual_stream_recompute_context is not None:
+                        residual_stream_recompute_context.finalize(hidden_states)
+                    physical_layer_index += 1
+
+                if physical_layer_index != self.num_layers_per_pipeline_rank:
+                    raise RuntimeError(
+                        "HybridStack forward did not execute every physical layer exactly once."
+                    )
+
+        observe_decoder_boundary = (
+            self.post_process and not self.is_mtp_layer and self.name == "decoder"
+        )
+        if observe_decoder_boundary:
+            observe_residual_summary_boundary(self, "last_layer", hidden_states)
+
+        if self.residual_stream_readout is not None:
+            hidden_states = apply_module(self.residual_stream_readout)(hidden_states)
+            if observe_decoder_boundary:
+                observe_residual_summary_boundary(self, "last_layer_widereadout", hidden_states)
+
+        # Final layer norm.
+        if self.post_process and self.post_layer_norm:
+            hidden_states = self.final_norm(hidden_states)
+
+        # Ensure that the tensor passed between pipeline parallel stages is
+        # viewless. See related notes in TransformerBlock and TransformerLayer
+        hidden_states = make_viewless_tensor(
+            inp=hidden_states, requires_grad=hidden_states.requires_grad, keep_graph=True
+        )
+
+        return hidden_states
+
+    def sharded_state_dict(
+        self,
+        prefix: str = '',
+        sharded_offsets: Optional[tuple] = None,
+        metadata: Optional[dict] = None,
+    ) -> ShardedStateDict:
+        """
+        Returns a sharded state dictionary for the current object.
+
+        This function constructs a sharded state dictionary by iterating over the layers
+        in the current object, computing the sharded state dictionary for each layer,
+        and combining the results into a single dictionary.
+
+        Parameters:
+            prefix (str): The prefix to use for the state dictionary keys.
+            sharded_offsets (tuple): The sharded offsets to use for the state dictionary.
+            metadata (dict): Additional metadata to use when computing the sharded state dictionary.
+
+        Returns:
+            dict: The sharded state dictionary for the current object.
+        """
+
+        sharded_state_dict = {}
+        layer_prefix = f'{prefix}layers.'
+
+        for local_layer_idx, layer in enumerate(self.layers):
+
+            global_layer_offset = layer.layer_number - 1  # self.layer_number starts at 1
+            state_dict_prefix = (
+                f'{layer_prefix}{local_layer_idx}.'  # module list index in HybridStack
+            )
+
+            sharded_prefix = f'{layer_prefix}{global_layer_offset}.'
+            sharded_pp_offset = []
+
+            layer_sharded_state_dict = layer.sharded_state_dict(
+                state_dict_prefix, sharded_pp_offset, metadata
+            )
+
+            replace_prefix_for_sharding(layer_sharded_state_dict, state_dict_prefix, sharded_prefix)
+
+            sharded_state_dict.update(layer_sharded_state_dict)
+
+        # Add modules other than self.layers
+        for name, module in self.named_children():
+            if not module is self.layers:
+                sharded_state_dict.update(
+                    sharded_state_dict_default(
+                        module,
+                        f'{prefix}{name}.',
+                        sharded_offsets,
+                        metadata,
+                        tp_group=self.tp_group,
+                    )
+                )
+
+        return sharded_state_dict
+
+
+# Backward-compatible aliases
+MambaStackSubmodules = HybridStackSubmodules
+MambaStack = HybridStack

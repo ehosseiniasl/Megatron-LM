@@ -1,0 +1,2624 @@
+# With interdocument_masking: true, Megatron's --seq-length must match
+# original_seq_len (4096). --micro-batch-size is a launch-time setting.
+# NOTE: 5 source(s) were skipped from validation_set because they have no pretokenized validation/ chunk:
+#   - /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_math_code_hs_bio_low/validation
+#   - /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_math_hs_mid/validation
+#   - /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_math_acadqa_high/validation
+#   - /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_math_code_hs_bio_acadqa_low/validation
+#   - /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_math_code_hs_bio_mid/validation
+version: 9
+sources:
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/courtlistener/merged_1099511627776b/chunks_00000-00005
+  weight: 0.0007373599852528003
+  percentage_data: 0.413517
+  sample_type: pretrain
+  image_transform_type: null
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/pretrain_v4__lobstral_mask_file_separator/nvidia_data_sharing/github4_1_repo_multi_langs/merged_1099511627776b/chunks_00000-00125
+  weight: 0.24484517510309653
+  percentage_data: 0.252022
+  sample_type: pretrain
+  image_transform_type: null
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_biology/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0003744099925118002
+  percentage_data: 0.138937
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_comp_sci/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00016456999670860006
+  percentage_data: 0.133512
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_hard_science/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0003999999920000002
+  percentage_data: 0.137955
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_humanities/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0004903499901930002
+  percentage_data: 0.549053
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_low/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0001664299966714001
+  percentage_data: 0.570963
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_math/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00014979999700400008
+  percentage_data: 0.066897
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_novel_misc/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0006914699861706003
+  percentage_data: 0.545091
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_soft_science/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0008536399829272004
+  percentage_data: 0.556383
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_biology/merged_1099511627776b/chunks_00000-00016
+  weight: 0.02057825958843481
+  percentage_data: 0.251368
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_comp_sci/merged_1099511627776b/chunks_00000-00014
+  weight: 0.012624289747514205
+  percentage_data: 0.294359
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_hard_science/merged_1099511627776b/chunks_00000-00036
+  weight: 0.03239367935212641
+  percentage_data: 0.23074
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_humanities/merged_1099511627776b/chunks_00000-00010
+  weight: 0.013084539738309206
+  percentage_data: 0.402802
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_low/merged_1099511627776b/chunks_00000-00005
+  weight: 0.002077379958452401
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_math/merged_1099511627776b/chunks_00000-00009
+  weight: 0.012592929748141406
+  percentage_data: 0.227791
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_misc/merged_1099511627776b/chunks_00000-00005
+  weight: 0.004178859916422801
+  percentage_data: 0.400935
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_novel/merged_1099511627776b/chunks_00000-00002
+  weight: 0.002045449959091001
+  percentage_data: 0.241564
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_soft_science/merged_1099511627776b/chunks_00000-00025
+  weight: 0.032576439348471216
+  percentage_data: 0.353777
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_biology/merged_1099511627776b/chunks_00000-00003
+  weight: 0.0031678399366432014
+  percentage_data: 0.372314
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_comp_sci/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0007528799849424002
+  percentage_data: 0.542744
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_hard_science/merged_1099511627776b/chunks_00000-00006
+  weight: 0.004461329910773402
+  percentage_data: 0.372747
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_humanities/merged_1099511627776b/chunks_00000-00003
+  weight: 0.002676189946476201
+  percentage_data: 0.715605
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_low/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00032200999355980013
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_math/merged_1099511627776b/chunks_00000-00002
+  weight: 0.0010915299781694004
+  percentage_data: 0.267062
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_misc/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0007071799858564004
+  percentage_data: 0.542541
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_novel/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00020015999599680008
+  percentage_data: 0.126558
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_soft_science/merged_1099511627776b/chunks_00000-00003
+  weight: 0.0049594699008106025
+  percentage_data: 0.744368
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_biology/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0007568899848622004
+  percentage_data: 0.265786
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_comp_sci/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0002182799956344001
+  percentage_data: 0.130574
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_hard_science/merged_1099511627776b/chunks_00000-00002
+  weight: 0.0013014899739702004
+  percentage_data: 0.261261
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_humanities/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00040418999191620017
+  percentage_data: 0.255638
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_low/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0003923199921536002
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_math/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00016861999662760006
+  percentage_data: 0.062924
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_novel_misc/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00010656999786860005
+  percentage_data: 0.124863
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_soft_science/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0010172899796542004
+  percentage_data: 0.532291
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_biology/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0012192699756146004
+  percentage_data: 0.254881
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_comp_sci/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00024853999502920013
+  percentage_data: 0.12627
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_hard_science/merged_1099511627776b/chunks_00000-00002
+  weight: 0.001728589965428201
+  percentage_data: 0.254661
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_humanities/merged_1099511627776b/chunks_00000-00002
+  weight: 0.0015604999687900006
+  percentage_data: 0.492954
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_low/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00025666999486660013
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_math/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00031492999370140017
+  percentage_data: 0.124875
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_misc/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0007081799858364003
+  percentage_data: 0.248576
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_novel/merged_1099511627776b/chunks_00000-00001
+  weight: 9.182999816340004e-05
+  percentage_data: 0.060151
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_soft_science/merged_1099511627776b/chunks_00000-00002
+  weight: 0.002498739950025201
+  percentage_data: 0.508304
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_biology/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0005047399899052002
+  percentage_data: 0.287367
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_comp_sci/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0001969499960610001
+  percentage_data: 0.143968
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_hard_science/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0008713599825728004
+  percentage_data: 0.281151
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_humanities/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0007486999850260004
+  percentage_data: 0.563104
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_low/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00019859999602800008
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_math/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0003838299923234002
+  percentage_data: 0.135752
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_novel_misc/merged_1099511627776b/chunks_00000-00001
+  weight: 0.00029398999412020015
+  percentage_data: 0.279538
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_soft_science/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0007894899842102004
+  percentage_data: 0.586158
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_biology/merged_1099511627776b/chunks_00000-00003
+  weight: 0.004784169904316602
+  percentage_data: 0.416073
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_comp_sci/merged_1099511627776b/chunks_00000-00002
+  weight: 0.0017284899654302008
+  percentage_data: 0.612178
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_hard_science/merged_1099511627776b/chunks_00000-00006
+  weight: 0.006365899872682003
+  percentage_data: 0.404724
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_humanities/merged_1099511627776b/chunks_00000-00002
+  weight: 0.0024875399502492014
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_low/merged_1099511627776b/chunks_00000-00001
+  weight: 0.0004900799901984002
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_math/merged_1099511627776b/chunks_00000-00002
+  weight: 0.0025369799492604007
+  percentage_data: 0.284811
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_misc/merged_1099511627776b/chunks_00000-00002
+  weight: 0.0014725499705490006
+  percentage_data: 0.577745
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_novel/merged_1099511627776b/chunks_00000-00002
+  weight: 0.002635179947296401
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_soft_science/merged_1099511627776b/chunks_00000-00002
+  weight: 0.002657999946840001
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/uspto_mm/merged_1099511627776b/chunks_00000-00036
+  weight: 0.02105562957888741
+  percentage_data: 0.450278
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_academic_qa_high/merged_1099511627776b/chunks_00000-00567
+  weight: 0.0036098299278034015
+  percentage_data: 0.234339
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_academic_qa_low/merged_1099511627776b/chunks_00000-00071
+  weight: 0.00010648999787020005
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_biology_high/merged_1099511627776b/chunks_00000-00497
+  weight: 0.016310399673792008
+  percentage_data: 0.259278
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_biology_low/merged_1099511627776b/chunks_00000-00071
+  weight: 9.889999802200003e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_biology_mid/merged_1099511627776b/chunks_00000-00298
+  weight: 0.0015009699699806008
+  percentage_data: 0.443604
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_code_high/merged_1099511627776b/chunks_00000-00567
+  weight: 0.03944142921117142
+  percentage_data: 0.227652
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_code_low/merged_1099511627776b/chunks_00000-00071
+  weight: 0.0004606699907866002
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_code_mid/merged_1099511627776b/chunks_00000-00298
+  weight: 0.004554549908909002
+  percentage_data: 0.433668
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_hard_science_high/merged_1099511627776b/chunks_00000-00497
+  weight: 0.015312089693758208
+  percentage_data: 0.266385
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_hard_science_low/merged_1099511627776b/chunks_00000-00071
+  weight: 0.00012299999754000006
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_hard_science_mid/merged_1099511627776b/chunks_00000-00298
+  weight: 0.002751459944970801
+  percentage_data: 0.493833
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_humanities_high/merged_1099511627776b/chunks_00000-00249
+  weight: 0.03241815935163681
+  percentage_data: 0.538976
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_humanities_low/merged_1099511627776b/chunks_00000-00071
+  weight: 0.0016159999676800007
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_humanities_mid/merged_1099511627776b/chunks_00000-00227
+  weight: 0.015345799693084007
+  percentage_data: 0.614734
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_math_high/merged_1099511627776b/chunks_00000-00567
+  weight: 0.0022495899550082007
+  percentage_data: 0.244056
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_math_low/merged_1099511627776b/chunks_00000-00071
+  weight: 2.9499999410000013e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_math_mid/merged_1099511627776b/chunks_00000-00298
+  weight: 0.00023597999528040013
+  percentage_data: 0.460401
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_other_high/merged_1099511627776b/chunks_00000-00213
+  weight: 0.07256436854871263
+  percentage_data: 0.687104
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_other_low/merged_1099511627776b/chunks_00000-00043
+  weight: 0.005605269887894603
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_other_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.047481929050361416
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_other_super_low/merged_1099511627776b/chunks_00000-00015
+  weight: 0.0005074099898518003
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_academic_qa_high/merged_1099511627776b/chunks_00000-00426
+  weight: 0.0009597799808044004
+  percentage_data: 0.30521
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_academic_qa_low/merged_1099511627776b/chunks_00000-00005
+  weight: 4.2499999150000015e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_biology_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0038545899229082015
+  percentage_data: 0.372037
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_biology_low/merged_1099511627776b/chunks_00000-00071
+  weight: 2.481999950360001e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_biology_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.00015748999685020007
+  percentage_data: 0.877678
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_code_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0035312599293748016
+  percentage_data: 0.39351
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_code_low/merged_1099511627776b/chunks_00000-00071
+  weight: 5.918999881620002e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_code_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.0004300299913994002
+  percentage_data: 0.838684
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_hard_science_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.004338329913233402
+  percentage_data: 0.413537
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_hard_science_low/merged_1099511627776b/chunks_00000-00071
+  weight: 5.040999899180003e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_hard_science_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.0007000199859996003
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_humanities_high/merged_1099511627776b/chunks_00000-00185
+  weight: 0.01799653964006921
+  percentage_data: 0.732873
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_humanities_low/merged_1099511627776b/chunks_00000-00071
+  weight: 0.0010013099799738004
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_humanities_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.008624549827509003
+  percentage_data: 0.94082
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_math_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0005131899897362002
+  percentage_data: 0.385076
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_math_low/merged_1099511627776b/chunks_00000-00071
+  weight: 5.839999883200003e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_math_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 2.190999956180001e-05
+  percentage_data: 0.946629
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_other_high/merged_1099511627776b/chunks_00000-00114
+  weight: 0.025528589489428214
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_other_low/merged_1099511627776b/chunks_00000-00043
+  weight: 0.0030103399397932015
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_other_mid/merged_1099511627776b/chunks_00000-00086
+  weight: 0.007637889847242204
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_other_super_low/merged_1099511627776b/chunks_00000-00015
+  weight: 0.00015844999683100008
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_academic_qa_high/merged_1099511627776b/chunks_00000-00213
+  weight: 0.0001793199964136001
+  percentage_data: 0.31382
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_academic_qa_low/merged_1099511627776b/chunks_00000-00018
+  weight: 3.999999920000002e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_biology_high/merged_1099511627776b/chunks_00000-00178
+  weight: 7.605999847880003e-05
+  percentage_data: 0.373469
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_biology_mid/merged_1099511627776b/chunks_00000-00001
+  weight: 1.2299999754000006e-06
+  percentage_data: 0.141162
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_code_high/merged_1099511627776b/chunks_00000-00178
+  weight: 7.126999857460003e-05
+  percentage_data: 0.396727
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_code_mid/merged_1099511627776b/chunks_00000-00003
+  weight: 1.2399999752000006e-06
+  percentage_data: 0.73646
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_hard_science_high/merged_1099511627776b/chunks_00000-00178
+  weight: 0.00012746999745060004
+  percentage_data: 0.43224
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_humanities_high/merged_1099511627776b/chunks_00000-00093
+  weight: 0.0009823599803528004
+  percentage_data: 0.751319
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_humanities_low/merged_1099511627776b/chunks_00000-00018
+  weight: 3.858999922820002e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_humanities_mid/merged_1099511627776b/chunks_00000-00078
+  weight: 0.0008703599825928004
+  percentage_data: 0.943588
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_math_code_hs_bio_low/merged_1099511627776b/chunks_00000-00001
+  weight: 1.0399999792000004e-06
+  percentage_data: 0.041865
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_math_high/merged_1099511627776b/chunks_00000-00045
+  weight: 1.2009999759800006e-05
+  percentage_data: 0.398379
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_math_hs_mid/merged_1099511627776b/chunks_00000-00001
+  weight: 2.5199999496000014e-05
+  percentage_data: 0.04491
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_other_high/merged_1099511627776b/chunks_00000-00093
+  weight: 0.0014380199712396007
+  percentage_data: 0.753613
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_other_low/merged_1099511627776b/chunks_00000-00011
+  weight: 1.872999962540001e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_other_mid/merged_1099511627776b/chunks_00000-00043
+  weight: 0.0003293899934122002
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_other_super_low/merged_1099511627776b/chunks_00000-00004
+  weight: 3.6999999260000016e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_academic_qa_high/merged_1099511627776b/chunks_00000-00426
+  weight: 0.00024284999514300013
+  percentage_data: 0.323342
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_academic_qa_low/merged_1099511627776b/chunks_00000-00002
+  weight: 4.5999999080000023e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_biology_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0008760599824788005
+  percentage_data: 0.377681
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_biology_low/merged_1099511627776b/chunks_00000-00036
+  weight: 2.6999999460000013e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_biology_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 8.795999824080004e-05
+  percentage_data: 0.857132
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_code_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.002258189954836201
+  percentage_data: 0.4153
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_code_low/merged_1099511627776b/chunks_00000-00036
+  weight: 4.479999910400002e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_code_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.00013002999739940006
+  percentage_data: 0.897559
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_hard_science_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0013696099726078007
+  percentage_data: 0.44372
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_hard_science_low/merged_1099511627776b/chunks_00000-00036
+  weight: 3.109999937800002e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_hard_science_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.00016235999675280008
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_humanities_high/merged_1099511627776b/chunks_00000-00185
+  weight: 0.004345519913089602
+  percentage_data: 0.735171
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_humanities_low/merged_1099511627776b/chunks_00000-00036
+  weight: 8.125999837480003e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_humanities_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.0016570999668580008
+  percentage_data: 0.889567
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_math_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.00013285999734280004
+  percentage_data: 0.401527
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_math_low/merged_1099511627776b/chunks_00000-00009
+  weight: 3.6999999260000016e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_math_mid/merged_1099511627776b/chunks_00000-00039
+  weight: 8.279999834400004e-06
+  percentage_data: 0.920208
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_other_high/merged_1099511627776b/chunks_00000-00185
+  weight: 0.015916829681663407
+  percentage_data: 0.839911
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_other_low/merged_1099511627776b/chunks_00000-00022
+  weight: 0.0005133199897336002
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_other_mid/merged_1099511627776b/chunks_00000-00086
+  weight: 0.004657959906840802
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_other_super_low/merged_1099511627776b/chunks_00000-00008
+  weight: 4.285999914280002e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_biology_high/merged_1099511627776b/chunks_00000-00006
+  weight: 1.1529999769400005e-05
+  percentage_data: 0.345633
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_code_high/merged_1099511627776b/chunks_00000-00006
+  weight: 5.249999895000002e-06
+  percentage_data: 0.386605
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_hard_science_high/merged_1099511627776b/chunks_00000-00006
+  weight: 2.127999957440001e-05
+  percentage_data: 0.408585
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_humanities_high/merged_1099511627776b/chunks_00000-00003
+  weight: 5.735999885280002e-05
+  percentage_data: 0.719052
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_humanities_low/merged_1099511627776b/chunks_00000-00001
+  weight: 1.0399999792000004e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_humanities_mid/merged_1099511627776b/chunks_00000-00003
+  weight: 3.9239999215200024e-05
+  percentage_data: 0.793816
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_math_acadqa_high/merged_1099511627776b/chunks_00000-00001
+  weight: 3.3099999338000016e-06
+  percentage_data: 0.03354
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_math_code_hs_bio_acadqa_low/merged_1099511627776b/chunks_00000-00001
+  weight: 2.0999999580000008e-07
+  percentage_data: 0.049767
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_math_code_hs_bio_mid/merged_1099511627776b/chunks_00000-00001
+  weight: 4.569999908600002e-06
+  percentage_data: 0.048298
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_other_high/merged_1099511627776b/chunks_00000-00003
+  weight: 9.604999807900005e-05
+  percentage_data: 0.720531
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_other_low/merged_1099511627776b/chunks_00000-00001
+  weight: 1.7999999640000008e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_other_mid/merged_1099511627776b/chunks_00000-00002
+  weight: 1.771999964560001e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_other_super_low/merged_1099511627776b/chunks_00000-00001
+  weight: 2.999999940000001e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_academic_qa_high/merged_1099511627776b/chunks_00000-00426
+  weight: 0.0005463599890728002
+  percentage_data: 0.299821
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_academic_qa_low/merged_1099511627776b/chunks_00000-00001
+  weight: 6.299999874000003e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_biology_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.004384739912305201
+  percentage_data: 0.358426
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_biology_low/merged_1099511627776b/chunks_00000-00071
+  weight: 2.072999958540001e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_biology_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 7.227999855440003e-05
+  percentage_data: 0.828348
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_code_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0009925799801484005
+  percentage_data: 0.38823
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_code_low/merged_1099511627776b/chunks_00000-00036
+  weight: 3.5499999290000016e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_code_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.00013047999739040006
+  percentage_data: 0.834265
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_hard_science_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0027728099445438015
+  percentage_data: 0.391944
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_hard_science_low/merged_1099511627776b/chunks_00000-00036
+  weight: 6.409999871800003e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_hard_science_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.00043317999133640024
+  percentage_data: 0.931971
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_humanities_high/merged_1099511627776b/chunks_00000-00185
+  weight: 0.009955439800891204
+  percentage_data: 0.720591
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_humanities_low/merged_1099511627776b/chunks_00000-00036
+  weight: 0.00016334999673300006
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_humanities_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.004897429902051402
+  percentage_data: 0.907551
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_math_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.00022914999541700013
+  percentage_data: 0.380536
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_math_low/merged_1099511627776b/chunks_00000-00009
+  weight: 7.799999844000003e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_math_mid/merged_1099511627776b/chunks_00000-00039
+  weight: 9.279999814400005e-06
+  percentage_data: 0.930419
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_other_high/merged_1099511627776b/chunks_00000-00185
+  weight: 0.016879599662408006
+  percentage_data: 0.774862
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_other_low/merged_1099511627776b/chunks_00000-00022
+  weight: 0.00034712999305740015
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_other_mid/merged_1099511627776b/chunks_00000-00086
+  weight: 0.0037104299257914018
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_other_super_low/merged_1099511627776b/chunks_00000-00008
+  weight: 3.777999924440002e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_academic_qa_high/merged_1099511627776b/chunks_00000-00426
+  weight: 0.0011169799776604005
+  percentage_data: 0.335212
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_academic_qa_low/merged_1099511627776b/chunks_00000-00036
+  weight: 5.149999897000003e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_biology_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.005800719883985603
+  percentage_data: 0.373527
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_biology_low/merged_1099511627776b/chunks_00000-00036
+  weight: 7.009999859800003e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_biology_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.00011323999773520006
+  percentage_data: 0.826411
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_code_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0018160699636786007
+  percentage_data: 0.411766
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_code_low/merged_1099511627776b/chunks_00000-00036
+  weight: 6.799999864000004e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_code_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.00013854999722900005
+  percentage_data: 0.844961
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_hard_science_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.007843039843139204
+  percentage_data: 0.430697
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_hard_science_low/merged_1099511627776b/chunks_00000-00036
+  weight: 1.2069999758600006e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_hard_science_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.0004576199908476002
+  percentage_data: 0.946294
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_humanities_high/merged_1099511627776b/chunks_00000-00185
+  weight: 0.011310659773786804
+  percentage_data: 0.725638
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_humanities_low/merged_1099511627776b/chunks_00000-00036
+  weight: 0.00014389999712200005
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_humanities_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.0037005399259892016
+  percentage_data: 0.900942
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_math_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.00048778999024420025
+  percentage_data: 0.405604
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_math_low/merged_1099511627776b/chunks_00000-00036
+  weight: 1.5899999682000007e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_math_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 2.218999955620001e-05
+  percentage_data: 0.8722
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_other_high/merged_1099511627776b/chunks_00000-00114
+  weight: 0.009982079800358404
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_other_low/merged_1099511627776b/chunks_00000-00022
+  weight: 0.00030439999391200013
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_other_mid/merged_1099511627776b/chunks_00000-00057
+  weight: 0.0013430299731394006
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_other_super_low/merged_1099511627776b/chunks_00000-00008
+  weight: 3.749999925000001e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_academic_qa_high/merged_1099511627776b/chunks_00000-00426
+  weight: 0.0004978899900422002
+  percentage_data: 0.308125
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_academic_qa_low/merged_1099511627776b/chunks_00000-00005
+  weight: 6.499999870000002e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_biology_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0006035699879286002
+  percentage_data: 0.367004
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_biology_low/merged_1099511627776b/chunks_00000-00003
+  weight: 5.599999888000003e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_biology_mid/merged_1099511627776b/chunks_00000-00020
+  weight: 7.3999998520000036e-06
+  percentage_data: 0.945643
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_code_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0004395299912094002
+  percentage_data: 0.430792
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_code_low/merged_1099511627776b/chunks_00000-00036
+  weight: 1.3099999738000008e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_code_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 1.679999966400001e-05
+  percentage_data: 0.942228
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_hard_science_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0006043499879130003
+  percentage_data: 0.421386
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_hard_science_low/merged_1099511627776b/chunks_00000-00036
+  weight: 1.2099999758000005e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_hard_science_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 6.0049998799000023e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_humanities_high/merged_1099511627776b/chunks_00000-00185
+  weight: 0.002934519941309601
+  percentage_data: 0.757074
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_humanities_low/merged_1099511627776b/chunks_00000-00036
+  weight: 4.775999904480002e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_humanities_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.0017127999657440007
+  percentage_data: 0.960151
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_math_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.00010841999783160004
+  percentage_data: 0.40182
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_math_low/merged_1099511627776b/chunks_00000-00005
+  weight: 3.499999930000001e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_math_mid/merged_1099511627776b/chunks_00000-00039
+  weight: 6.419999871600003e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_other_high/merged_1099511627776b/chunks_00000-00185
+  weight: 0.0059666398806672025
+  percentage_data: 0.796304
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_other_low/merged_1099511627776b/chunks_00000-00022
+  weight: 0.00013729999725400004
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_other_mid/merged_1099511627776b/chunks_00000-00086
+  weight: 0.0013290499734190005
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_other_super_low/merged_1099511627776b/chunks_00000-00008
+  weight: 8.359999832800004e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_academic_qa_high/merged_1099511627776b/chunks_00000-00426
+  weight: 0.0002001799959964001
+  percentage_data: 0.309364
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_academic_qa_low/merged_1099511627776b/chunks_00000-00002
+  weight: 6.999999860000002e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_biology_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0005850099882998002
+  percentage_data: 0.366538
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_biology_low/merged_1099511627776b/chunks_00000-00005
+  weight: 6.499999870000002e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_biology_mid/merged_1099511627776b/chunks_00000-00039
+  weight: 1.3049999739000005e-05
+  percentage_data: 0.884971
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_code_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0003916499921670002
+  percentage_data: 0.412998
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_code_low/merged_1099511627776b/chunks_00000-00036
+  weight: 1.3199999736000007e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_code_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 2.514999949700001e-05
+  percentage_data: 0.872195
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_hard_science_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0007461699850766003
+  percentage_data: 0.403785
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_hard_science_low/merged_1099511627776b/chunks_00000-00036
+  weight: 1.3099999738000008e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_hard_science_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 7.112999857740004e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_humanities_high/merged_1099511627776b/chunks_00000-00185
+  weight: 0.0034640199307196013
+  percentage_data: 0.73522
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_humanities_low/merged_1099511627776b/chunks_00000-00036
+  weight: 6.824999863500003e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_humanities_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.001933259961334801
+  percentage_data: 0.932041
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_math_high/merged_1099511627776b/chunks_00000-00355
+  weight: 6.229999875400003e-05
+  percentage_data: 0.391348
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_math_low/merged_1099511627776b/chunks_00000-00003
+  weight: 2.0999999580000008e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_math_mid/merged_1099511627776b/chunks_00000-00020
+  weight: 3.7199999256000017e-06
+  percentage_data: 0.948681
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_other_high/merged_1099511627776b/chunks_00000-00185
+  weight: 0.0053334298933314025
+  percentage_data: 0.758227
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_other_low/merged_1099511627776b/chunks_00000-00022
+  weight: 7.778999844420004e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_other_mid/merged_1099511627776b/chunks_00000-00086
+  weight: 0.0009136599817268005
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_other_super_low/merged_1099511627776b/chunks_00000-00008
+  weight: 6.189999876200002e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_academic_qa_high/merged_1099511627776b/chunks_00000-00426
+  weight: 0.0013921899721562006
+  percentage_data: 0.294643
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_academic_qa_low/merged_1099511627776b/chunks_00000-00036
+  weight: 1.909999961800001e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_biology_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0012407899751842005
+  percentage_data: 0.361258
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_biology_low/merged_1099511627776b/chunks_00000-00036
+  weight: 2.429999951400001e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_biology_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 5.4839998903200025e-05
+  percentage_data: 0.863448
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_code_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.0030923999381520014
+  percentage_data: 0.415008
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_code_low/merged_1099511627776b/chunks_00000-00036
+  weight: 6.559999868800003e-06
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_code_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 9.299999814000004e-05
+  percentage_data: 0.912011
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_hard_science_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.004381949912361002
+  percentage_data: 0.363991
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_hard_science_low/merged_1099511627776b/chunks_00000-00036
+  weight: 1.889999962200001e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_hard_science_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.0006278399874432004
+  percentage_data: 0.875723
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_humanities_high/merged_1099511627776b/chunks_00000-00185
+  weight: 0.008106689837866204
+  percentage_data: 0.683545
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_humanities_low/merged_1099511627776b/chunks_00000-00036
+  weight: 0.00015084999698300005
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_humanities_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 0.0033823599323528014
+  percentage_data: 0.853098
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_math_high/merged_1099511627776b/chunks_00000-00355
+  weight: 0.00014907999701840006
+  percentage_data: 0.374072
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_math_low/merged_1099511627776b/chunks_00000-00036
+  weight: 5.899999882000003e-07
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_math_mid/merged_1099511627776b/chunks_00000-00156
+  weight: 1.0689999786200005e-05
+  percentage_data: 0.839206
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_other_high/merged_1099511627776b/chunks_00000-00114
+  weight: 0.007759309844813804
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_other_low/merged_1099511627776b/chunks_00000-00022
+  weight: 0.00032801999343960015
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_other_mid/merged_1099511627776b/chunks_00000-00057
+  weight: 0.0016083399678332008
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_other_super_low/merged_1099511627776b/chunks_00000-00008
+  weight: 1.8269999634600008e-05
+  percentage_data: 1.0
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+- prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/wikipedia_260318/merged_1099511627776b/chunks_00000-00018
+  weight: 0.008525689829486205
+  percentage_data: 0.331311
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+bos_id: 1
+eos_id: 2
+pad_id: 11
+img_id: 10
+img_break_id: 12
+img_end_id: 13
+seed: 0
+epoch_index_cache_path: /mnt/pretokenized/epoch_indexes
+interdocument_masking: true
+drop_bos: false
+original_seq_len: 4096
+truncate_trailing_masked: true
+tokenizer_name: pretrain_v3_lobstenizer
+optimized_datasource_id_sampling: true
+skip_images: true
+validation_set:
+  valid_sources:
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/courtlistener/validation/chunk
+    weight: 0.0007373852996896323
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/pretrain_v4__lobstral_mask_file_separator/nvidia_data_sharing/github4_1_repo_multi_langs/validation/chunk
+    weight: 0.24485358092636159
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_biology/validation/chunk
+    weight: 0.00037442284644786163
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_comp_sci/validation/chunk
+    weight: 0.0001645756465904345
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_hard_science/validation/chunk
+    weight: 0.0004000137244708866
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_humanities/validation/chunk
+    weight: 0.0004903668244857481
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_low/validation/chunk
+    weight: 0.00016643571040922414
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_math/validation/chunk
+    weight: 0.00014980513981434704
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_novel_misc/validation/chunk
+    weight: 0.0006914937251497098
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_asian_african_soft_science/validation/chunk
+    weight: 0.000853669289393319
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_biology/validation/chunk
+    weight: 0.020578966064325667
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_comp_sci/validation/chunk
+    weight: 0.012624723154251422
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_hard_science/validation/chunk
+    weight: 0.03239479146529517
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_humanities/validation/chunk
+    weight: 0.013084988945970736
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_low/validation/chunk
+    weight: 0.002077451277353326
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_math/validation/chunk
+    weight: 0.012593362078252904
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_misc/validation/chunk
+    weight: 0.0041790033816060225
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_novel/validation/chunk
+    weight: 0.0020455201817974377
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_en_soft_science/validation/chunk
+    weight: 0.03257755773600592
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_biology/validation/chunk
+    weight: 0.0031679486923196333
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_comp_sci/validation/chunk
+    weight: 0.0007529058321991026
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_hard_science/validation/chunk
+    weight: 0.004461483073484251
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_humanities/validation/chunk
+    weight: 0.002676281823229355
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_low/validation/chunk
+    weight: 0.00032202104854217546
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_math/validation/chunk
+    weight: 0.001091567451679267
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_misc/validation/chunk
+    weight: 0.0007072042641783039
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_novel/validation/chunk
+    weight: 0.00020016686772523164
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_fr_de_es_it_pt_nl_soft_science/validation/chunk
+    weight: 0.0049596401652540695
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_biology/validation/chunk
+    weight: 0.0007569159697869234
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_comp_sci/validation/chunk
+    weight: 0.00021828748944376281
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_hard_science/validation/chunk
+    weight: 0.0013015346556540352
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_humanities/validation/chunk
+    weight: 0.0004042038682347191
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_low/validation/chunk
+    weight: 0.00039233346096104556
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_math/validation/chunk
+    weight: 0.00016862578555070222
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_novel_misc/validation/chunk
+    weight: 0.00010657365654215595
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ja_ko_soft_science/validation/chunk
+    weight: 0.0010173249044174704
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_biology/validation/chunk
+    weight: 0.0012193118345890446
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_comp_sci/validation/chunk
+    weight: 0.0002485485276999854
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_hard_science/validation/chunk
+    weight: 0.0017286493099578247
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_humanities/validation/chunk
+    weight: 0.001560553542592046
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_low/validation/chunk
+    weight: 0.00025667880664985616
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_math/validation/chunk
+    weight: 0.0003149408056190408
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_misc/validation/chunk
+    weight: 0.0007082042984894811
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_novel/validation/chunk
+    weight: 9.183315079540379e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_rest_europe_soft_science/validation/chunk
+    weight: 0.002498825734710958
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_biology/validation/chunk
+    weight: 0.0005047573182235882
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_comp_sci/validation/chunk
+    weight: 0.00019695675758635278
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_hard_science/validation/chunk
+    weight: 0.0008713898973873793
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_humanities/validation/chunk
+    weight: 0.000748725688778382
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_low/validation/chunk
+    weight: 0.00019860681419979517
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_math/validation/chunk
+    weight: 0.000383843169659151
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_novel_misc/validation/chunk
+    weight: 0.00029400008714298986
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_ru_soft_science/validation/chunk
+    weight: 0.0007895170883313007
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_biology/validation/chunk
+    weight: 0.004784334150504704
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_comp_sci/validation/chunk
+    weight: 0.0017285493065267068
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_hard_science/validation/chunk
+    weight: 0.006366118421523042
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_humanities/validation/chunk
+    weight: 0.0024876253504257733
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_low/validation/chunk
+    weight: 0.0004900968152217302
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_math/validation/chunk
+    weight: 0.002537067046770374
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_misc/validation/chunk
+    weight: 0.00147260052492401
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_novel/validation/chunk
+    weight: 0.002635270416127977
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/docsv5_zh_soft_science/validation/chunk
+    weight: 0.002658091199109041
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/uspto_mm/validation/chunk
+    weight: 0.021056352443452334
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_academic_qa_high/validation/chunk
+    weight: 0.0036099538575168513
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_academic_qa_low/validation/chunk
+    weight: 0.00010649365379726178
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_biology_high/validation/chunk
+    weight: 0.01631095962902487
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_biology_low/validation/chunk
+    weight: 9.89033933754267e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_biology_mid/validation/chunk
+    weight: 0.0015010215000476666
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_code_high/validation/chunk
+    weight: 0.039442783281894406
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_code_low/validation/chunk
+    weight: 0.0004606858061300083
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_code_mid/validation/chunk
+    weight: 0.004554706271972191
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_hard_science_high/validation/chunk
+    weight: 0.015312615375833545
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_hard_science_low/validation/chunk
+    weight: 0.00012300422027479763
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_hard_science_mid/validation/chunk
+    weight: 0.002751554405831664
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_humanities_high/validation/chunk
+    weight: 0.03241927230523279
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_humanities_low/validation/chunk
+    weight: 0.0016160554468623817
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_humanities_mid/validation/chunk
+    weight: 0.015346326532463329
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_math_high/validation/chunk
+    weight: 0.002249667186081154
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_math_low/validation/chunk
+    weight: 2.9501012179727883e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_math_mid/validation/chunk
+    weight: 0.00023598809675159956
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_other_high/validation/chunk
+    weight: 0.07256685976895867
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_other_low/validation/chunk
+    weight: 0.005605462323412316
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_other_mid/validation/chunk
+    weight: 0.047483559160914804
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_en_other_super_low/validation/chunk
+    weight: 0.0005074274098344314
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_academic_qa_high/validation/chunk
+    weight: 0.0009598129311816688
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_academic_qa_low/validation/chunk
+    weight: 4.2501458225031695e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_biology_high/validation/chunk
+    weight: 0.0038547222555205866
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_biology_low/validation/chunk
+    weight: 2.482085160341851e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_biology_mid/validation/chunk
+    weight: 0.00015749540366729982
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_code_high/validation/chunk
+    weight: 0.0035313811616876573
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_code_low/validation/chunk
+    weight: 5.9192030878579436e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_code_mid/validation/chunk
+    weight: 0.0004300447548355384
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_hard_science_high/validation/chunk
+    weight: 0.004338478853209453
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_hard_science_low/validation/chunk
+    weight: 5.041172962644349e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_hard_science_mid/validation/chunk
+    weight: 0.000700044018510275
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_humanities_high/validation/chunk
+    weight: 0.017997157482473224
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_humanities_low/validation/chunk
+    weight: 0.0010013443561248585
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_humanities_mid/validation/chunk
+    weight: 0.00862484591846346
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_math_high/validation/chunk
+    weight: 0.0005132076081530356
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_math_low/validation/chunk
+    weight: 5.840200377274944e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_math_mid/validation/chunk
+    weight: 2.1910751757892812e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_other_high/validation/chunk
+    weight: 0.025529465915975578
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_other_low/validation/chunk
+    weight: 0.0030104432883092218
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_other_mid/validation/chunk
+    weight: 0.00763815206499735
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_fr_de_es_pt_it_nl_other_super_low/validation/chunk
+    weight: 0.00015845543660602995
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_academic_qa_high/validation/chunk
+    weight: 0.00017932615268029847
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_academic_qa_low/validation/chunk
+    weight: 4.0001372447088663e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_biology_high/validation/chunk
+    weight: 7.606260970813908e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_biology_mid/validation/chunk
+    weight: 1.2300422027479763e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_code_high/validation/chunk
+    weight: 7.127244535760021e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_code_mid/validation/chunk
+    weight: 1.2400425458597484e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_hard_science_high/validation/chunk
+    weight: 0.00012747437364575977
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_humanities_high/validation/chunk
+    weight: 0.0009823937059280502
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_humanities_low/validation/chunk
+    weight: 3.859132406832878e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_humanities_mid/validation/chunk
+    weight: 0.0008703898630762021
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_math_high/validation/chunk
+    weight: 1.201041207723837e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_other_high/validation/chunk
+    weight: 0.0014380693401590608
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_other_low/validation/chunk
+    weight: 1.8730642648349265e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_other_mid/validation/chunk
+    weight: 0.00032940130175866336
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_indian_other_super_low/validation/chunk
+    weight: 3.7001269513557006e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_academic_qa_high/validation/chunk
+    weight: 0.00024285833246938702
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_academic_qa_low/validation/chunk
+    weight: 4.600157831415196e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_biology_high/validation/chunk
+    weight: 0.0008760900586499123
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_biology_low/validation/chunk
+    weight: 2.7000926401784844e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_biology_mid/validation/chunk
+    weight: 8.796301801114796e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_code_high/validation/chunk
+    weight: 0.002258267481157278
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_code_low/validation/chunk
+    weight: 4.48015371407393e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_code_mid/validation/chunk
+    weight: 0.00013003446148237346
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_hard_science_high/validation/chunk
+    weight: 0.0013696569929314275
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_hard_science_low/validation/chunk
+    weight: 3.1101067077611433e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_hard_science_mid/validation/chunk
+    weight: 0.00016236557076273287
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_humanities_high/validation/chunk
+    weight: 0.004345669099906818
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_humanities_low/validation/chunk
+    weight: 8.12627881262606e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_humanities_mid/validation/chunk
+    weight: 0.0016571568570517654
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_math_high/validation/chunk
+    weight: 0.00013286455858300497
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_math_low/validation/chunk
+    weight: 3.7001269513557006e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_math_mid/validation/chunk
+    weight: 8.280284096547352e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_other_high/validation/chunk
+    weight: 0.015917376125174854
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_other_low/validation/chunk
+    weight: 0.0005133376126134888
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_other_mid/validation/chunk
+    weight: 0.004658119820091027
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ja_ko_other_super_low/validation/chunk
+    weight: 4.28614705770555e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_biology_high/validation/chunk
+    weight: 1.1530395607873305e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_code_high/validation/chunk
+    weight: 5.250180133680386e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_hard_science_high/validation/chunk
+    weight: 2.1280730141851168e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_humanities_high/validation/chunk
+    weight: 5.7361968089125135e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_humanities_low/validation/chunk
+    weight: 1.040035683624305e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_humanities_mid/validation/chunk
+    weight: 3.924134637059398e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_other_high/validation/chunk
+    weight: 9.605329558857164e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_other_low/validation/chunk
+    weight: 1.8000617601189896e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_other_mid/validation/chunk
+    weight: 1.7720607994060276e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_other_other_super_low/validation/chunk
+    weight: 3.0001029335316494e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_academic_qa_high/validation/chunk
+    weight: 0.0005463787462547839
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_academic_qa_low/validation/chunk
+    weight: 6.300216160416463e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_biology_high/validation/chunk
+    weight: 0.004384890445591187
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_biology_low/validation/chunk
+    weight: 2.0730711270703698e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_biology_mid/validation/chunk
+    weight: 7.22824800118892e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_code_high/validation/chunk
+    weight: 0.0009926140565882815
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_code_low/validation/chunk
+    weight: 3.5501218046791184e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_code_mid/validation/chunk
+    weight: 0.0001304844769224032
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_hard_science_high/validation/chunk
+    weight: 0.0027729051383752978
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_hard_science_low/validation/chunk
+    weight: 6.410219934645957e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_hard_science_mid/validation/chunk
+    weight: 0.00043319486291574664
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_humanities_high/validation/chunk
+    weight: 0.009955781582866106
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_humanities_low/validation/chunk
+    weight: 0.0001633556047307983
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_humanities_mid/validation/chunk
+    weight: 0.004897598036588635
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_math_high/validation/chunk
+    weight: 0.00022915786240625916
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_math_low/validation/chunk
+    weight: 7.800267627182287e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_math_mid/validation/chunk
+    weight: 9.28031840772457e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_other_high/validation/chunk
+    weight: 0.01688017915894694
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_other_low/validation/chunk
+    weight: 0.00034714191043894714
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_other_mid/validation/chunk
+    weight: 0.0037105573092212794
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_rest_europe_other_super_low/validation/chunk
+    weight: 3.778129627627524e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_academic_qa_high/validation/chunk
+    weight: 0.0011170183248987273
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_academic_qa_low/validation/chunk
+    weight: 5.150176702562665e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_biology_high/validation/chunk
+    weight: 0.005800919029531903
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_biology_low/validation/chunk
+    weight: 7.010240521352287e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_biology_mid/validation/chunk
+    weight: 0.000113243885397708
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_code_high/validation/chunk
+    weight: 0.0018161323114996074
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_code_low/validation/chunk
+    weight: 6.800233316005073e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_code_mid/validation/chunk
+    weight: 0.00013855475381360332
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_hard_science_high/validation/chunk
+    weight: 0.007843309103935357
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_hard_science_low/validation/chunk
+    weight: 1.2070414135909003e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_hard_science_mid/validation/chunk
+    weight: 0.00045763570148091775
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_humanities_high/validation/chunk
+    weight: 0.011311048082059695
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_humanities_low/validation/chunk
+    weight: 0.00014390493737840145
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_humanities_mid/validation/chunk
+    weight: 0.0037006669698837363
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_math_high/validation/chunk
+    weight: 0.00048780673664913446
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_math_low/validation/chunk
+    weight: 1.5900545547717742e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_math_mid/validation/chunk
+    weight: 2.2190761365022433e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_other_high/validation/chunk
+    weight: 0.009982422496915869
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_other_low/validation/chunk
+    weight: 0.00030441044432234467
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_other_mid/validation/chunk
+    weight: 0.001343076080940337
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_ru_other_super_low/validation/chunk
+    weight: 3.7501286669145615e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_academic_qa_high/validation/chunk
+    weight: 0.0004979070831920242
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_academic_qa_low/validation/chunk
+    weight: 6.500223022651906e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_biology_high/validation/chunk
+    weight: 0.0006035907091972325
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_biology_low/validation/chunk
+    weight: 5.600192142592413e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_biology_mid/validation/chunk
+    weight: 7.400253902711402e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_code_high/validation/chunk
+    weight: 0.0004395450807917219
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_code_low/validation/chunk
+    weight: 1.3100449476421537e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_code_mid/validation/chunk
+    weight: 1.6800576427777236e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_hard_science_high/validation/chunk
+    weight: 0.0006043707359599508
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_hard_science_low/validation/chunk
+    weight: 1.2100415165244319e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_hard_science_mid/validation/chunk
+    weight: 6.005206038619184e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_humanities_high/validation/chunk
+    weight: 0.0029346206868357647
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_humanities_low/validation/chunk
+    weight: 4.776163870182386e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_humanities_mid/validation/chunk
+    weight: 0.0017128587681843363
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_math_high/validation/chunk
+    weight: 0.0001084237200178338
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_math_low/validation/chunk
+    weight: 3.500120089120257e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_math_mid/validation/chunk
+    weight: 6.42022027775773e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_other_high/validation/chunk
+    weight: 0.005966844722442427
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_other_low/validation/chunk
+    weight: 0.00013730471092463178
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_other_mid/validation/chunk
+    weight: 0.0013290956012700793
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_southeast_asian_other_super_low/validation/chunk
+    weight: 8.360286841441529e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_academic_qa_high/validation/chunk
+    weight: 0.0002001868684114552
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_academic_qa_low/validation/chunk
+    weight: 7.000240178240514e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_biology_high/validation/chunk
+    weight: 0.0005850300723817833
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_biology_low/validation/chunk
+    weight: 6.500223022651906e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_biology_mid/validation/chunk
+    weight: 1.3050447760862673e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_code_high/validation/chunk
+    weight: 0.0003916634379725568
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_code_low/validation/chunk
+    weight: 1.3200452907539258e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_code_mid/validation/chunk
+    weight: 2.5150862926106993e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_hard_science_high/validation/chunk
+    weight: 0.0007461956019711036
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_hard_science_low/validation/chunk
+    weight: 1.3100449476421537e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_hard_science_mid/validation/chunk
+    weight: 7.113244055403541e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_humanities_high/validation/chunk
+    weight: 0.003464138854604101
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_humanities_low/validation/chunk
+    weight: 6.825234173784502e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_humanities_mid/validation/chunk
+    weight: 0.0019333263324264654
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_math_high/validation/chunk
+    weight: 6.230213758634058e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_math_low/validation/chunk
+    weight: 2.1000720534721544e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_math_mid/validation/chunk
+    weight: 3.720127637579245e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_other_high/validation/chunk
+    weight: 0.005333612996261902
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_other_low/validation/chunk
+    weight: 7.779266906647567e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_other_mid/validation/chunk
+    weight: 0.0009136913487501757
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_west_asia_other_super_low/validation/chunk
+    weight: 6.190212386186969e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_academic_qa_high/validation/chunk
+    weight: 0.001392237767677809
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_academic_qa_low/validation/chunk
+    weight: 1.9100655343484836e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_biology_high/validation/chunk
+    weight: 0.0012408325729655783
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_biology_low/validation/chunk
+    weight: 2.430083376160636e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_biology_mid/validation/chunk
+    weight: 5.484188162495855e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_code_high/validation/chunk
+    weight: 0.003092506103884424
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_code_low/validation/chunk
+    weight: 6.56022508132254e-06
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_code_mid/validation/chunk
+    weight: 9.300319093948112e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_hard_science_high/validation/chunk
+    weight: 0.004382100349863004
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_hard_science_low/validation/chunk
+    weight: 1.890064848124939e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_hard_science_mid/validation/chunk
+    weight: 0.0006278615419295037
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_humanities_high/validation/chunk
+    weight: 0.00810696815007723
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_humanities_low/validation/chunk
+    weight: 0.0001508551758410831
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_humanities_mid/validation/chunk
+    weight: 0.0033824760527533695
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_math_high/validation/chunk
+    weight: 0.0001490851151102994
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_math_low/validation/chunk
+    weight: 5.900202435945578e-07
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_math_mid/validation/chunk
+    weight: 1.0690366786484444e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_other_high/validation/chunk
+    weight: 0.007759576231060487
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_other_low/validation/chunk
+    weight: 0.0003280312547523505
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_other_mid/validation/chunk
+    weight: 0.0016083951840387644
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/web1_1_zh_other_super_low/validation/chunk
+    weight: 1.8270626865207745e-05
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /mnt/pretokenized/pretokenized_data/pretrain_v3_lobstenizer/multimodal_v4__lobstral/nvidia_data_sharing/wikipedia_260318/validation/chunk
+    weight: 0.008525982526460484
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  valid_num_tokens: 1048576
+  valid_seed: 0

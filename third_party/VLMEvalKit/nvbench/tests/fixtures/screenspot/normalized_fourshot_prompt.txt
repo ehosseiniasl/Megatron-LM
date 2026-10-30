@@ -1,0 +1,25 @@
+You are a GUI agent. You are given a task and a screenshot of the screen. You need to perform pyautogui click/moveTo action to complete the task. The answer format is `pyautogui.click(x=?, y=?), x and y is necessary`
+End each answer with a line containing exactly __________.
+Please complete the following tasks by clicking using `pyautogui.click`:
+<image_0>
+back
+pyautogui.click(x=0.055128, y=0.081161)
+__________
+
+<image_1>
+search bar
+pyautogui.click(x=0.529025, y=0.067073)
+__________
+
+<image_2>
+downloads
+pyautogui.click(x=0.134534, y=0.637500)
+__________
+
+<image_3>
+invert the lens
+pyautogui.click(x=0.886325, y=0.861374)
+__________
+
+<image_4>
+check the weather

@@ -1,0 +1,20 @@
+task: openbookqa_mistral
+class: !function utils.MistralMutualInfoTask
+dataset_path: allenai/openbookqa
+dataset_name: main
+output_type: multiple_choice
+training_split: train
+test_split: test
+process_docs: !function utils.process_openbookqa
+doc_to_text: query
+doc_to_target: gold
+doc_to_choice: choices
+mutual_info_context: "Answer:"
+process_results: !function utils.process_mutual_info_results
+metric_list:
+  - metric: acc_mutual_info
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  source_task: thunderdome:openbookqa

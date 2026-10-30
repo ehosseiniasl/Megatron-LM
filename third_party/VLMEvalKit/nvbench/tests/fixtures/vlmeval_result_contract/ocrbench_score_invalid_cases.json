@@ -1,0 +1,74 @@
+{
+  "missing": {
+    "Text Recognition": 6,
+    "Scene Text-centric VQA": 1,
+    "Doc-oriented VQA": 1,
+    "Key Information Extraction": 1,
+    "Handwritten Mathematical Expression Recognition": 1,
+    "Final Score": 10
+  },
+  "extra": {
+    "Text Recognition": 6,
+    "Scene Text-centric VQA": 1,
+    "Doc-oriented VQA": 1,
+    "Key Information Extraction": 1,
+    "Handwritten Mathematical Expression Recognition": 1,
+    "Final Score": 10,
+    "Final Score Norm": 1.0,
+    "Unexpected": 0
+  },
+  "boolean": {
+    "Text Recognition": true,
+    "Scene Text-centric VQA": 1,
+    "Doc-oriented VQA": 1,
+    "Key Information Extraction": 1,
+    "Handwritten Mathematical Expression Recognition": 1,
+    "Final Score": 10,
+    "Final Score Norm": 1.0
+  },
+  "negative": {
+    "Text Recognition": -1,
+    "Scene Text-centric VQA": 0,
+    "Doc-oriented VQA": 0,
+    "Key Information Extraction": 0,
+    "Handwritten Mathematical Expression Recognition": 0,
+    "Final Score": -1,
+    "Final Score Norm": -0.1
+  },
+  "out_of_range": {
+    "Text Recognition": 301,
+    "Scene Text-centric VQA": 0,
+    "Doc-oriented VQA": 0,
+    "Key Information Extraction": 0,
+    "Handwritten Mathematical Expression Recognition": 0,
+    "Final Score": 301,
+    "Final Score Norm": 30.1
+  },
+  "raw_float": {
+    "Text Recognition": 6.0,
+    "Scene Text-centric VQA": 1,
+    "Doc-oriented VQA": 1,
+    "Key Information Extraction": 1,
+    "Handwritten Mathematical Expression Recognition": 1,
+    "Final Score": 10,
+    "Final Score Norm": 1.0
+  },
+  "inconsistent_final": {
+    "Text Recognition": 6,
+    "Scene Text-centric VQA": 1,
+    "Doc-oriented VQA": 1,
+    "Key Information Extraction": 1,
+    "Handwritten Mathematical Expression Recognition": 1,
+    "Final Score": 9,
+    "Final Score Norm": 0.9
+  },
+  "wrong_normalized_unit": {
+    "Text Recognition": 6,
+    "Scene Text-centric VQA": 1,
+    "Doc-oriented VQA": 1,
+    "Key Information Extraction": 1,
+    "Handwritten Mathematical Expression Recognition": 1,
+    "Final Score": 10,
+    "Final Score Norm": 100.0
+  }
+}

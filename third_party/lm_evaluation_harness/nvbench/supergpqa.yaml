@@ -1,0 +1,29 @@
+version: 1.0
+tasks:
+  - task_name: supergpqa_main_cot_n_shot
+    task_group: aggregate
+    num_fewshot: 5
+    batch_size: 8
+    overrides:
+      generation_kwargs.max_gen_toks: 2048
+    report_metric:
+      - alias: supergpqa_main_cot_n_shot
+        metric: exact_match,flexible-extract
+  - task_name: supergpqa_main_generative_n_shot
+    task_group: aggregate
+    num_fewshot: 5
+    batch_size: 8
+    overrides:
+      generation_kwargs.max_gen_toks: 2048
+    report_metric:
+      - alias: supergpqa_main_generative_n_shot
+        metric: exact_match,flexible-extract
+  - task_name: supergpqa_main_n_shot
+    task_group: aggregate
+    num_fewshot: 5
+    batch_size: 8
+    overrides:
+      generation_kwargs.max_gen_toks: 2048
+    report_metric:
+      - alias: supergpqa_main_n_shot
+        metric: exact_match,flexible-extract

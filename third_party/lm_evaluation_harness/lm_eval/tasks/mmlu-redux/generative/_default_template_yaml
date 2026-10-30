@@ -1,0 +1,43 @@
+dataset_path: "/lustre/fsw/portfolios/llmservice/users/yilin/data/mmlu_redux_2_cot"
+test_split: test
+fewshot_split: validation
+fewshot_config:
+  sampler: first_n
+  doc_to_text: !function utils.fewshot_to_text
+  doc_to_target: !function utils.empty_str
+output_type: generate_until
+doc_to_text: !function utils.doc_to_text
+doc_to_choice: ["A", "B", "C", "D"]
+doc_to_target: answer
+filter_list:
+  - name: "tigerlab-extract"
+    filter:
+      - function: "fallback-regex"
+        regex_patterns:
+          - 'answer is \(?([A-D])\)?'
+          - '.*[aA]nswer:\s*([A-D])'
+          - '\b[A-D]\b(?!.*\b[A-D]\b)'
+        group_select: [1, 1, 0]
+        fallback: "[invalid]"
+      - function: "take_first"
+generation_kwargs:
+  max_gen_toks: 2048
+  until:
+    - "</s>"
+    - "Q:"
+    - "Question:"
+    - "<|im_end|>"
+    - "\n\n\n"
+  do_sample: false
+  temperature: 0.0
+num_fewshot: 5
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+    ignore_case: true
+    ignore_punctuation: true
+dataset_kwargs:
+  trust_remote_code: true
+metadata:
+  version: 1.0

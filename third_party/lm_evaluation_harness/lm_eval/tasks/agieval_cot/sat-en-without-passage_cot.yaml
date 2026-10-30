@@ -1,0 +1,27 @@
+include: aqua-rat_cot.yaml
+description: "The following are multiple choice questions (with answers) from general college admission tests SAT. 
+              Think step by step and then finish your answer with \"The answer is (X)\" where X is the correct letter choice.\n"
+
+task: agieval_sat_en_without_passage_cot
+dataset_path: hails/agieval-sat-en-without-passage
+doc_to_choice: ["A","B","C","D"]
+
+num_fewshot: 3
+fewshot_config:
+  doc_to_text: !function utils.cot_fewshot_to_text
+  doc_to_target: !function utils.empty_str
+  sampler: first_n
+  samples:
+    - query: "    Question: It can most reasonably be inferred from the passage that many people in the solar panel industry believe that \nOptions: \nA. consumers don’t understand how solar panels work.\nB. two-sided cells have weaknesses that have not yet been discovered.\nC. the cost of solar panels is too high and their power output too low.\nD. Willow Glass is too inefficient to be marketable.\n"
+      explanation: "It can reasonably be inferred that much of the solar panel industry believes current solar technology is too expensive and inefficient because the passage states that the industry has been working to improve those two things: \"All parts of the silicon solar panel industry have been looking for ways to cut costs and improve the power output of solar panels, and that\\'s led to steady cost reductions\" (lines 27-30).Choice $A$ is incorrect because the passage explains how solar panels work but never states or implies that consumers do not understand the technology. Choice $B$ is incorrect because while the passage explains how two-sided solar cells can increase solar electric output, it does not suggest that they have any existing or possible weaknesses. Choice $D$ is incorrect because the passage characterizes Willow Glass as entirely promising and doesn\\'t imply that it is not efficient enough to be marketed.. The answer is (C)."
+      gold: [ "C" ]
+      few_shot: 1
+    - query: "    Question: The primary purpose of the passage is to \nOptions: \nA. discuss the assumptions and reasoning behind a theory.\nB. describe the aim, method, and results of an experiment.\nC. present and analyze conflicting data about a phenomenon.\nD. show the innovative nature of a procedure used in a study.\n"
+      explanation: "The first paragraph of the passage identifies and describes \"Texas gourd vines\" (line 1), but the primary focus of the passage is introduced in the first sentence of the second paragraph: \"In one recent study, Nina Theis and Lynn Adler took on the specific problem of the Texas gourd-how to attract enough pollinators but not too many beetles\" (lines 17-20). The remainder of the passage focuses on describing the purpose, process, and results of the recent research done on those Texas gourd vines.Choice $A$ is incorrect because the passage doesn\\'t focus on the assumptions behind a theory but rather on the way in which that theory was tested. Choice $C$ is incorrect because the passage does not present much conflicting data; most of it supports the idea there can be too much fragrance for the Texas gourd vine. Choice $D$ is incorrect because the passage explains the procedures used in a study were \"very labor intensive\"\\' (line 58) but does not present them as particularly innovative.. The answer is (B)."
+      gold: [ "B" ]
+      few_shot: 1
+    - query: "    Question: With which of the following statements about his father would the narrator most likely agree? \nOptions: \nA. He lacked affection for the narrator.\nB. He disliked any unnecessary use of money.\nC. He would not have approved of Sempere's gift.\nD. He objected to the writings of Charles Dickens.\n"
+      explanation: "The tenth paragraph shows that upon returning home, the narrator hides the gift (the \"new friend\") that Sempere had given him: \"That afternoon I took my new friend home, hidden under my clothes so that my father wouldn\\'t see it.\" It can be inferred from this sentence that the narrator\\'s concern arises from an awareness that his father would disapprove of the gift.Choice $\\mathrm{A}$ is incorrect because although the passage discusses the father\\'s hostility toward the narrator\\'s love of reading, there is no indication that the father is not affectionate to the narrator more generally; indeed, the third paragraph depicts the father\\'s generosity toward the narrator. Choice B is incorrect because the father\\'s generosity toward the narrator, as depicted in the third paragraph, clearly shows that the father encourages unnecessary purchases of such things as candy. Choice $\\mathrm{D}$ is incorrect because although the first paragraph shows that the father is hostile toward books in general, there is no indication in the passage that Dickens or any other author is a specific object of the father\\'s disdain.. The answer is (C)."
+      gold: [ "C" ]
+      few_shot: 1
+

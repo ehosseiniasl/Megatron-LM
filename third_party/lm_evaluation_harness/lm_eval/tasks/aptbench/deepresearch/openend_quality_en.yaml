@@ -1,0 +1,36 @@
+task: aptbench_deepresearch_openend_quality_en
+tag:
+  - aptbench
+  - deepresearch
+dataset_path: nvidia/APTBench
+dataset_name: null
+dataset_kwargs:
+  data_files: deepresearch/openend_quality_en.jsonl
+training_split: null
+validation_split: null
+test_split: train
+output_type: generate_until
+doc_to_text: !function utils.doc_to_text_openend_quality_en
+doc_to_target: !function utils.doc_to_target_openend_quality_en
+process_results: !function utils.process_results_openend_quality_en
+generation_kwargs:
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 10
+  until:
+    - "\n"
+    - "</s>"
+    - "<|im_end|>"
+    - "<|endoftext|>"
+    - "<|eot_id|>"
+num_fewshot: 0
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  description: "APTBench Deep Research - Open-ended Quality (EN): Evaluate the quality of research responses. Tests quality assessment and critical evaluation skills in English."

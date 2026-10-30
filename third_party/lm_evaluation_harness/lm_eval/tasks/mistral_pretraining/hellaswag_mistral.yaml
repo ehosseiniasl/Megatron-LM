@@ -1,0 +1,17 @@
+task: hellaswag_mistral
+dataset_path: Rowan/hellaswag
+output_type: multiple_choice
+training_split: train
+validation_split: validation
+process_docs: !function utils.process_hellaswag
+doc_to_text: query
+doc_to_target: gold
+doc_to_choice: choices
+process_results: !function utils.process_hellaswag_results
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  source_task: thunderdome:hellaswag

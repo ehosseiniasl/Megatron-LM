@@ -1,0 +1,3 @@
+include: _greedy_config
+task: humanevalplus_greedy
+dataset_path: evalplus/humanevalplus

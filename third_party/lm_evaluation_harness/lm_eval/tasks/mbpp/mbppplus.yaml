@@ -1,0 +1,6 @@
+include: _sample_config
+task: mbppplus
+dataset_path: evalplus/mbppplus
+generation_kwargs:
+  temperature: 0.1
+repeats: 1

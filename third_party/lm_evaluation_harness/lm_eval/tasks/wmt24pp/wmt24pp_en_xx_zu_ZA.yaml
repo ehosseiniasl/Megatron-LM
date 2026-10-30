@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_zu_ZA
+include: _base_config.yaml
+dataset_name: en-zu_ZA
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Zulu follows.\n\nThe translation is:"

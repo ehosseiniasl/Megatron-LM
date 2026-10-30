@@ -1,0 +1,12 @@
+# Validation-only fragment appended to the phase1 production training blend.
+# Budget: --input-tokens-per-source (default 131072); sequence length: 8192.
+per_source_validation:
+  sources:
+  - name: mistral_arxiv_val_ppl
+    prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/nemotron-v4/sandia/validation/per_source/n4-v6-262k/mistral-arxiv/n4_v6_262k_ml4_regex/pretrain_v4__lobstral_no_max_length/arxiv_val_ppl/chunks/validation/chunk
+    weight: 0.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+  valid_seed: 17
+  epoch_index_cache_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/nemotron-v4/sandia/validation/per_source/n4-v6-262k/epoch_indexes

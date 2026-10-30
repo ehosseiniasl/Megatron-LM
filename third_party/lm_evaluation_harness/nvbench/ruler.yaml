@@ -1,0 +1,7 @@
+version: 1.0
+tasks:
+  - task_name: ruler
+    batch_size: 1
+    overrides:
+      dataset_kwargs.max_seq_lengths: "[131072]" # change accordingly to your target sequence len
+    limit: 100

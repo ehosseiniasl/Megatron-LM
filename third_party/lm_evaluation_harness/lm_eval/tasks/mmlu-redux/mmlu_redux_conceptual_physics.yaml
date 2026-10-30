@@ -1,0 +1,47 @@
+task: mmlu_redux_conceptual_physics
+task_alias: conceptual_physics
+dataset_name: conceptual_physics
+description: 'The following are multiple choice questions (with answers) about conceptual physics.
+
+
+  '
+include: _mmlu_redux_template_yaml
+fewshot_config:
+  sampler: first_n
+  samples:
+  - question: Compared with the mass of a uranium atom undergoing fission, the combined masses of the products after fission are
+    choices:
+    - less
+    - more
+    - the same
+    - zero
+    answer: 0
+  - question: Things that are equivalent according to the equivalence principle are
+    choices:
+    - space and time.
+    - a traveling twin and a stay-at-home twin.
+    - gravity and acceleration.
+    - mass and energy.
+    answer: 2
+  - question: Colors in a soap bubble result from light
+    choices:
+    - converted to a different frequency
+    - deflection
+    - interference
+    - polarization
+    answer: 2
+  - question: A model airplane flies slower when flying into the wind and faster with wind at its back. When launched at right angles to the wind a cross wind its groundspeed compared with flying in still
+      air is
+    choices:
+    - the same
+    - greater
+    - less
+    - either greater or less depending on wind speed
+    answer: 1
+  - question: Which of these three elements has the most mass per nucleon?
+    choices:
+    - Hydrogen
+    - Iron
+    - Uranium
+    - Same in each
+    answer: 0

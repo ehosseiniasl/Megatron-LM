@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_tr_TR
+include: _base_config.yaml
+dataset_name: en-tr_TR
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Turkish follows.\n\nThe translation is:"

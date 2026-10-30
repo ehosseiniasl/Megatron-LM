@@ -1,0 +1,4 @@
+Request: This is a math calculation question. Please choose the correct answer. Put your answer after "(" .
+Math calculation question: $REPO_INFO$
+Answer choices: $CHOICES$
+The correct answer choice is (

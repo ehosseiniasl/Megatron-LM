@@ -1,0 +1,11 @@
+include: _default_template.yaml
+task: multiple-ts
+dataset_name: humaneval-ts
+generation_kwargs:
+  until:
+    - "\nfunction "
+    - "\n/*"
+    - "\n//"
+    - "\nclass"
+metadata:
+  language: ts

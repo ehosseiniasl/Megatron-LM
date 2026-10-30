@@ -1,0 +1,52 @@
+FROM vllm/vllm-openai:latest
+
+ENTRYPOINT []
+
+# Install first to cache the dependencies
+# RUN pip install --no-cache-dir 'lm_eval[math,openai]==0.4.3'
+
+RUN apt update && apt install -y build-essential
+
+WORKDIR /
+
+RUN git clone https://github.com/huggingface/transformers
+
+WORKDIR transformers
+
+RUN git checkout HEAD~5
+
+RUN pip install -e .
+
+WORKDIR /
+
+RUN git clone https://github.com/vllm-project/vllm.git
+
+WORKDIR vllm
+
+# go back 5 commits, its more likely to find a wheel
+RUN git checkout HEAD~5
+
+RUN VLLM_PRECOMPILED_WHEEL_LOCATION=https://wheels.vllm.ai/$(git rev-parse HEAD)/vllm-1.0.0.dev-cp38-abi3-manylinux1_x86_64.whl pip install -e .
+
+# WORKDIR /lm-evaluation-harness
+
+# # deprecated name
+# ENV TRANSFORMERS_CACHE=/lm-evaluation-harness/hf
+# # new env name
+# ENV HF_HOME=/lm-evaluation-harness/hf
+
+# Set to EMPTY for local evaluation
+ENV OPENAI_API_KEY=EMPTY
+
+# RUN mkdir -p /lm-evaluation-harness/hf
+
+# COPY . /lm-evaluation-harness
+
+# RUN pip install --no-cache-dir '.[math,openai]' openai\>1.3.9
+
+# RUN python3 nvbench/fetch_datasets.py
+
+# Offline mode during evals.
+ENV HF_DATASETS_OFFLINE=1 
+
+ENV HF_HUB_OFFLINE=1 

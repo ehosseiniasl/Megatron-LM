@@ -1,0 +1,146 @@
+#!/bin/bash
+
+#SBATCH -N 1
+#SBATCH --gpus-per-node=8
+#SBATCH --ntasks-per-node=1
+#SBATCH -A llmservice_nemo_mlops
+#SBATCH -J llmservice_nemo_mlops:llama-8b-base-aegis-v1-vllm-judge+vllm-test-model-0
+#SBATCH -t 04:00:00
+#SBATCH --exclusive
+#SBATCH --mem=0MB
+#SBATCH --dependency=singleton
+#SBATCH --partition=polar,polar3,polar4
+
+#SBATCH hetjob
+#SBATCH -N 1
+#SBATCH --gpus-per-node=8
+#SBATCH --ntasks-per-node=1
+#SBATCH -A llmservice_nemo_mlops
+#SBATCH -J llmservice_nemo_mlops:llama-8b-base-aegis-v1-vllm-judge+vllm-test-model-1
+#SBATCH -t 04:00:00
+#SBATCH --exclusive
+#SBATCH --mem=0MB
+#SBATCH --dependency=singleton
+#SBATCH --partition=polar,polar3,polar4
+
+# =================== ENV SETUP ====================
+export NVIDIA_API_KEY=???
+export HF_TOKEN=???
+
+export LOGS_DIR="/lustre/fsw/portfolios/llmservice/users/ameyasunilm/logs"
+export HF_HOME="/lustre/fsw/portfolios/llmservice/users/ameyasunilm/hf_cache"
+export TRITON_CACHE_DIR="/lustre/fsw/portfolios/llmservice/users/ameyasunilm/trt_cache_dir/trt_cache_dir"
+export LM_EVAL_DIR="/lustre/fsw/portfolios/llmservice/users/ameyasunilm/codebases/lm-eval-adlr-aegis"
+
+export TASK="aegis_v1_content_safety"
+export TEST_MODEL="meta-llama/Llama-3.1-8B"
+export JUDGE_MODEL="meta-llama/LlamaGuard-7b"
+export JUDGE_LORA_MODEL_PATH="/lustre/fsw/portfolios/llmservice/users/ameyasunilm/codebases/aegis-content-safety/aegis_v1/models/llama_guard_family/aegis_model_v1_11k_020824_annot_proj_1/aegis_llama_guard_permissive"
+
+export OUTPUT_PATH="/lustre/fsw/portfolios/llmservice/users/ameyasunilm/evaluations/${TASK}/${TEST_MODEL}"
+export CACHE_PATH="${OUTPUT_PATH}/cache.db"
+mkdir -p "${OUTPUT_PATH}"
+
+# =================== FUNCTION TO WAIT FOR MODEL SERVER ====================
+function wait_for_model_server() {
+    echo "Waiting for Test Model server to be ready..."
+    local RETRIES=60
+    local SLEEP_TIME=5
+    for ((i=1; i<=RETRIES; i++)); do
+        if curl -s http://localhost:8000/v1/models | grep -q '"id":'; then
+            echo "✅ Test Model server is up!"
+            return 0
+        fi
+        echo "⏳ Test Model server not ready yet (attempt $i/$RETRIES)..."
+        sleep $SLEEP_TIME
+    done
+    echo "❌ Timed out waiting for Test Model server"
+    exit 1
+}
+
+# =================== JOB 0: TEST MODEL ====================
+srun \
+    -l \
+    --het-group=0 \
+    --output "${LOGS_DIR}/test_model_%x_%j.log" \
+    --container-image="/lustre/fsw/portfolios/llmservice/users/ameyasunilm/containers/vllm_v0.6.6.post1-deci.sqsh" \
+    --container-mounts="/lustre:/lustre,/home:/home" \
+    bash -c "
+huggingface-cli login --token \"${HF_TOKEN}\"
+export TRITON_CACHE_DIR=\"${TRITON_CACHE_DIR}\"
+export HF_HOME=\"${HF_HOME}\"
+export NVIDIA_API_KEY=\"${NVIDIA_API_KEY}\"
+export OPENAI_API_KEY=\"dummy-key\"
+export HF_DATASETS_TRUST_REMOTE_CODE=true
+
+python3 -m vllm.entrypoints.openai.api_server \
+    --model '${TEST_MODEL}' \
+    --served-model-name '${TEST_MODEL}' \
+    --trust-remote-code \
+    --seed 42 \
+    --host '0.0.0.0' \
+    --port 8000 \
+    --tensor-parallel-size 8 \
+    --max-model-len 4096 \
+    --gpu-memory-utilization 0.95 \
+    --enforce-eager \
+    --download-dir \"${HF_HOME}\"" &
+
+TEST_MODEL_PID=$!
+sleep 60
+
+wait_for_model_server
+
+TEST_MODEL_HOST=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1)
+echo "TEST_MODEL_HOST: ${TEST_MODEL_HOST}"
+
+# =================== JOB 1: JUDGE + EVALUATION ====================
+srun \
+    -l \
+    --het-group=1 \
+    --output "${LOGS_DIR}/judge_model+eval_%x_%j.log" \
+    --container-image="/lustre/fsw/portfolios/llmservice/users/ameyasunilm/containers/vllm_v0.6.6.post1-deci.sqsh" \
+    --container-mounts="/lustre:/lustre,/home:/home" \
+    bash -c "
+huggingface-cli login --token \"${HF_TOKEN}\"
+export TRITON_CACHE_DIR=\"${TRITON_CACHE_DIR}\"
+export HF_HOME=\"${HF_HOME}\"
+export NVIDIA_API_KEY=\"${NVIDIA_API_KEY}\"
+export HF_DATASETS_TRUST_REMOTE_CODE=true
+export OPENAI_API_KEY=\"dummy-key\"
+
+python3 -m vllm.entrypoints.openai.api_server \
+    --model '${JUDGE_MODEL}' \
+    --enable-lora \
+    --lora-modules \"aegis-v1-llama-guard=${JUDGE_LORA_MODEL_PATH}\" \
+    --trust-remote-code \
+    --seed 1 \
+    --host '0.0.0.0' \
+    --port 5000 \
+    --tensor-parallel-size 8 \
+    --max-model-len 4096 \
+    --gpu-memory-utilization 0.95 \
+    --enforce-eager \
+    --download-dir \"${HF_HOME}\" &
+
+JUDGE_PID=\$!
+sleep 60
+
+cd ${LM_EVAL_DIR}
+pip install -e .[api]
+pip install git+https://github.com/NVIDIA/dllogger#egg=dllogger
+export JUDGE_NODE='0.0.0.0'
+
+lm_eval \
+    --output_path ${OUTPUT_PATH} \
+    --model local-completions \
+    --model_args model=${TEST_MODEL},base_url=http://${TEST_MODEL_HOST}:8000/v1,tokenizer=${TEST_MODEL},tokenizer_backend=huggingface \
+    --tasks ${TASK} \
+    --num_fewshot 0 \
+    --use_cache ${CACHE_PATH} \
+    --log_samples \
+    --write_out
+
+wait \$JUDGE_PID"
+
+wait $TEST_MODEL_PID

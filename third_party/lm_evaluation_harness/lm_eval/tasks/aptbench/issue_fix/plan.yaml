@@ -1,0 +1,36 @@
+task: aptbench_issue_fix_plan
+tag:
+  - aptbench
+  - issue_fix
+dataset_path: nvidia/APTBench
+dataset_name: null
+dataset_kwargs:
+  data_files: issue_fix/plan.jsonl
+training_split: null
+validation_split: null
+test_split: train
+output_type: generate_until
+doc_to_text: !function utils.doc_to_text_plan
+doc_to_target: !function utils.doc_to_target_plan
+process_results: !function utils.process_results_plan
+generation_kwargs:
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 10
+  until:
+    - "\n"
+    - "</s>"
+    - "<|im_end|>"
+    - "<|endoftext|>"
+    - "<|eot_id|>"
+num_fewshot: 0
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  description: "APTBench Issue Fix - Plan: Choose the correct solution plan based on execution trajectory. Tests planning and problem-solving for bug fixes."

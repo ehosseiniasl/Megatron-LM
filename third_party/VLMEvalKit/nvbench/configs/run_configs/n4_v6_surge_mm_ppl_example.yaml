@@ -1,0 +1,14 @@
+schema_version: 1
+run:
+  name: n4_v6_surge_mm_ppl_example
+model_config: ../models/n4_v6.yaml
+suite_config: ../suites/surge_mm_ppl.yaml
+cluster_config: ../clusters/cmh.yaml
+checkpoint:
+  path: ${workspace}/checkpoints/n4_v6
+  iteration: 1
+paths:
+  cache_root: ${workspace}/vlmevalkit_cache
+output:
+  root: ${workspace}/vlmevalkit_runs
+  resume: false

@@ -1,0 +1,28 @@
+task: aegis_v2_content_safety
+dataset_path: nvidia/Aegis-AI-Content-Safety-Dataset-2.0
+test_split: test
+doc_to_target: "no_target"
+doc_to_text: "{{prompt}}"
+generation_kwargs:
+  do_sample: true
+  temperature: 0.9
+  max_gen_toks: 50
+  until:
+    - "</s>"
+    - "<|im_end|>"
+
+output_type: generate_until
+
+metric_list:
+  - metric: safety_score
+    aggregation: mean
+    higher_is_better: true
+  - metric: grading_nemo_guard
+    aggregation: bypass
+
+tag:
+  - content_safety
+metadata:
+  version: 2.0
+
+process_results: !function v2_utils.process_results

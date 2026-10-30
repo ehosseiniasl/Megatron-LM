@@ -1,0 +1,21 @@
+include: aqua-rat.yaml
+task: agieval_sat_en_without_passage
+dataset_path: hails/agieval-sat-en-without-passage
+doc_to_choice: ["Answer: A",
+    "Answer: B",
+    "Answer: C",
+    "Answer: D",
+]
+num_fewshot: 3
+fewshot_config:
+  sampler: first_n
+  samples:
+    - query: "    It can most reasonably be inferred from the passage that many people in the solar panel industry believe that \n   A. consumers don’t understand how solar panels work.\n   B. two-sided cells have weaknesses that have not yet been discovered.\n   C. the cost of solar panels is too high and their power output too low.\n   D. Willow Glass is too inefficient to be marketable.\n"
+      gold: [ "Answer: C" ]
+      few_shot: 1
+    - query: "    The primary purpose of the passage is to \n   A. discuss the assumptions and reasoning behind a theory.\n   B. describe the aim, method, and results of an experiment.\n   C. present and analyze conflicting data about a phenomenon.\n   D. show the innovative nature of a procedure used in a study.\n"
+      gold: [ "Answer: B" ]
+      few_shot: 1
+    - query: "    With which of the following statements about his father would the narrator most likely agree? \n   A. He lacked affection for the narrator.\n   B. He disliked any unnecessary use of money.\n   C. He would not have approved of Sempere's gift.\n   D. He objected to the writings of Charles Dickens.\n"
+      gold: [ "Answer: C" ]
+      few_shot: 1

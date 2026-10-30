@@ -1,0 +1,18 @@
+megatron/** @deepakn94 @jaredcasper @rogerwaleffe @sancha
+
+.gitlab/ @NVIDIA-NeMo/automation
+.github/ @NVIDIA-NeMo/automation
+.github/oncall_schedule.json @NVIDIA-NeMo/automation
+.gitlab-ci.yml @NVIDIA-NeMo/automation
+docker/  @NVIDIA-NeMo/automation
+tests/functional_tests/python_test_utils/ @NVIDIA-NeMo/automation
+tests/functional_tests/shell_test_utils/ @NVIDIA-NeMo/automation
+tests/test_utils/recipes/ @NVIDIA-NeMo/automation
+tests/unit_tests/run_ci_test.sh @NVIDIA-NeMo/automation
+
+# API Backwards Compatibility Check
+scripts/check_api_backwards_compatibility.py @NVIDIA-NeMo/automation
+scripts/README_API_COMPAT.md @NVIDIA-NeMo/automation
+.github/workflows/check_api_backwards_compatibility_workflow.yml @NVIDIA-NeMo/automation
+docs/api-backwards-compatibility-check.md @NVIDIA-NeMo/automation
+tests/unit_tests/test_api_backwards_compat_setup.py @NVIDIA-NeMo/automation

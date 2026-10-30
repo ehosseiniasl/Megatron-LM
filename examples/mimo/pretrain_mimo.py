@@ -1,0 +1,227 @@
+# Copyright (c) 2026, NVIDIA CORPORATION. All rights reserved.
+
+"""Heterogeneous Nemotron6-MoE VLM training through the stock pretrain loop."""
+
+from __future__ import annotations
+
+# Capture entrypoint execution before heavy imports, after interpreter startup.
+import time
+
+_PROGRAM_START_TIME = time.time()
+
+from megatron.rank_log_setup import suppress_duplicate_logs_off_rank0
+
+# Quiet the duplicate warnings before the heavy imports below: torch raises its
+# own deprecations while it is being imported, so a filter installed any later
+# cannot reach them.
+suppress_duplicate_logs_off_rank0()
+
+import argparse
+from datetime import timedelta
+from functools import partial
+
+from examples.mimo.model_providers import resolve_provider
+from examples.mimo.model_providers.nemotron_moe_vlm import add_model_provider_args
+from examples.mimo.training.args import (
+    add_hetero_grid_args,
+    build_module_grid_specs,
+    validate_hetero_grid_args,
+)
+from examples.mimo.training.builder import MimoBuildConfig
+from examples.mimo.training.data import (
+    add_mistral_data_args,
+    add_mock_data_args,
+    build_train_valid_test_data_loaders,
+)
+from examples.mimo.training.distributed import initialize_distributed, shutdown_distributed
+from examples.mimo.training.encoder_prefetch import (
+    EncoderPrefetchLoader,
+    add_encoder_prefetch_args,
+    prefetch_frozen_features,
+    validate_encoder_prefetch_args,
+)
+from examples.mimo.training.step import mimo_forward_step
+from examples.mimo.training.topology import create_topology
+from examples.mimo.utils.mistral_ckpt import load_vision_only_from_dcp
+from megatron.core.enums import ModelType
+from megatron.core.utils import unwrap_model
+from megatron.training.argument_utils import pretrain_cfg_container_from_args
+from megatron.training.arguments import parse_args, validate_args
+from megatron.training.global_vars import set_global_variables
+from megatron.training.tensor_metrics.data_source_loss import (
+    configured_data_source_names,
+    data_source_metrics_requested,
+)
+from megatron.training.tensor_metrics.observer import build_tensor_metric_observer
+from megatron.training.training import pretrain, set_startup_timestamps
+from megatron.training.vocab_utils import calculate_padded_vocab_size
+from mistral_adapter.train_loop_helpers import add_pretokenized_args
+
+
+def extra_args_provider(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
+    """Register model-provider, heterogeneous-grid, and external-data arguments."""
+    parser = add_model_provider_args(parser)
+    parser = add_hetero_grid_args(parser)
+    parser = add_mock_data_args(parser)
+    parser = add_mistral_data_args(parser)
+    parser = add_encoder_prefetch_args(parser)
+    parser = add_pretokenized_args(parser)
+    return parser
+
+
+def _set_stock_parallel_args(args: argparse.Namespace) -> None:
+    # validate_args and the stock training loop consume these fields.
+    args.tensor_model_parallel_size = args.mimo_llm_tp
+    args.pipeline_model_parallel_size = args.mimo_llm_pp
+    args.context_parallel_size = args.mimo_llm_cp
+    args.expert_model_parallel_size = args.mimo_llm_ep
+    args.expert_tensor_parallel_size = args.mimo_llm_expt_tp or 1
+
+
+def _parse_and_validate() -> argparse.Namespace:
+    """Parse stock plus MIMO arguments and validate the disjoint module grids."""
+    args = parse_args(extra_args_provider)
+    _, llm_size = validate_hetero_grid_args(args, args.world_size)
+    _set_stock_parallel_args(args)
+    physical_world_size = args.world_size
+    args.world_size = llm_size
+    try:
+        validate_args(args, {"dataloader_type": "external"})
+    finally:
+        args.world_size = physical_world_size
+    if not (
+        args.use_distributed_optimizer
+        or getattr(args, "use_layer_wise_distributed_optimizer", False)
+    ):
+        raise ValueError("Other optimizer paths have not been tested with heterogeneous MIMO")
+    validate_encoder_prefetch_args(args)
+    if getattr(args, "load_vision_from", None) is not None and (
+        args.load is not None or args.pretrained_checkpoint is not None
+    ):
+        raise ValueError(
+            "--load-vision-from is mutually exclusive with --load and --pretrained-checkpoint"
+        )
+
+    if getattr(args, "padded_vocab_size", None) is None:
+        args.padded_vocab_size = calculate_padded_vocab_size(
+            args.vocab_size,
+            args.make_vocab_size_divisible_by,
+            args.mimo_llm_tp,
+            logging_enabled=False,
+        )
+    from examples.mimo.data.mistral_provider import configure_mistral_data
+
+    configure_mistral_data(args)
+    return args
+
+
+def main() -> None:
+    """Build the heterogeneous topology and run stock pretraining."""
+    args = _parse_and_validate()
+    set_global_variables(args, build_tokenizer=False)
+    provider = resolve_provider(args)
+
+    prefetch_loader = None
+    loaders = []
+    process_group_timeout = timedelta(minutes=args.distributed_timeout_minutes)
+    initialize_distributed(timeout=process_group_timeout)
+    # The grid/rank-layout args model a single encoder region; the builder itself is
+    # generic over any number of encoder grids in the topology.
+    encoder_name = provider.encoder_module_names[0] if provider.encoder_module_names else None
+    specs = build_module_grid_specs(args, args.world_size, encoder_name)
+    topology = create_topology(
+        specs, args.high_priority_stream_groups, timeout=process_group_timeout
+    )
+
+    communicator = provider.build_communicator(args, topology)
+
+    if args.mimo_encoder_prefetch and len(provider.encoder_module_names) != 1:
+        raise ValueError("encoder prefetch requires exactly one encoder")
+
+    # Encoder prefetch runs encoder forward while producing batches, so it needs the built
+    # rank-local encoder instance. Capture the wrapped model here so the data provider can
+    # later extract that encoder and bind it to the prefetch worker.
+    captured_model = {}
+    hooks = []
+    if getattr(args, "load_vision_from", None) is not None:
+        if encoder_name is None:
+            raise ValueError("--load-vision-from requires a vision encoder")
+
+        def load_vision_hook(models):
+            load_vision_only_from_dcp(
+                unwrap_model(models[0]), args.load_vision_from, topology, encoder_name
+            )
+            return models
+
+        hooks.append(load_vision_hook)
+    if args.mimo_encoder_prefetch:
+
+        def capture_model(models):
+            captured_model["model"] = models[0]
+            return models
+
+        hooks.append(capture_model)
+    model_cfg = MimoBuildConfig(_topology=topology, post_wrap_hooks=hooks)
+    cfg = pretrain_cfg_container_from_args(args, model_cfg)
+
+    def train_valid_test_data_provider(_train_val_test_num_samples):
+        nonlocal prefetch_loader
+        role_loaders = build_train_valid_test_data_loaders(args, topology)
+        loaders.extend(loader for loader in role_loaders if loader is not None)
+        iterators = tuple(iter(loader) if loader is not None else None for loader in role_loaders)
+        if not args.mimo_encoder_prefetch or role_loaders[0] is None:
+            return iterators
+
+        mimo_model = unwrap_model(captured_model["model"])
+        if not mimo_model.role.has_modality_modules:
+            return iterators
+        if prefetch_loader is not None:
+            raise RuntimeError("encoder prefetch loader was already built")
+
+        encoder_module = unwrap_model(mimo_model.modality_submodules[encoder_name])
+        prefetch_loader = EncoderPrefetchLoader(
+            source=iter(role_loaders[0]),
+            encoder_name=encoder_name,
+            feature_producer=partial(prefetch_frozen_features, encoder_module),
+            depth=args.mimo_encoder_prefetch_depth,
+            debug=args.mimo_encoder_prefetch_debug,
+        )
+        prefetch_loader.start()
+        return (prefetch_loader, *iterators[1:])
+
+    train_valid_test_data_provider.is_distributed = True
+    tensor_metric_observer = None
+    if data_source_metrics_requested(args.tensor_metrics):
+        tensor_metric_observer = build_tensor_metric_observer(
+            args.tensor_metrics,
+            data_source_names=configured_data_source_names(args),
+            iterations=args.tensor_metrics_iterations,
+            wgrad_small_thresholds=args.tensor_metrics_wgrad_small_thresholds,
+            wgrad_relative_small_thresholds=args.tensor_metrics_wgrad_relative_small_thresholds,
+        )
+    pretrain(
+        cfg,
+        train_valid_test_data_provider,
+        ModelType.encoder_or_decoder,
+        mimo_forward_step,
+        model_provider=None,
+        skip_model_parallel_init=True,
+        p2p_communicator=communicator,
+        pg_collection=topology.schedule_pg_collection,
+        tensor_metric_observer=tensor_metric_observer,
+    )
+
+    if prefetch_loader is not None:
+        prefetch_loader.close()
+    for loader in loaders:
+        close = getattr(loader, "close", None)
+        if callable(close):
+            close()
+    topology.destroy()
+    shutdown_distributed()
+
+
+if __name__ == "__main__":
+    _MAIN_ENTRY_TIME = time.time()
+    set_startup_timestamps(program_start=_PROGRAM_START_TIME, main_entry=_MAIN_ENTRY_TIME)
+    main()

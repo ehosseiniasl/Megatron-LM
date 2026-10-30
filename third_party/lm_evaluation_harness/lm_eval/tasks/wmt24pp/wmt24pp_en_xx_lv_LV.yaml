@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_lv_LV
+include: _base_config.yaml
+dataset_name: en-lv_LV
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Latvian follows.\n\nThe translation is:"

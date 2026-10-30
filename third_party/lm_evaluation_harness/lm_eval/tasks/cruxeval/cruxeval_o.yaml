@@ -1,0 +1,31 @@
+task: cruxeval_o
+dataset_path: cruxeval-org/cruxeval
+dataset_name: null
+test_split: test
+output_type: generate_until
+doc_to_text: !function cruxo_utils.doc_to_text
+doc_to_target: !function cruxo_utils.doc_to_target
+process_results: !function metrics.code_eval.estimate_pass_at_k_dynamic
+generation_kwargs:
+  max_gen_toks: 512
+  temperature: 0.2
+  top_p: 0.95
+  until:
+    - "[/ANSWER]"
+    - "\n\n"
+    - "</s>"
+    - "<|im_end|>"
+repeats: 10
+filter_list:
+  - name: "sanitize"
+    filter:
+      - function: custom
+        filter_fn: !function cruxo_utils.build_predictions
+metadata:
+  version: 1.1
+  description: |
+    CRUXEval-O is a code understanding benchmark for output prediction.
+    Given a Python function and an input, the task is to predict the
+    output that would be produced when executing the function with that input.
+
+    Homepage: https://crux-eval.github.io/

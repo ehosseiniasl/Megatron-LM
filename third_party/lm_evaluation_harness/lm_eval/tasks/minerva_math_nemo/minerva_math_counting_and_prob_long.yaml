@@ -1,0 +1,4 @@
+include: minerva_math_algebra_long.yaml
+dataset_name: counting_and_probability
+task: minerva_math_counting_and_prob_long
+

@@ -1,0 +1,15 @@
+group: adlr_global_mmlu # adlr because, we select a subset of languages
+task:
+  - global_mmlu_es
+  - global_mmlu_de
+  - global_mmlu_fr
+  - global_mmlu_zh
+  - global_mmlu_it
+  - global_mmlu_ja
+  - global_mmlu_pt
+  - global_mmlu_ko
+aggregate_metric_list:
+  - metric: acc
+    weight_by_size: True
+metadata:
+  version: 0.0

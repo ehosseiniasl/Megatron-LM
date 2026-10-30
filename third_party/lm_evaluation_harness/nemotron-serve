@@ -1,0 +1,303 @@
+#!/usr/bin/env python3
+"""nemotron-serve — Launch Megatron dynamic inference server.
+
+Like `vllm serve`, but for Nemotron/Megatron. Run inside a container/allocation
+with megatron-lm on PYTHONPATH.
+
+Usage:
+    nemotron-serve <checkpoint_path> --tier <nano|super|ultra> [options]
+    nemotron-serve ~/data/checkpoints/nemo-3-nano-base-mcore-8k --tier nano
+    nemotron-serve ~/data/checkpoints/nemotron-3-super-base-mcore-8k --tier super --port 5000
+
+Unknown arguments are forwarded to the underlying Megatron server command.
+Use `--` to make the boundary explicit when needed:
+    nemotron-serve <checkpoint_path> --tier ultra -- --hybrid-layer-pattern '...'
+    nemotron-serve <checkpoint_path> --tier ultra --hybrid-layer-pattern '...'
+"""
+
+from __future__ import annotations
+
+import argparse
+import os
+import sys
+from dataclasses import dataclass, field
+from pathlib import Path
+
+
+# ---------------------------------------------------------------------------
+# Tier presets
+# ---------------------------------------------------------------------------
+NM6_ROOT = "/lustre/fsw/portfolios/llmservice/projects/llmservice_nlp_fm/nemotron6"
+DEFAULT_TOKENIZER = f"{NM6_ROOT}/tokenizers/multiMixV8.gpt4o_nc_sd.500000.128k.vocab.json"
+
+@dataclass
+class TierConfig:
+    tp: int
+    etp: int
+    ep: int
+    pp: int
+    extra_args: list[str] = field(default_factory=list)
+
+
+TIERS: dict[str, TierConfig] = {
+    # 3B MOE (128 experts, Mamba hybrid) — 1 node (8 GPUs)
+    "nano": TierConfig(
+        tp=1, etp=1, ep=8, pp=1,
+        extra_args=["--inference-dynamic-batching-buffer-size-gb", "5"],
+    ),
+    # 8B MOE — 1 node (8 GPUs, H100)
+    "super": TierConfig(
+        tp=1, etp=1, ep=8, pp=1,
+        extra_args=["--inference-dynamic-batching-buffer-size-gb", "10"],
+    ),
+    # 8B MOE on GB200 (4 GPUs/node) — 4 nodes
+    "ultra": TierConfig(
+        tp=1, etp=1, ep=16, pp=1,
+        extra_args=[
+            "--inference-dynamic-batching-buffer-size-gb", "20",
+            "--mlp-chunks-for-prefill", "4",
+            "--inference-dynamic-batching-max-requests", "24",
+            "--inference-dynamic-batching-num-cuda-graphs", "-1",
+        ],
+    ),
+}
+
+
+# ---------------------------------------------------------------------------
+# NCCL env
+# ---------------------------------------------------------------------------
+NCCL_ENV = {
+    "NCCL_IB_SL": "1",
+    "NCCL_IB_TIMEOUT": "19",
+    "UB_TIMEOUT": "720",
+    "CUDA_DEVICE_MAX_CONNECTIONS": "1",
+    "NVTE_FWD_LAYERNORM_SM_MARGIN": "16",
+    "NVTE_BWD_LAYERNORM_SM_MARGIN": "16",
+    "NCCL_P2P_NET_CHUNKSIZE": "2097152",
+    "NCCL_DEBUG": "WARN",
+    "TORCHINDUCTOR_WORKER_START": "fork",
+    "NCCL_SHM_DISABLE": "1",
+    "NCCL_PROTO": "simple",
+}
+
+
+# ---------------------------------------------------------------------------
+# Port derivation
+# ---------------------------------------------------------------------------
+def derive_ports(base_port: int | None) -> dict[str, int | str]:
+    import subprocess
+
+    # Derive deterministic port window from SLURM job/array if --port is not set.
+    port_base = 42000
+    port_window = 2000
+    job_hash = int(os.environ.get("SLURM_JOB_ID", "0"))
+    array_hash = int(os.environ.get("SLURM_ARRAY_TASK_ID", "0"))
+    port_offset = (job_hash + array_hash * 131) % port_window
+
+    if base_port is not None:
+        http_port = base_port
+    elif os.environ.get("HTTP_PORT"):
+        http_port = int(os.environ["HTTP_PORT"])
+    else:
+        http_port = port_base + port_offset
+
+    if os.environ.get("COORDINATOR_PORT"):
+        coordinator_port = int(os.environ["COORDINATOR_PORT"])
+    elif base_port is not None:
+        coordinator_port = http_port + 1
+    else:
+        coordinator_port = (port_base + port_window) + port_offset
+
+    master_port = int(os.environ.get("MASTER_PORT", 0)) or (hash(os.urandom(4)) % 10000 + 20000)
+
+    # Priority: MASTER_ADDR env (set by sbatch) > scontrol > localhost
+    master_addr = os.environ.get("MASTER_ADDR", "")
+    if not master_addr:
+        nodelist = os.environ.get("SLURM_NODELIST", "")
+        if nodelist:
+            r = subprocess.run(["scontrol", "show", "hostnames", nodelist],
+                               capture_output=True, text=True)
+            master_addr = r.stdout.strip().split("\n")[0] if r.returncode == 0 else "localhost"
+        else:
+            master_addr = "localhost"
+
+    return {
+        "http_port": http_port,
+        "coordinator_port": coordinator_port,
+        "master_port": master_port,
+        "master_addr": master_addr,
+    }
+
+
+# ---------------------------------------------------------------------------
+# serve
+# ---------------------------------------------------------------------------
+def cmd_serve(args: argparse.Namespace) -> None:
+    # --- Resolve tier ---
+    if not args.tier:
+        print("Error: --tier is required (nano|super|ultra)", file=sys.stderr)
+        sys.exit(1)
+    tier_name = args.tier
+    tier = TIERS[tier_name]
+
+    # --- Overrides ---
+    tp = args.tp if args.tp is not None else tier.tp
+    etp = args.etp if args.etp is not None else tier.etp
+    ep = args.ep if args.ep is not None else tier.ep
+    pp = args.pp if args.pp is not None else tier.pp
+
+    nnodes = args.nnodes or int(os.environ.get("SLURM_JOB_NUM_NODES", 1))
+    nproc = args.nproc or int(os.environ.get("SLURM_GPUS_ON_NODE",
+                              os.environ.get("GPUS_PER_NODE", 8)))
+    node_rank = int(os.environ.get("SLURM_NODEID", 0))
+
+    ports = derive_ports(args.port)
+
+    # --- Resolve tokenizer ---
+    ckpt_path = Path(args.checkpoint_path)
+    tokenizer_path = DEFAULT_TOKENIZER
+    if not os.path.exists(tokenizer_path):
+        bundled = ckpt_path / "tokenizer"
+        candidates = list(bundled.glob("*.json")) if bundled.is_dir() else []
+        if candidates:
+            tokenizer_path = str(candidates[0])
+            print(f"Using bundled tokenizer: {tokenizer_path}")
+        else:
+            print(f"Warning: tokenizer not found at {DEFAULT_TOKENIZER} "
+                  "or in checkpoint", file=sys.stderr)
+    tokenizer_args = [
+        "--tokenizer-type", "TikTokenizer",
+        "--tokenizer-model", tokenizer_path,
+        "--no-use-tokenizer-model-from-checkpoint-args",
+    ]
+
+    # --- Set NCCL env ---
+    for k, v in NCCL_ENV.items():
+        os.environ.setdefault(k, v)
+
+    # --- Build server args ---
+    server_args = [
+        "--tensor-model-parallel-size", str(tp),
+        "--expert-tensor-parallel-size", str(etp),
+        "--expert-model-parallel-size", str(ep),
+        "--pipeline-model-parallel-size", str(pp),
+        "--sequence-parallel",
+        "--model-provider", "mamba",
+        "--inference-max-seq-length", str(args.max_seq_len),
+        "--load", args.checkpoint_path,
+        "--micro-batch-size", "1",
+        "--moe-router-dtype", "fp32",
+        "--moe-token-dispatcher-type", "alltoall",
+        "--use-checkpoint-args",
+        "--bf16",
+        "--attention-backend", "flash",
+        "--transformer-impl", "inference_optimized",
+        "--te-rng-tracker",
+        "--inference-rng-tracker",
+        "--cuda-graph-impl", "local",
+        "--dist-ckpt-strictness", "log_unexpected",
+        *tokenizer_args,
+        *tier.extra_args,
+        "--inference-coordinator-port", str(ports["coordinator_port"]),
+        "--port", str(ports["http_port"]),
+    ]
+
+    if args.iter:
+        server_args += ["--ckpt-step", args.iter]
+
+    # Passthrough args after --
+    if args.extra:
+        server_args += args.extra
+
+    # --- Build torchrun command ---
+    cmd = [
+        "torchrun",
+        "--nnodes", str(nnodes),
+        "--nproc_per_node", str(nproc),
+        "--node_rank", str(node_rank),
+        "--master_addr", str(ports["master_addr"]),
+        "--master_port", str(ports["master_port"]),
+        "-m", "tools.run_dynamic_text_generation_server",
+        *server_args,
+    ]
+
+    # --- Print & exec ---
+    topo = f"TP={tp} ETP={etp} EP={ep} PP={pp} | {nnodes}x{nproc} GPUs"
+    print(f"=== nemotron-serve ({tier_name}) ===")
+    print(f"Checkpoint: {args.checkpoint_path}")
+    print(f"Iter:       {args.iter or 'latest'}")
+    print(f"Topology:   {topo}")
+    print(f"Endpoint:   http://{ports['master_addr']}:{ports['http_port']}")
+    print("========================")
+
+    # --- Resolve Megatron-LM path ---
+    mlm_path = args.megatron_path or os.environ.get("MEGATRON_PATH", "")
+    if not mlm_path:
+        # Auto-detect: check common locations
+        for candidate in ["/opt/megatron-lm", "/workspace/megatron-lm"]:
+            if os.path.isdir(os.path.join(candidate, "tools")):
+                mlm_path = candidate
+                break
+    if mlm_path:
+        print(f"Megatron-LM: {mlm_path}")
+    else:
+        print("Warning: Megatron-LM path not set. Use --megatron-path or "
+              "set MEGATRON_PATH env var.", file=sys.stderr)
+
+    if args.dry_run:
+        # Pretty-print: group flag + value pairs on the same line
+        parts = [cmd[0]]
+        i = 1
+        while i < len(cmd):
+            token = cmd[i]
+            if token.startswith("-") and i + 1 < len(cmd) and not cmd[i + 1].startswith("-"):
+                parts.append(f"{token} {cmd[i + 1]}")
+                i += 2
+            else:
+                parts.append(token)
+                i += 1
+        print(" \\\n  ".join(parts))
+        return
+
+    if mlm_path:
+        os.chdir(mlm_path)
+    os.execvp("torchrun", cmd)
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+def main():
+    parser = argparse.ArgumentParser(
+        prog="nemotron-serve",
+        description="Launch Nemotron dynamic inference server",
+    )
+    parser.add_argument("checkpoint_path", help="Path to checkpoint directory")
+    parser.add_argument("--tier", choices=["nano", "super", "ultra"], required=True,
+                        help="Model tier")
+    parser.add_argument("--iter", help="Checkpoint iteration")
+    parser.add_argument("--port", type=int,
+                        help="HTTP port (default: deterministic SLURM-based port)")
+    parser.add_argument("--max-seq-len", type=int, default=8192,
+                        help="Max sequence length (default: 8192)")
+
+    # Parallelism overrides
+    parser.add_argument("--tp", type=int, help="Override tensor parallelism")
+    parser.add_argument("--etp", type=int, help="Override expert tensor parallelism")
+    parser.add_argument("--ep", type=int, help="Override expert parallelism")
+    parser.add_argument("--pp", type=int, help="Override pipeline parallelism")
+
+    # Torchrun overrides
+    parser.add_argument("--nnodes", type=int, help="Number of nodes (default: from SLURM or 1)")
+    parser.add_argument("--nproc", type=int, help="GPUs per node (default: from SLURM or 8)")
+
+    parser.add_argument("--megatron-path", help="Path to Megatron-LM source (or set MEGATRON_PATH)")
+    parser.add_argument("--dry-run", action="store_true", help="Print command without executing")
+
+    args, extra = parser.parse_known_args()
+    args.extra = extra[1:] if extra[:1] == ["--"] else extra
+    cmd_serve(args)
+
+
+if __name__ == "__main__":
+    main()

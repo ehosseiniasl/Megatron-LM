@@ -1,0 +1,8 @@
+task: mmlu_redux_cot_jurisprudence
+task_alias: jurisprudence
+dataset_name: jurisprudence
+description: 'The following are multiple choice questions (with answers) about jurisprudence.
+
+
+  '
+include: _mmlu_redux_cot_template_yaml

@@ -1,0 +1,24 @@
+group: mistral_pretraining
+task:
+  - hellaswag_mistral
+  - commonsense_qa_mistral
+  - openbookqa_mistral
+  - piqa_mistral
+  - siqa_mistral
+  - race_high_mistral
+  - race_middle_mistral
+  - naturalqs_5shot_mistral
+  - triviaqa_5shot_mistral
+  - truthfulqa_mistral
+  - winogrande_mistral
+  - gpqa_diamond_0shot_mistral
+  - gpqa_diamond_5shot_mistral
+  - drop_3shot_v2_mistral
+  - gsm8k_5shot_maj@1_v3_mistral
+  - simpleqa_5shot_mistral
+  - popqa_5shot_mistral
+  - new_mmlu_v2_mistral
+  - mmlu_redux_mistral
+  - super_gpqa_cot_5shot_mistral
+metadata:
+  version: 1.0

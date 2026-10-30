@@ -1,0 +1,21 @@
+group: minerva_math_nemo
+task:
+  - minerva_math_algebra_nemo
+  - minerva_math_counting_and_prob_nemo
+  - minerva_math_geometry_nemo
+  - minerva_math_intermediate_algebra_nemo
+  - minerva_math_num_theory_nemo
+  - minerva_math_prealgebra_nemo
+  - minerva_math_precalc_nemo
+aggregate_metric_list:
+  - aggregation: mean
+    metric: exact_match
+    weight_by_size: true
+  - aggregation: mean
+    metric: math500_exact_match
+    weight_by_size: true
+  - aggregation: mean
+    metric: level_5_exact_match
+    weight_by_size: true
+metadata:
+  version: 2.0

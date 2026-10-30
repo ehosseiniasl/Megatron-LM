@@ -1,0 +1,37 @@
+task: aptbench_env_setup_action
+tag:
+  - aptbench
+  - env_setup
+dataset_path: nvidia/APTBench
+dataset_name: null
+dataset_kwargs:
+  data_files: env_setup/action.jsonl
+training_split: null
+validation_split: null
+test_split: train
+output_type: generate_until
+doc_to_text: !function utils.doc_to_text_action
+doc_to_target: !function utils.doc_to_target_action
+process_results: !function utils.process_results_action
+generation_kwargs:
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 30
+  until:
+    - "\n"
+    - "```"
+    - "</s>"
+    - "<|im_end|>"
+    - "<|endoftext|>"
+    - "<|eot_id|>"
+num_fewshot: 0
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  description: "APTBench Environment Setup - Action: Predict the next execution command given an execution plan and previously executed commands. Tests step-by-step command execution planning."

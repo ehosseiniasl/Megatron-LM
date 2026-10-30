@@ -1,0 +1,16 @@
+group: llm_compression_2026_arxiv_interleaved
+task:
+  - llm_compression_2026_arxiv_math_interleaved
+  - llm_compression_2026_arxiv_physics_interleaved
+aggregate_metric_list:
+  - metric: word_perplexity
+    aggregation: mean
+    weight_by_size: true
+  - metric: byte_perplexity
+    aggregation: mean
+    weight_by_size: true
+  - metric: bits_per_byte
+    aggregation: mean
+    weight_by_size: true
+metadata:
+  version: 1.0

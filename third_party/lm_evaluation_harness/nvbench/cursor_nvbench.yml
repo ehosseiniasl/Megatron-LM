@@ -1,0 +1,124 @@
+# Code evaluation benchmark — all tasks pass@8
+#
+# Task                         Prompts  max_gen_toks  Requests (×8)
+# humaneval_sampled                164           512          1,312
+# mbpp_sanitized_3shot_sampled     257           768          2,056
+# cruxeval_i                       800           512          6,400
+# cruxeval_o                       800           512          6,400
+# bigcodebench_complete          1,140         1,024          9,120
+# multiple-cpp                     161           512          1,288
+# multiple-go                      154           512          1,232
+# multiple-js                      161           512          1,288
+# multiple-php                     161           512          1,288
+# multiple-rb                      161           512          1,288
+# multiple-r                       161           512          1,288
+# multiple-rs                      156           512          1,248
+# multiple-sh                      158           512          1,264
+# multiple-ts                      159           512          1,272
+# lcb_codegen                      880         1,024          7,040
+# Total                          5,473                      43,784
+
+version: 1.0
+tasks:
+  - task_name: humaneval_sampled
+    task_group: code
+    batch_size: 128
+    overrides:
+      repeats: 8
+    report_metric:
+      - alias: humaneval
+        metric: pass@1[8],evalplus_sanitized
+      - alias: humaneval
+        metric: pass@8[8],evalplus_sanitized
+  - task_name: mbpp_sanitized_3shot_sampled
+    task_group: code
+    batch_size: 128
+    overrides:
+      repeats: 8
+    report_metric:
+      - alias: mbpp
+        metric: pass@1[8],evalplus_sanitized
+      - alias: mbpp
+        metric: pass@8[8],evalplus_sanitized
+  - task_name: cruxeval_i
+    task_group: code
+    batch_size: 64
+    overrides:
+      repeats: 8
+    report_metric:
+      - alias: cruxeval_input
+        metric: pass@1[8],sanitize
+      - alias: cruxeval_input
+        metric: pass@8[8],sanitize
+  - task_name: cruxeval_o
+    task_group: code
+    batch_size: 64
+    overrides:
+      repeats: 8
+    report_metric:
+      - alias: cruxeval_output
+        metric: pass@1[8],sanitize
+      - alias: cruxeval_output
+        metric: pass@8[8],sanitize
+  - task_name: bigcodebench_complete
+    task_group: code
+    batch_size: 128
+    overrides:
+      repeats: 8
+    report_metric:
+      - alias: bigcodebench_complete
+        metric: pass@1[8],bigcodebench_sanitized
+      - alias: bigcodebench_complete
+        metric: pass@8[8],bigcodebench_sanitized
+  - task_name: multiple
+    task_group: code
+    batch_size: 64
+    overrides:
+      repeats: 8
+    report_metric:
+      - alias: multiple-cpp
+        metric: pass@1[8],multiple
+      - alias: multiple-cpp
+        metric: pass@8[8],multiple
+      - alias: multiple-go
+        metric: pass@1[8],multiple
+      - alias: multiple-go
+        metric: pass@8[8],multiple
+      - alias: multiple-js
+        metric: pass@1[8],multiple
+      - alias: multiple-js
+        metric: pass@8[8],multiple
+      - alias: multiple-php
+        metric: pass@1[8],multiple
+      - alias: multiple-php
+        metric: pass@8[8],multiple
+      - alias: multiple-rb
+        metric: pass@1[8],multiple
+      - alias: multiple-rb
+        metric: pass@8[8],multiple
+      - alias: multiple-r
+        metric: pass@1[8],multiple
+      - alias: multiple-r
+        metric: pass@8[8],multiple
+      - alias: multiple-rs
+        metric: pass@1[8],multiple
+      - alias: multiple-rs
+        metric: pass@8[8],multiple
+      - alias: multiple-sh
+        metric: pass@1[8],multiple
+      - alias: multiple-sh
+        metric: pass@8[8],multiple
+      - alias: multiple-ts
+        metric: pass@1[8],multiple
+      - alias: multiple-ts
+        metric: pass@8[8],multiple
+  - task_name: lcb_codegen
+    task_group: code
+    batch_size: 32
+    overrides:
+      repeats: 8
+    report_metric:
+      - alias: lcb_codegen
+        metric: pass@1
+      - alias: lcb_codegen
+        metric: pass@k

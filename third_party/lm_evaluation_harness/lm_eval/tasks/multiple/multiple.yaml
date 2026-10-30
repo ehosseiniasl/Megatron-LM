@@ -1,0 +1,11 @@
+group: multiple
+task:
+  - multiple-js
+  - multiple-ts
+  - multiple-cpp
+  - multiple-rs
+  - multiple-go
+  - multiple-php
+  - multiple-rb
+  - multiple-r
+  - multiple-sh

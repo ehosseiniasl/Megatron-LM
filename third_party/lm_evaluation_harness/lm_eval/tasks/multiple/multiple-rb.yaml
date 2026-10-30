@@ -1,0 +1,11 @@
+include: _default_template.yaml
+task: multiple-rb
+dataset_name: humaneval-rb
+generation_kwargs:
+  until:
+    - "\nclass"
+    - "\ndef"
+    - "\n#"
+    - "\n\n"
+metadata:
+  language: rb

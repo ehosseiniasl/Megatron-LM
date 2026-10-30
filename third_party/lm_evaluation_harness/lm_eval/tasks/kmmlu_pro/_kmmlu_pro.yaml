@@ -1,0 +1,17 @@
+group: kmmlu_pro
+task:
+  - kmmlu_pro_law
+  - kmmlu_pro_tax_and_accounting
+  - kmmlu_pro_value_estimation
+  - kmmlu_pro_medicine
+aggregate_metric_list:
+  - aggregation: mean
+    metric: exact_match
+    weight_by_size: true
+    filter_list: custom-extract
+  - aggregation: mean
+    metric: exact_match
+    weight_by_size: false
+    filter_list: custom-extract
+metadata:
+  version: 1.0

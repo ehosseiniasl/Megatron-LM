@@ -1,0 +1,40 @@
+version: 9
+sources:
+  - prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_rare_tokens_n4_v6_262k_v1_nvidia_pds_quarantine_v1/nv-00-10603-sandia/mistral-data-260804/web1_4_zh_other_mid/merged_1099511627776b/chunks_00000-04096
+    weight: 1.0
+    percentage_data: 0.01
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_rare_tokens_n4_v6_262k_v1_nvidia_pds_quarantine_v1/nv-00-10603-sandia/mistral-data-260804/web1_4_en_humanities_mid/merged_1099511627776b/chunks_00000-04096
+    weight: 1.0
+    percentage_data: 0.01
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_rare_tokens_n4_v6_262k_v1_nvidia_pds_quarantine_v1/nv-00-10603-sandia/mistral-data-260804/web1_4_ja_ko_other_mid/merged_1099511627776b/chunks_00000-04096
+    weight: 1.0
+    percentage_data: 0.01
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+  - prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_rare_tokens_n4_v6_262k_v1_nvidia_pds_quarantine_v1/nv-00-10603-sandia/mistral-data-260804/web1_4_en_other_mid/merged_1099511627776b/chunks_00000-01024
+    weight: 1.0
+    percentage_data: 0.01
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+bos_id: 1
+eos_id: 2
+pad_id: 3
+img_id: 18
+img_break_id: 20
+img_end_id: 19
+seed: 0
+epoch_index_cache_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/epoch_index/benchmarks/web1_4_nested_pool_1pct_random_io_fix_260824
+interdocument_masking: false
+drop_bos: true
+original_seq_len: 8192
+truncate_trailing_masked: true
+tokenizer_name: n4_v6_262k
+optimized_datasource_id_sampling: true
+allow_non_sorted_sources_in_dataloader: false
+skip_images: false
+validation_set: null
+perplexity_eval_sets: []

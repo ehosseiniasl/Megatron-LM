@@ -1,0 +1,10 @@
+include: _greedy_config
+task: humanevalplus_greedy_nosanitize
+dataset_path: evalplus/humanevalplus
+filter_list:
+  - name: "non_sanitized"
+    filter:
+      - function: custom
+        filter_fn: !function utils.non_sanitized_predictions
+metadata:
+  version: 1.0

@@ -1,0 +1,63 @@
+task: lcb_codegen
+dataset_path: sam-paech/livecodebench-code_generation_lite
+# dataset_name: release_v5
+# livecodebench/code_generation_lite
+# dataset_kwargs: # trust_remote_code: true
+output_type: generate_until
+test_split: release_v5
+doc_to_text: !function utils.build_text
+doc_to_target: ""
+filter_list:
+    - name: "score"
+      filter:
+          - function: custom
+            filter_fn: !function utils.score_batch
+process_results: !function utils.passthrough_score
+metric_list:
+    - metric: "pass@1[1]"
+      aggregation: mean
+      higher_is_better: true
+    - metric: "pass@1[5]"
+      aggregation: mean
+      higher_is_better: true
+    - metric: "pass@5[5]"
+      aggregation: mean
+      higher_is_better: true
+    - metric: "pass@1[32]"
+      aggregation: mean
+      higher_is_better: true
+    - metric: "pass@32[32]"
+      aggregation: mean
+      higher_is_better: true
+    - metric: "pass@1_easy"
+      aggregation: !function utils.nanmean
+      higher_is_better: true
+    - metric: "pass@1_medium"
+      aggregation: !function utils.nanmean
+      higher_is_better: true
+    - metric: "pass@1_hard"
+      aggregation: !function utils.nanmean
+      higher_is_better: true
+    - metric: "pass@k_easy"
+      aggregation: !function utils.nanmean
+      higher_is_better: true
+    - metric: "pass@k_medium"
+      aggregation: !function utils.nanmean
+      higher_is_better: true
+    - metric: "pass@k_hard"
+      aggregation: !function utils.nanmean
+      higher_is_better: true
+generation_kwargs:
+    until:
+        - "</s>"
+        - "### Question"
+        - "### Starter Code"
+        - "### Answer"
+    max_gen_toks: 1024
+    do_sample: true
+    temperature: 0.6
+    top_p: 0.95
+repeats: 5
+num_fewshot: 0
+metadata:
+    version: 1.2

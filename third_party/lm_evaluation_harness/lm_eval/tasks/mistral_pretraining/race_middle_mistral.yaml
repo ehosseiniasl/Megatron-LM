@@ -1,0 +1,21 @@
+task: race_middle_mistral
+class: !function utils.MistralMutualInfoTask
+dataset_path: EleutherAI/race
+dataset_name: middle
+dataset_kwargs:
+  trust_remote_code: true
+output_type: multiple_choice
+test_split: test
+process_docs: !function utils.process_race
+doc_to_text: query
+doc_to_target: gold
+doc_to_choice: choices
+mutual_info_context: "A:"
+process_results: !function utils.process_mutual_info_results
+metric_list:
+  - metric: acc_mutual_info
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  source_task: thunderdome:race_middle

@@ -1,0 +1,5 @@
+task: mistral_ppl_catlm_v2
+dataset_name: catlm_v2
+dataset_kwargs:
+  subset: catlm_v2
+include: _base_config.yaml

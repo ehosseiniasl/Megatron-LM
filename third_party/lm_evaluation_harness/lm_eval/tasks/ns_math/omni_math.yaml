@@ -1,0 +1,3 @@
+include: _sample_config
+task: omni_math
+dataset_path: gitlab:omni_math/test.parquet

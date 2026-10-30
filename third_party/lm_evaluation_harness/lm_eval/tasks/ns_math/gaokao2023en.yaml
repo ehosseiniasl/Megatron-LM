@@ -1,0 +1,3 @@
+include: _sample_config
+task: gaokao2023en
+dataset_path: gitlab:gaokao2023en/test.parquet

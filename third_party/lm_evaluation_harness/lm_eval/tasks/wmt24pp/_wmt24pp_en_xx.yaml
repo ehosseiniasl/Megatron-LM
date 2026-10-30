@@ -1,0 +1,62 @@
+group: wmt24pp_en_xx
+task:
+  - wmt24pp_en_xx_ar_EG
+  - wmt24pp_en_xx_ar_SA
+  - wmt24pp_en_xx_bg_BG
+  - wmt24pp_en_xx_bn_IN
+  - wmt24pp_en_xx_ca_ES
+  - wmt24pp_en_xx_cs_CZ
+  - wmt24pp_en_xx_da_DK
+  - wmt24pp_en_xx_de_DE
+  - wmt24pp_en_xx_el_GR
+  - wmt24pp_en_xx_es_MX
+  - wmt24pp_en_xx_et_EE
+  - wmt24pp_en_xx_fa_IR
+  - wmt24pp_en_xx_fi_FI
+  - wmt24pp_en_xx_fil_PH
+  - wmt24pp_en_xx_fr_CA
+  - wmt24pp_en_xx_fr_FR
+  - wmt24pp_en_xx_gu_IN
+  - wmt24pp_en_xx_he_IL
+  - wmt24pp_en_xx_hi_IN
+  - wmt24pp_en_xx_hr_HR
+  - wmt24pp_en_xx_hu_HU
+  - wmt24pp_en_xx_id_ID
+  - wmt24pp_en_xx_is_IS
+  - wmt24pp_en_xx_it_IT
+  - wmt24pp_en_xx_ja_JP
+  - wmt24pp_en_xx_kn_IN
+  - wmt24pp_en_xx_ko_KR
+  - wmt24pp_en_xx_lt_LT
+  - wmt24pp_en_xx_lv_LV
+  - wmt24pp_en_xx_ml_IN
+  - wmt24pp_en_xx_mr_IN
+  - wmt24pp_en_xx_nl_NL
+  - wmt24pp_en_xx_no_NO
+  - wmt24pp_en_xx_pa_IN
+  - wmt24pp_en_xx_pl_PL
+  - wmt24pp_en_xx_pt_BR
+  - wmt24pp_en_xx_pt_PT
+  - wmt24pp_en_xx_ro_RO
+  - wmt24pp_en_xx_ru_RU
+  - wmt24pp_en_xx_sk_SK
+  - wmt24pp_en_xx_sl_SI
+  - wmt24pp_en_xx_sr_RS
+  - wmt24pp_en_xx_sv_SE
+  - wmt24pp_en_xx_sw_KE
+  - wmt24pp_en_xx_sw_TZ
+  - wmt24pp_en_xx_ta_IN
+  - wmt24pp_en_xx_te_IN
+  - wmt24pp_en_xx_th_TH
+  - wmt24pp_en_xx_tr_TR
+  - wmt24pp_en_xx_uk_UA
+  - wmt24pp_en_xx_ur_PK
+  - wmt24pp_en_xx_vi_VN
+  - wmt24pp_en_xx_zh_CN
+  - wmt24pp_en_xx_zh_TW
+  - wmt24pp_en_xx_zu_ZA
+aggregate_metric_list:
+  - metric: chrf++
+    weight_by_size: true
+metadata:
+  version: 1.0

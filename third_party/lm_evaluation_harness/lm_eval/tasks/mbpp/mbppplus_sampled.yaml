@@ -1,0 +1,3 @@
+include: _sample_config
+task: mbppplus_sampled
+dataset_path: evalplus/mbppplus

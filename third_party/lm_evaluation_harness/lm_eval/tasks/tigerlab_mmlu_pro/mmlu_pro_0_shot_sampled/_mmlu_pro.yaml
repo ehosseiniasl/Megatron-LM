@@ -1,0 +1,16 @@
+group: mmlu_pro_0_shot_sampled
+task:
+  - mmlu_pro_0_shot_sampled_biology
+  - mmlu_pro_0_shot_sampled_business
+  - mmlu_pro_0_shot_sampled_chemistry
+  - mmlu_pro_0_shot_sampled_computer_science
+  - mmlu_pro_0_shot_sampled_economics
+  - mmlu_pro_0_shot_sampled_engineering
+  - mmlu_pro_0_shot_sampled_health
+  - mmlu_pro_0_shot_sampled_history
+  - mmlu_pro_0_shot_sampled_law
+  - mmlu_pro_0_shot_sampled_math
+  - mmlu_pro_0_shot_sampled_other
+  - mmlu_pro_0_shot_sampled_philosophy
+  - mmlu_pro_0_shot_sampled_physics
+  - mmlu_pro_0_shot_sampled_psychology

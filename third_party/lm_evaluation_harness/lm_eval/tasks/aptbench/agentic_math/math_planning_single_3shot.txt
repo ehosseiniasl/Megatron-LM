@@ -1,0 +1,31 @@
+Solving math questions requires a variety of mathematical atomic capabilities, including：
+1. Symbol_Recognition_Tool - Recognizes key symbols and structures in mathematical expressions from text or images, generating computable/renderable standardized text (LaTeX/MathML/Markdown).
+2. Concept_Understanding_Tool - Understands and clarifies mathematical concepts (definitions, properties, theorems, necessary/sufficient conditions, counterexamples).
+3. Calculation_Execution_Tool - Performs correct and robust calculations based on expressions, including arithmetic operations, algebraic equations, calculus, linear algebra, and more.
+4. Spatial_Perception_Tool - Recognizes and reasons about objects, relationships, and measurements in geometric figures (plane/solid), including visual-symbolic alignment.
+5. Formal_Math_Language_Tool - Converts natural language mathematical statements into a machine-readable formal representation (FOL/SMT/Lean/Isabelle/Coq style) while maintaining semantic equivalence. This formal mathematical language facilitates subsequent mathematical reasoning, proofs, and constructions.
+6. Multi_Step_Reasoning_Tool - Forward Reasoning: Deduction and Induction. Given a given objective, reason forward from the premises, including both deductive and inductive reasoning, until a conclusion is reached. This tool focuses primarily on proof questions or difficult Olympiad problems that require multiple steps of forward reasoning, as opposed to proof by contradiction and construction.
+7. Proof_Construction_Tool - Reverse Reasoning: Proof by contradiction and construction, using proof by contradiction or providing specific mathematical examples (functions, sequences, sets, graphs, etc.) that satisfy or counterexample a property.
+8. Theorem_Application_Tool - Identify applicable theorems/lemmas, verify their applicability, and correctly apply them to solve the problem.
+9. Modeling_Transformation_Tool - Transform natural language scenarios into mathematical models (variable definitions, constraints, objective functions/systems of equations), and solve or analyze them.
+10. New_Knowledge_Learning_Tool - After a short exposure to a new definition/theorem, understand and transfer it to a new problem, such as reading a complex new mathematical research-level paper and answering questions about the mathematical expression in it.
+
+For the following math question, choose the most critical atomic capability required to solve the question. Put your answer after "(".
+Math question: What is the value of $3x^2 - 2x + 5$ when $x = -2$?
+Atomic capability choices: (A) Concept_Understanding_Tool; (B) Calculation_Execution_Tool; (C) Theorem_Application_Tool; (D) Spatial_Perception_Tool; (E) Formal_Math_Language_Tool
+The most critical choice is (B)
+
+For the following math question, choose the most critical atomic capability required to solve the question. Put your answer after "(".
+Math question: There is no rational number $x$ such that $x^2 = 2$
+Atomic capability choices: (A) Formal_Math_Language_Tool; (B) Multi_Step_Reasoning_Tool; (C) Concept_Understanding_Tool; (D) Proof_Construction_Tool; (E) Theorem_Application_Tool
+The most critical choice is (D)
+
+For the following math question, choose the most critical atomic capability required to solve the question. Put your answer after "(".
+Math question: A function \( f(x) \) defined on an interval \( I \) satisfies: for every \( \varepsilon > 0 \), there exists a \( \delta > 0 \) such that \( |f(x_1) - f(x_2)| < \varepsilon \) whenever \( x_1, x_2 \in I \) and \( |x_1 - x_2| < \delta \). If \( \delta \) depends only on \( \varepsilon \) (not on \( x_1, x_2 \)'s positions in \( I \)), what is the correct term for this property of \( f(x) \)?
+Atomic capability choices: (A) Concept_Understanding_Tool; (B) Calculation_Execution_Tool; (C) Proof_Construction_Tool; (D) Spatial_Perception_Tool; (E) Modeling_Transformation_Tool
+The most critical choice is (A)
+
+For the following question, choose the most critical math atomic capability required to solve the problem. Put your answer after "(".
+Math question: $REPO_INFO$
+Atomic capability choices: $CHOICES$
+The most critical choice is (

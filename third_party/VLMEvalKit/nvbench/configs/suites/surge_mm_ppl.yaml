@@ -1,0 +1,15 @@
+schema_version: 1
+suite:
+  name: surge_mm_ppl
+  kind: conditional_perplexity
+  request:
+    instruction: "Describe the image in detail.\n"
+    temperature: 0
+    top_p: 1
+    retry: 10
+  benchmarks:
+    - dataset: surge_mm_ppl
+      format: packed_jsonl_tar
+      data: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/nemotron-v4/sandia/new_eval_data/surge_mm_ppl/data.jsonl
+      category: image_type
+      resource: n1

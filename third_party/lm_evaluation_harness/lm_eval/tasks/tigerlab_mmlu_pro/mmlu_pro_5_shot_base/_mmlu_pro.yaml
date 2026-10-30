@@ -1,0 +1,23 @@
+group: mmlu_pro_5_shot_base
+task:
+  - mmlu_pro_5_shot_base_biology
+  - mmlu_pro_5_shot_base_business
+  - mmlu_pro_5_shot_base_chemistry
+  - mmlu_pro_5_shot_base_computer_science
+  - mmlu_pro_5_shot_base_economics
+  - mmlu_pro_5_shot_base_engineering
+  - mmlu_pro_5_shot_base_health
+  - mmlu_pro_5_shot_base_history
+  - mmlu_pro_5_shot_base_law
+  - mmlu_pro_5_shot_base_math
+  - mmlu_pro_5_shot_base_other
+  - mmlu_pro_5_shot_base_philosophy
+  - mmlu_pro_5_shot_base_physics
+  - mmlu_pro_5_shot_base_psychology
+aggregate_metric_list:
+  - aggregation: mean
+    metric: exact_match
+    weight_by_size: true
+    filter_list: tigerlab-extract
+metadata:
+  version: 2.0

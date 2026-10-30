@@ -1,0 +1,12 @@
+group: milu_chunk1
+task:
+  - milu_English
+  - milu_Bengali
+  - milu_Telugu
+  - milu_Malayalam
+  - milu_Kannada
+aggregate_metric_list:
+  - metric: acc
+    weight_by_size: true
+metadata:
+  version: 0.0

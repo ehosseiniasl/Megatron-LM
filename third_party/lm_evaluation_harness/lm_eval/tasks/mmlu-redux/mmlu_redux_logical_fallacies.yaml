@@ -1,0 +1,46 @@
+task: mmlu_redux_logical_fallacies
+task_alias: logical_fallacies
+dataset_name: logical_fallacies
+description: 'The following are multiple choice questions (with answers) about logical fallacies.
+
+
+  '
+include: _mmlu_redux_template_yaml
+fewshot_config:
+  sampler: first_n
+  samples:
+  - question: If someone attacks the character of an opposing arguer, instead of responding to that opponent's arguments, the first person has probably committed which of the following fallacies?
+    choices:
+    - tu quoque
+    - horse laugh
+    - argument against the person
+    - ignoratio elenchi
+    answer: 2
+  - question: The complex question fallacy consists of
+    choices:
+    - arguing something is inferior just because it doesn't do something it was never intended to do.
+    - including more than one claim in the proposition and treating proof for one claim as proof for all the claims.
+    - drawing a conclusion before examining the evidence, and only considering evidence that supports that conclusion.
+    - asking a question that includes either an unproven assumption or more than one question, thus making a straightforward yes or no answer meaningless.
+    answer: 3
+  - question: Which of the following is true of a valid categorical syllogism?
+    choices:
+    - The minor premise must deny the antecedent
+    - The major premise must affirm the consequent
+    - The middle term must be used in at least one premise in a universal or unqualified sense
+    - All of the above
+    answer: 2
+  - question: Arguing that what is true of the parts must be true of the whole is the fallacy of...
+    choices:
+    - Division
+    - Composition
+    - Appeal to the person
+    - Appeal to ignorance
+    answer: 1
+  - question: When an arguer causes confusion during refutation because of real or feigned lack of an ability to engage in refutation, that arguer may have committed the fallacy of
+    choices:
+    - poor sportsmanship
+    - appeal to compassion
+    - argument against the person
+    - ignorance of refutation
+    answer: 3

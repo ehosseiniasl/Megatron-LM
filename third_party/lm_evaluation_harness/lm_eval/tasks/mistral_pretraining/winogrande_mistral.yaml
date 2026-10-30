@@ -1,0 +1,17 @@
+task: winogrande_mistral
+dataset_path: allenai/winogrande
+dataset_name: winogrande_xl
+output_type: multiple_choice
+training_split: train
+validation_split: validation
+doc_to_text: !function utils.winogrande_text
+doc_to_target: !function utils.winogrande_target
+doc_to_choice: !function utils.winogrande_choices
+process_results: !function utils.process_winogrande_results
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  source_task: thunderdome:winogrande

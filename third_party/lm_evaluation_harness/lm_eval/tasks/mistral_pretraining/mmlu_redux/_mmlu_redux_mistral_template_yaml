@@ -1,0 +1,21 @@
+dataset_path: edinburgh-dawg/mmlu-redux-2.0
+output_type: multiple_choice
+test_split: test
+fewshot_split: test
+process_docs: !function utils.process_mmlu_redux
+doc_to_text: "{{query}}\nAnswer:"
+doc_to_target: gold
+doc_to_choice: choices
+target_delimiter: " "
+fewshot_delimiter: ""
+num_fewshot: 5
+fewshot_config:
+  sampler: first_n
+process_results: !function utils.process_mistral_mc_results
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+  source_task: thunderdome:mmlu_redux

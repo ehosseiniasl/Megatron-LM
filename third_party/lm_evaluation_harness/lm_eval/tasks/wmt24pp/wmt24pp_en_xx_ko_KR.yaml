@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_ko_KR
+include: _base_config.yaml
+dataset_name: en-ko_KR
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Korean follows.\n\nThe translation is:"

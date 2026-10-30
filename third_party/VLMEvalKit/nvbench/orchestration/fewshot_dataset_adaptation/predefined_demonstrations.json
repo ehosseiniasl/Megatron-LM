@@ -1,0 +1,583 @@
+{
+  "DocVQA": {
+    "trivial": [
+      {
+        "index": "fs_docvqa_trivial_01",
+        "question": "What number is written inside the shape?",
+        "answer": "42",
+        "image_file": "docvqa_images/fs_docvqa_trivial_01.png"
+      },
+      {
+        "index": "fs_docvqa_trivial_02",
+        "question": "What word is written inside the rectangle?",
+        "answer": "Hello",
+        "image_file": "docvqa_images/fs_docvqa_trivial_02.png"
+      },
+      {
+        "index": "fs_docvqa_trivial_03",
+        "question": "What letter is shown inside the triangle?",
+        "answer": "X",
+        "image_file": "docvqa_images/fs_docvqa_trivial_03.png"
+      },
+      {
+        "index": "fs_docvqa_trivial_04",
+        "question": "What word is displayed inside the diamond shape?",
+        "answer": "Yes",
+        "image_file": "docvqa_images/fs_docvqa_trivial_04.png"
+      },
+      {
+        "index": "fs_docvqa_trivial_05",
+        "question": "What is the total shown in the image?",
+        "answer": "150",
+        "image_file": "docvqa_images/fs_docvqa_trivial_05.png"
+      },
+      {
+        "index": "fs_docvqa_trivial_06",
+        "question": "What date is written in the image?",
+        "answer": "March 5",
+        "image_file": "docvqa_images/fs_docvqa_trivial_06.png"
+      },
+      {
+        "index": "fs_docvqa_trivial_07",
+        "question": "What word is written on the banner?",
+        "answer": "OPEN",
+        "image_file": "docvqa_images/fs_docvqa_trivial_07.png"
+      },
+      {
+        "index": "fs_docvqa_trivial_08",
+        "question": "What city is listed in the image?",
+        "answer": "Paris",
+        "image_file": "docvqa_images/fs_docvqa_trivial_08.png"
+      }
+    ]
+  },
+  "MMMU": {
+    "rich": [
+      {
+        "index": "fs_01",
+        "question": "Based on the quarterly revenue chart, what is the total annual revenue for the company?",
+        "hint": "Sum the revenue across all four quarters.",
+        "A": "$54 million",
+        "B": "$69 million",
+        "C": "$72 million",
+        "D": "$60 million",
+        "answer": "B",
+        "image_file": "mmmu_images/fs_01_bar_chart.png"
+      },
+      {
+        "index": "fs_02",
+        "question": "According to the pie chart, what percentage of the national energy comes from non-fossil fuel sources combined?",
+        "hint": "Non-fossil fuel sources include nuclear, renewables, and other.",
+        "A": "25%",
+        "B": "32%",
+        "C": "37%",
+        "D": "42%",
+        "answer": "C",
+        "image_file": "mmmu_images/fs_02_pie_chart.png"
+      },
+      {
+        "index": "fs_03",
+        "question": "In the supply and demand diagram, if the government imposes a price ceiling below the equilibrium price P*, what is the most likely market outcome?",
+        "hint": null,
+        "A": "Surplus of goods",
+        "B": "Shortage of goods",
+        "C": "No change in quantity",
+        "D": "Increase in supply",
+        "answer": "B",
+        "image_file": "mmmu_images/fs_03_supply_demand.png"
+      },
+      {
+        "index": "fs_04",
+        "question": "Based on the income statement, what is the gross profit margin for Greenfield Corp.?",
+        "hint": "Gross profit margin = Gross Profit / Revenue × 100%.",
+        "A": "18.1%",
+        "B": "30.0%",
+        "C": "40.0%",
+        "D": "11.9%",
+        "answer": "C",
+        "image_file": "mmmu_images/fs_04_financial_table.png"
+      },
+      {
+        "index": "fs_05",
+        "question": "In the series circuit shown, what is the current flowing through the circuit?",
+        "hint": "For a series circuit, total resistance is the sum of individual resistances. Use Ohm's law: V = IR.",
+        "A": "0.5 A",
+        "B": "1.0 A",
+        "C": "1.5 A",
+        "D": "3.0 A",
+        "answer": "B",
+        "image_file": "mmmu_images/fs_05_circuit.png"
+      },
+      {
+        "index": "fs_06",
+        "question": "For the function f(x) = x² − 4x + 3 shown in the graph, what is the axis of symmetry?",
+        "hint": "The axis of symmetry passes through the vertex of the parabola.",
+        "A": "x = 1",
+        "B": "x = 2",
+        "C": "x = 3",
+        "D": "x = 4",
+        "answer": "B",
+        "image_file": "mmmu_images/fs_06_function_plot.png"
+      },
+      {
+        "index": "fs_07",
+        "question": "Based on the exam score distribution, approximately what percentage of students scored 70 or above?",
+        "hint": "Sum the counts for bins 70-79, 80-89, and 90-100, then divide by the total number of students.",
+        "A": "46%",
+        "B": "54%",
+        "C": "64%",
+        "D": "72%",
+        "answer": "C",
+        "image_file": "mmmu_images/fs_07_histogram.png"
+      },
+      {
+        "index": "fs_08",
+        "question": "Which organelle shown in the cell diagram is primarily responsible for producing ATP through cellular respiration?",
+        "hint": null,
+        "A": "Nucleus",
+        "B": "Golgi Apparatus",
+        "C": "Endoplasmic Reticulum",
+        "D": "Mitochondria",
+        "answer": "D",
+        "image_file": "mmmu_images/fs_08_cell_diagram.png"
+      },
+      {
+        "index": "fs_09",
+        "question": "Based on the population growth graph, in approximately which year did the population of City A surpass that of City B?",
+        "hint": "Look for where the two lines intersect.",
+        "A": "1990",
+        "B": "2000",
+        "C": "2005",
+        "D": "2010",
+        "answer": "C",
+        "image_file": "mmmu_images/fs_09_line_graph.png"
+      },
+      {
+        "index": "fs_10",
+        "question": "From the experimental data table, the relationship between temperature and reaction rate is consistent with which principle?",
+        "hint": "Consider the mathematical relationship between temperature and the natural log of the rate.",
+        "A": "Le Chatelier's Principle",
+        "B": "Arrhenius Equation",
+        "C": "Hess's Law",
+        "D": "Ideal Gas Law",
+        "answer": "B",
+        "image_file": "mmmu_images/fs_10_experiment_table.png"
+      },
+      {
+        "index": "fs_11",
+        "question": "According to the scatter plot and regression line, what exam score would you predict for a student who studied for 6 hours?",
+        "hint": "Use the regression equation ŷ = 4.5x + 48.",
+        "A": "72",
+        "B": "75",
+        "C": "78",
+        "D": "81",
+        "answer": "B",
+        "image_file": "mmmu_images/fs_11_scatter_regression.png"
+      }
+    ],
+    "trivial": [
+      {
+        "index": "fs_trivial_01",
+        "question": "What shape is shown in the image?",
+        "hint": null,
+        "A": "Circle",
+        "B": "Square",
+        "C": "Triangle",
+        "D": "Diamond",
+        "answer": "A",
+        "image_file": "mmmu_images/fs_trivial_01.png"
+      },
+      {
+        "index": "fs_trivial_02",
+        "question": "What color is the rectangle in the image?",
+        "hint": null,
+        "A": "Red",
+        "B": "Blue",
+        "C": "Green",
+        "D": "Yellow",
+        "answer": "C",
+        "image_file": "mmmu_images/fs_trivial_02.png"
+      },
+      {
+        "index": "fs_trivial_03",
+        "question": "How many sides does the shape in the image have?",
+        "hint": "Count the edges of the polygon.",
+        "A": "2",
+        "B": "3",
+        "C": "4",
+        "D": "5",
+        "answer": "B",
+        "image_file": "mmmu_images/fs_trivial_03.png"
+      },
+      {
+        "index": "fs_trivial_04",
+        "question": "Which geometric term best describes the shape shown?",
+        "hint": null,
+        "A": "Pentagon",
+        "B": "Hexagon",
+        "C": "Rhombus",
+        "D": "Trapezoid",
+        "answer": "C",
+        "image_file": "mmmu_images/fs_trivial_04.png"
+      },
+      {
+        "index": "fs_trivial_05",
+        "question": "What color is the shape in the image?",
+        "hint": null,
+        "A": "Green",
+        "B": "Blue",
+        "C": "Red",
+        "D": "Yellow",
+        "answer": "D",
+        "image_file": "mmmu_images/fs_trivial_05.png"
+      },
+      {
+        "index": "fs_trivial_06",
+        "question": "What shape is shown in the image?",
+        "hint": null,
+        "A": "Rectangle",
+        "B": "Circle",
+        "C": "Triangle",
+        "D": "Diamond",
+        "answer": "A",
+        "image_file": "mmmu_images/fs_trivial_06.png"
+      },
+      {
+        "index": "fs_trivial_07",
+        "question": "How many sides does the shape in the image have?",
+        "hint": "Count the edges of the polygon.",
+        "A": "4",
+        "B": "3",
+        "C": "5",
+        "D": "6",
+        "answer": "B",
+        "image_file": "mmmu_images/fs_trivial_07.png"
+      },
+      {
+        "index": "fs_trivial_08",
+        "question": "What color is the shape in the image?",
+        "hint": null,
+        "A": "Purple",
+        "B": "Yellow",
+        "C": "Blue",
+        "D": "Green",
+        "answer": "D",
+        "image_file": "mmmu_images/fs_trivial_08.png"
+      }
+    ]
+  },
+  "MMMU_Pro": {
+    "reasoning": [
+      {
+        "index": "fs_mmmu_pro_reasoning_01",
+        "question": "Based on the quarterly revenue chart, what is the total annual revenue for the company?",
+        "hint": "Sum the revenue across all four quarters.",
+        "A": "$54 million",
+        "B": "$69 million",
+        "C": "$72 million",
+        "D": "$60 million",
+        "E": "$63 million",
+        "F": "$66 million",
+        "G": "$75 million",
+        "H": "$57 million",
+        "I": "$81 million",
+        "J": "$51 million",
+        "answer_label": "B",
+        "answer": "The chart shows quarterly revenues of $12 million, $18 million, $15 million, and $24 million. Their sum is 12 + 18 + 15 + 24 = 69, so the total annual revenue is $69 million.\nAnswer: B",
+        "image_file": "mmmu_images/fs_01_bar_chart.png"
+      },
+      {
+        "index": "fs_mmmu_pro_reasoning_02",
+        "question": "In the series circuit shown, what is the current flowing through the circuit?",
+        "hint": "For a series circuit, total resistance is the sum of individual resistances. Use Ohm's law: V = IR.",
+        "A": "0.5 A",
+        "B": "1.0 A",
+        "C": "1.5 A",
+        "D": "3.0 A",
+        "E": "2.0 A",
+        "F": "0.75 A",
+        "G": "4.0 A",
+        "H": "6.0 A",
+        "I": "8.0 A",
+        "J": "12.0 A",
+        "answer_label": "B",
+        "answer": "The two resistors are in series, so their total resistance is 4 + 8 = 12 ohms. By Ohm's law, I = V / R = 12 / 12 = 1.0 A.\nAnswer: B",
+        "image_file": "mmmu_images/fs_05_circuit.png"
+      }
+    ],
+    "trivial": [
+      {
+        "index": "fs_mmmu_pro_trivial_01",
+        "question": "What shape is shown in the image?",
+        "hint": null,
+        "A": "Square",
+        "B": "Triangle",
+        "C": "Circle",
+        "D": "Diamond",
+        "E": "Pentagon",
+        "F": "Hexagon",
+        "G": "Star",
+        "H": "Oval",
+        "I": "Cross",
+        "J": "Rectangle",
+        "answer": "C",
+        "image_file": "mmmu_pro_images/fs_mmmu_pro_trivial_01.png"
+      },
+      {
+        "index": "fs_mmmu_pro_trivial_02",
+        "question": "What color is the shape in the image?",
+        "hint": null,
+        "A": "Red",
+        "B": "Green",
+        "C": "Yellow",
+        "D": "Purple",
+        "E": "Blue",
+        "F": "Orange",
+        "G": "Pink",
+        "H": "Brown",
+        "I": "White",
+        "J": "Gray",
+        "answer": "E",
+        "image_file": "mmmu_pro_images/fs_mmmu_pro_trivial_02.png"
+      },
+      {
+        "index": "fs_mmmu_pro_trivial_03",
+        "question": "How many sides does the shape in the image have?",
+        "hint": "Count the edges of the polygon.",
+        "A": "0",
+        "B": "1",
+        "C": "2",
+        "D": "3",
+        "E": "4",
+        "F": "5",
+        "G": "6",
+        "H": "7",
+        "I": "8",
+        "J": "10",
+        "answer": "D",
+        "image_file": "mmmu_pro_images/fs_mmmu_pro_trivial_03.png"
+      },
+      {
+        "index": "fs_mmmu_pro_trivial_04",
+        "question": "Which geometric term best describes the shape shown?",
+        "hint": null,
+        "A": "Circle",
+        "B": "Square",
+        "C": "Triangle",
+        "D": "Rhombus",
+        "E": "Pentagon",
+        "F": "Hexagon",
+        "G": "Trapezoid",
+        "H": "Parallelogram",
+        "I": "Ellipse",
+        "J": "Octagon",
+        "answer": "D",
+        "image_file": "mmmu_pro_images/fs_mmmu_pro_trivial_04.png"
+      },
+      {
+        "index": "fs_mmmu_pro_trivial_05",
+        "question": "How many sides does the shape in the image have?",
+        "hint": "Count the edges of the polygon.",
+        "A": "2",
+        "B": "3",
+        "C": "4",
+        "D": "5",
+        "E": "6",
+        "F": "7",
+        "G": "8",
+        "H": "9",
+        "I": "10",
+        "J": "12",
+        "answer": "D",
+        "image_file": "mmmu_pro_images/fs_mmmu_pro_trivial_05.png"
+      },
+      {
+        "index": "fs_mmmu_pro_trivial_06",
+        "question": "What shape is shown in the image?",
+        "hint": null,
+        "A": "Circle",
+        "B": "Square",
+        "C": "Triangle",
+        "D": "Diamond",
+        "E": "Pentagon",
+        "F": "Star",
+        "G": "Cross",
+        "H": "Oval",
+        "I": "Hexagon",
+        "J": "Arrow",
+        "answer": "F",
+        "image_file": "mmmu_pro_images/fs_mmmu_pro_trivial_06.png"
+      },
+      {
+        "index": "fs_mmmu_pro_trivial_07",
+        "question": "What color is the shape in the image?",
+        "hint": null,
+        "A": "Red",
+        "B": "Blue",
+        "C": "Green",
+        "D": "Yellow",
+        "E": "Purple",
+        "F": "Orange",
+        "G": "Pink",
+        "H": "Brown",
+        "I": "White",
+        "J": "Gray",
+        "answer": "H",
+        "image_file": "mmmu_pro_images/fs_mmmu_pro_trivial_07.png"
+      },
+      {
+        "index": "fs_mmmu_pro_trivial_08",
+        "question": "What shape is shown in the image?",
+        "hint": null,
+        "A": "Circle",
+        "B": "Square",
+        "C": "Triangle",
+        "D": "Diamond",
+        "E": "Pentagon",
+        "F": "Star",
+        "G": "Cross",
+        "H": "Oval",
+        "I": "Hexagon",
+        "J": "Rectangle",
+        "answer": "H",
+        "image_file": "mmmu_pro_images/fs_mmmu_pro_trivial_08.png"
+      }
+    ]
+  },
+  "OCRBench": {
+    "trivial": [
+      {
+        "index": "fs_ocrbench_trivial_01",
+        "question": "What word is written in the image?",
+        "answer": "APPLE",
+        "image_file": "ocrbench_images/fs_ocrbench_trivial_01.png"
+      },
+      {
+        "index": "fs_ocrbench_trivial_02",
+        "question": "What is the number shown in the image?",
+        "answer": "30917",
+        "image_file": "ocrbench_images/fs_ocrbench_trivial_02.png"
+      },
+      {
+        "index": "fs_ocrbench_trivial_03",
+        "question": "What is the name listed in the image?",
+        "answer": "Alice",
+        "image_file": "ocrbench_images/fs_ocrbench_trivial_03.png"
+      },
+      {
+        "index": "fs_ocrbench_trivial_04",
+        "question": "What word is displayed in blue text?",
+        "answer": "OCEAN",
+        "image_file": "ocrbench_images/fs_ocrbench_trivial_04.png"
+      },
+      {
+        "index": "fs_ocrbench_trivial_05",
+        "question": "What word is written inside the box?",
+        "answer": "EXIT",
+        "image_file": "ocrbench_images/fs_ocrbench_trivial_05.png"
+      },
+      {
+        "index": "fs_ocrbench_trivial_06",
+        "question": "What is the result of the math expression shown?",
+        "answer": "10",
+        "image_file": "ocrbench_images/fs_ocrbench_trivial_06.png"
+      },
+      {
+        "index": "fs_ocrbench_trivial_07",
+        "question": "What is the price of the item listed?",
+        "answer": "$2",
+        "image_file": "ocrbench_images/fs_ocrbench_trivial_07.png"
+      },
+      {
+        "index": "fs_ocrbench_trivial_08",
+        "question": "What text is shown in the image?",
+        "answer": "Hello World",
+        "image_file": "ocrbench_images/fs_ocrbench_trivial_08.png"
+      }
+    ]
+  },
+  "RealWorldQA": {
+    "trivial": [
+      {
+        "index": "fs_rwqa_trivial_01",
+        "question": "What shape is shown in the image?",
+        "A": "Circle",
+        "B": "Square",
+        "C": "Triangle",
+        "D": "Diamond",
+        "answer": "A",
+        "image_file": "realworldqa_images/fs_rwqa_trivial_01.png"
+      },
+      {
+        "index": "fs_rwqa_trivial_02",
+        "question": "What color is the rectangle in the image?",
+        "A": "Red",
+        "B": "Blue",
+        "C": "Green",
+        "D": "Yellow",
+        "answer": "C",
+        "image_file": "realworldqa_images/fs_rwqa_trivial_02.png"
+      },
+      {
+        "index": "fs_rwqa_trivial_03",
+        "question": "How many sides does the shape in the image have?",
+        "A": "2",
+        "B": "3",
+        "C": "4",
+        "D": "5",
+        "answer": "B",
+        "image_file": "realworldqa_images/fs_rwqa_trivial_03.png"
+      },
+      {
+        "index": "fs_rwqa_trivial_04",
+        "question": "Which geometric term best describes the shape shown?",
+        "A": "Pentagon",
+        "B": "Hexagon",
+        "C": "Rhombus",
+        "D": "Trapezoid",
+        "answer": "C",
+        "image_file": "realworldqa_images/fs_rwqa_trivial_04.png"
+      },
+      {
+        "index": "fs_rwqa_trivial_05",
+        "question": "How many sides does the shape in the image have?",
+        "A": "4",
+        "B": "5",
+        "C": "6",
+        "D": "8",
+        "answer": "B",
+        "image_file": "realworldqa_images/fs_rwqa_trivial_05.png"
+      },
+      {
+        "index": "fs_rwqa_trivial_06",
+        "question": "What shape is shown in the image?",
+        "A": "Circle",
+        "B": "Diamond",
+        "C": "Star",
+        "D": "Hexagon",
+        "answer": "C",
+        "image_file": "realworldqa_images/fs_rwqa_trivial_06.png"
+      },
+      {
+        "index": "fs_rwqa_trivial_07",
+        "question": "What color is the shape in the image?",
+        "A": "Black",
+        "B": "White",
+        "C": "Brown",
+        "D": "Gray",
+        "answer": "C",
+        "image_file": "realworldqa_images/fs_rwqa_trivial_07.png"
+      },
+      {
+        "index": "fs_rwqa_trivial_08",
+        "question": "Which best describes the shape shown?",
+        "A": "Square",
+        "B": "Circle",
+        "C": "Triangle",
+        "D": "Oval",
+        "answer": "D",
+        "image_file": "realworldqa_images/fs_rwqa_trivial_08.png"
+      }
+    ]
+  }
+}

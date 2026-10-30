@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_es_MX
+include: _base_config.yaml
+dataset_name: en-es_MX
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Spanish follows.\n\nThe translation is:"

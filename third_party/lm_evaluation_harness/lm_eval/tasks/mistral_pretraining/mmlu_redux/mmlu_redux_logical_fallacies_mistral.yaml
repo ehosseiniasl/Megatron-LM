@@ -1,0 +1,5 @@
+include: _mmlu_redux_mistral_template_yaml
+task: mmlu_redux_logical_fallacies_mistral
+task_alias: logical_fallacies
+dataset_name: logical_fallacies
+description: "The following are multiple choice questions (with answers) about logical fallacies.\n{{ '' }}"

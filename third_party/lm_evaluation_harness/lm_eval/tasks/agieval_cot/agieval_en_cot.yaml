@@ -1,0 +1,24 @@
+group: agieval_en_cot
+task:
+  - agieval_aqua_rat_cot
+  # - agieval_gaokao_english # categorizing as EN because the AGIEval codebase lists this as in `english_qa_tasks`
+  - agieval_logiqa_en_cot
+  - agieval_lsat_ar_cot
+  - agieval_lsat_lr_cot
+  - agieval_lsat_rc_cot
+  # # - agieval_math
+  - agieval_sat_en_without_passage_cot
+  - agieval_sat_en_cot
+  - agieval_sat_math_cot
+aggregate_metric_list:
+  - aggregation: mean
+    metric: exact_match
+    weight_by_size: true
+    filter_list: custom-extract
+  - aggregation: mean
+    metric: exact_match
+    weight_by_size: false
+    filter_list: custom-extract
+
+metadata:
+  version: 0.0

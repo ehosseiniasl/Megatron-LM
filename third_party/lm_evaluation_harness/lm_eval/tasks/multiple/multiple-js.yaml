@@ -1,0 +1,11 @@
+include: _default_template.yaml
+task: multiple-js
+dataset_name: humaneval-js
+generation_kwargs:
+  until:
+    - "\nfunction "
+    - "\n/*"
+    - "\n//"
+    - "\nconsole.log"
+metadata:
+  language: js

@@ -1,0 +1,38 @@
+task: hle_text
+dataset_path: cais/hle
+output_type: generate_until
+test_split: test
+process_docs: !function utils.process_docs
+doc_to_text: "{{question}}\n"
+doc_to_target: "{{answer}}"
+num_fewshot: 0
+generation_kwargs:
+  max_gen_toks: 1024  # TODO: tune for base models — may need to be much higher
+  until:
+    - "\n\n\n"
+    - "</s>"
+    - "<|im_end|>"
+    - "<|endoftext|>"
+    - "<|eot_id|>"
+  do_sample: false
+  temperature: 0
+filter_list:
+  - name: "flexible-extract"
+    filter:
+      - function: "fallback-regex"
+        regex_patterns:
+          - "(?i)(?:the answer is|answer is|answer:)\\s*\\(?(.+?)\\)?[\\s.]*$"
+          - "\\\\boxed\\{([^}]+)\\}"
+          - "([A-Za-z0-9].*)\\s*$"
+        group_select: [1, 1, 1]
+      - function: "take_first"
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+    ignore_case: true
+    ignore_punctuation: true
+metadata:
+  version: 1.0
+dataset_kwargs:
+  trust_remote_code: true

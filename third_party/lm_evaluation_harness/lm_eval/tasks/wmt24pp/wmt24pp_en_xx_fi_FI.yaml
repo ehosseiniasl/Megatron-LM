@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_fi_FI
+include: _base_config.yaml
+dataset_name: en-fi_FI
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Finnish follows.\n\nThe translation is:"

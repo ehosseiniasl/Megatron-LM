@@ -1,0 +1,54 @@
+version: 1.0
+tasks:
+  - task_name: hmmt_sampled
+    task_group: math
+    batch_size: 16
+    overrides:
+      repeats: 32
+    report_metric:
+      - alias: hmmt_sampled
+        metric: pass@1[32],math_verify
+      - alias: hmmt_sampled
+        metric: pass@32[32],math_verify
+  - task_name: gpqa_diamond_cot_n_shot_sampled
+    task_group: aggregate
+    batch_size: 32
+    overrides:
+      repeats: 32
+      generation_kwargs.max_gen_toks: 2048
+    report_metric:
+      - alias: gpqa_diamond_sampled
+        metric: pass@1[32],flexible-extract
+      - alias: gpqa_diamond_sampled
+        metric: pass@32[32],flexible-extract
+  - task_name: hle_text_sampled
+    task_group: aggregate
+    batch_size: 32
+    overrides:
+      repeats: 32
+    report_metric:
+      - alias: hle_text_sampled
+        metric: pass@1[32],flexible-extract
+      - alias: hle_text_sampled
+        metric: pass@32[32],flexible-extract
+  - task_name: mmlu_pro_0_shot_sampled
+    task_group: aggregate
+    batch_size: 32
+    overrides:
+      repeats: 32
+    report_metric:
+      - alias: mmlu_pro_sampled
+        metric: pass@1[32],tigerlab-extract
+      - alias: mmlu_pro_sampled
+        metric: pass@32[32],tigerlab-extract
+  - task_name: lcb_codegen
+    task_group: code
+    batch_size: 32
+    overrides:
+      repeats: 32
+      test_split: release_v6
+    report_metric:
+      - alias: lcb_codegen_sampled
+        metric: pass@1[32],score
+      - alias: lcb_codegen_sampled
+        metric: pass@32[32],score

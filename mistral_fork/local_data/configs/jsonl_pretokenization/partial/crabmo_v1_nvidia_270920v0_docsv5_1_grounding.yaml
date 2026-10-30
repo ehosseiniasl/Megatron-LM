@@ -1,0 +1,336 @@
+# Partial config containing the selected docsv5.1 sources plus grounding sources from
+# crabmo_v1_nvidia_260825v0_PARTIAL_missing_61_doc_v5_and_code_union_v1.yaml.
+# The four *_low directories exist on the cluster but are not listed in the
+# base config; they use the same settings as their peer docsv5.1 sources.
+# The translated JA/KO math source is copied from the translation-only config.
+# The base config disables it because l2_reconstruction_score annotations may
+# be missing, so verify those annotations before launching pretokenization.
+# PR302 implements the grounding filter profile and image transform used below.
+version: 1
+tokenizer_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/tokenizers/n4-v6-262k.json
+jsonl_root_data_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/
+sources:
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_en_biology
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_en_comp_sci
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_en_hard_science
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_en_humanities
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_en_low
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_en_math
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_en_novel_misc
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_en_soft_science
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ja_ko_biology
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ja_ko_comp_sci
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ja_ko_hard_science
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ja_ko_humanities
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ja_ko_low
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ja_ko_math
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ja_ko_novel_misc
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ja_ko_soft_science
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ru_biology
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ru_comp_sci
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ru_hard_science
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ru_humanities
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ru_low
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ru_math
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ru_novel_misc
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_ru_soft_science
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_translated_en_from_ja_ko_math
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: MASK_MMDOC_CONTENT
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_zh_biology
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_zh_comp_sci
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_zh_hard_science
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_zh_humanities
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_zh_low
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_zh_math
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_zh_novel_misc
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/docsv5_1_zh_soft_science
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: crawl_default_no_high_res
+    filter: multimodal_v4__lobstral
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: null
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/grounding_cad_natural_images
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: grounding_default
+    filter: multimodal_v1__grounding
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: MASK_MMDOC_CONTENT
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/grounding_charts_floorplans_geospatial_gui
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: grounding_default
+    filter: multimodal_v1__grounding
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: MASK_MMDOC_CONTENT
+  - jsonl_dir: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/nv-00-10603-sandia/mistral-data-260804/grounding_music_deepscores
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain_image
+    image_transform_type: grounding_default
+    filter: multimodal_v1__grounding
+    rare_token_filter: rare_tokens_n4_v6_262k_v1
+    pds_filter: nvidia_pds_quarantine_v1
+    masking_strategy: MASK_MMDOC_CONTENT

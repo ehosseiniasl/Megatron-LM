@@ -1,0 +1,10 @@
+include: _default_template.yaml
+task: multiple-go
+dataset_name: humaneval-go
+generation_kwargs:
+  until:
+    - "\nfunc"
+    - "struct"
+    - "\n// "
+metadata:
+  language: go

@@ -1,0 +1,72 @@
+# Distributed epoch-index smoke config. Four sources request three epochs and
+# four request two epochs, yielding 20 epoch-major tasks for 4 ranks x 5 local
+# processes. It reuses the existing N4-v6 merged pretokens and isolates newly
+# built epoch indexes under an _DEBUG cache path.
+version: 9
+sources:
+- prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_mask_file_separator_rare_tokens_n4_v6_262k_v1/nv-00-10603-sandia/mistral-data-260804/repos_v1_competition/merged_1099511627776b/chunks_00000-00128
+  weight: 1.0
+  percentage_data: 0.01
+  sample_type: pretrain
+  image_transform_type: null
+  n_epoches_to_prebuild: 3
+- prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_mask_github_pr_expanded_context_rare_tokens_n4_v6_262k_v1/nv-00-10603-sandia/mistral-data-260804/github4_pr_issue_commentdiff/merged_1099511627776b/chunks_00000-00064
+  weight: 1.0
+  percentage_data: 0.01
+  sample_type: pretrain
+  image_transform_type: null
+  n_epoches_to_prebuild: 3
+- prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_mask_locodiff_markers_rare_tokens_n4_v6_262k_v1/nv-00-10603-sandia/mistral-data-260804/locodiff_short/merged_1099511627776b/chunks_00000-00512
+  weight: 1.0
+  percentage_data: 0.01
+  sample_type: pretrain
+  image_transform_type: null
+  n_epoches_to_prebuild: 3
+- prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_rare_tokens_n4_v6_262k_v1/jsonl/n4/nvidia/synthetic/mistral-classified/diverse_qa_pairs_new_academic_qa_high/merged_1099511627776b/chunks_00000-00129
+  weight: 1.0
+  percentage_data: 0.01
+  sample_type: pretrain
+  image_transform_type: null
+  n_epoches_to_prebuild: 3
+- prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_mask_midtraining_segments_rare_tokens_n4_v6_262k_v1/nv-00-10603-sandia/mistral-data-260804/traces_harvestqa_code_high_cpp_v2/merged_1099511627776b/chunks_00000-00002
+  weight: 1.0
+  percentage_data: 0.01
+  sample_type: pretrain
+  image_transform_type: null
+  n_epoches_to_prebuild: 2
+- prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_mask_mmdoc_content_rare_tokens_n4_v6_262k_v1_nvidia_pds_quarantine_v1/nv-00-10603-sandia/mistral-data-260804/web1_1_translated_v1_2_en_from_fr_de_es_pt_it_nl_biology_high/merged_1099511627776b/chunks_00000-04096
+  weight: 1.0
+  percentage_data: 0.01
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+  n_epoches_to_prebuild: 2
+- prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_rare_tokens_n4_v6_262k_v1_nvidia_pds_quarantine_v1/nv-00-10603-sandia/mistral-data-260804/stackexchange/merged_1099511627776b/chunks_00000-00064
+  weight: 1.0
+  percentage_data: 0.01
+  sample_type: pretrain_image
+  image_transform_type: crawl_default_no_high_res
+  n_epoches_to_prebuild: 2
+- prefix_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/pretokenized_data/n4_v6_262k_ml4_regex/multimodal_v4__lobstral_rare_tokens_n4_v6_262k_v1_nvidia_pds_quarantine_v1/nv-00-10603-sandia/mistral-data-260804/captioning_docs_chart_synth_v2/merged_1099511627776b/chunks_00000-00128
+  weight: 1.0
+  percentage_data: 0.01
+  sample_type: pretrain_image
+  image_transform_type: sometimes_high_res_default
+  n_epoches_to_prebuild: 2
+bos_id: 1
+eos_id: 2
+pad_id: 3
+img_id: 18
+img_break_id: 20
+img_end_id: 19
+seed: 0
+epoch_index_cache_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/epoch_index_DEBUG/pr298_n4_v6_merged_n_epoches_v2_260824_DEBUG
+interdocument_masking: false
+drop_bos: true
+original_seq_len: 8192
+truncate_trailing_masked: true
+tokenizer_name: n4_v6_262k_ml4_regex
+optimized_datasource_id_sampling: true
+allow_non_sorted_sources_in_dataloader: false
+skip_images: false
+validation_set: null
+perplexity_eval_sets: []

@@ -1,0 +1,46 @@
+task: mmlu_redux_str_global_facts
+task_alias: global_facts
+dataset_name: global_facts
+description: 'The following are multiple choice questions (with answers) about global facts.
+
+
+  '
+include: _mmlu_redux_str_template_yaml
+fewshot_config:
+  sampler: first_n
+  samples:
+  - question: Which of the following pairs of statements are both true (as of 2019)?
+    choices:
+    - People tend to be optimistic about their own future and the future of their nation or the world.
+    - People tend to be optimistic about their own future but pessimistic about the future of their nation or the world.
+    - People tend to be pessimistic about their own future but optimistic about the future of their nation or the world.
+    - People tend to be pessimistic about their own future and the future of their nation or the world.
+    answer: 1
+  - question: As of 2019, about what percentage of Americans agree that the state is run for the benefit of all the people?
+    choices:
+    - 31%
+    - 46%
+    - 61%
+    - 76%
+    answer: 1
+  - question: As of 2015, since 1990 forests have ____ in Europe and have ____ in Africa and the Americas.
+    choices:
+    - increased, increased
+    - increased, decreased
+    - decreased, increased
+    - decreased, decreased
+    answer: 1
+  - question: As of 2019, about what percentage of Russians say it is very important to have free media in our country without government/state censorship?
+    choices:
+    - 38%
+    - 53%
+    - 68%
+    - 83%
+    answer: 0
+  - question: As of 2017, how many of the world’s 1-year-old children today have been vaccinated against some disease? *
+    choices:
+    - 80%
+    - 60%
+    - 40%
+    - 20%
+    answer: 0

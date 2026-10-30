@@ -1,0 +1,8 @@
+task: mmlu_redux_cot_astronomy
+task_alias: astronomy
+dataset_name: astronomy
+description: 'The following are multiple choice questions (with answers) about astronomy.
+
+
+  '
+include: _mmlu_redux_cot_template_yaml

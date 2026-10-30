@@ -1,0 +1,4 @@
+task: wmt24pp_en_xx_he_IL
+include: _base_config.yaml
+dataset_name: en-he_IL
+doc_to_text: "{{source.strip()}}\n\nThe translation of the above sentence into Hebrew follows.\n\nThe translation is:"

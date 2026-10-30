@@ -1,0 +1,8 @@
+include: _default_template.yaml
+task: multiple-sh
+dataset_name: humaneval-sh
+generation_kwargs:
+  until:
+    - "\n}"
+metadata:
+  language: sh

@@ -1,0 +1,440 @@
+#!/usr/bin/env python3
+"""nemotron-vlm-serve - Launch Megatron VLM dynamic inference server.
+
+Like nemotron-serve, but for VLM (LLaVA) checkpoints. Auto-detects VLM from
+checkpoint args, loads vision model + language model, serves text and multimodal
+requests via the standard Flask completions API.
+
+Usage:
+    nemotron-vlm-serve <checkpoint_path> --tier <nano|super|ultra|vlm3b> [options]
+    nemotron-vlm-serve /path/to/vlm-3b --tier vlm3b --tokenizer /path/to/multimodal-tokenizer
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+from dataclasses import dataclass, field
+from pathlib import Path
+
+
+# ---------------------------------------------------------------------------
+# Tier presets
+# ---------------------------------------------------------------------------
+NM6_ROOT = "/lustre/fsw/portfolios/llmservice/projects/llmservice_nlp_fm/nemotron6"
+DEFAULT_TOKENIZER = f"{NM6_ROOT}/tokenizers/multiMixV8.gpt4o_nc_sd.500000.128k.vocab.json"
+
+
+@dataclass
+class TierConfig:
+    tp: int
+    etp: int
+    ep: int
+    pp: int
+    extra_args: list[str] = field(default_factory=list)
+    default_moe_dispatcher: str | None = None
+    default_dtype: str | None = None
+    inference_moe_dispatcher: str | None = None
+
+
+TIERS: dict[str, TierConfig] = {
+    # 3B MOE (128 experts, Mamba hybrid) - 1 node (8 GPUs)
+    "nano": TierConfig(
+        tp=1, etp=1, ep=8, pp=1,
+        extra_args=["--inference-dynamic-batching-buffer-size-gb", "5"],
+    ),
+    # 8B MOE - 1 node (8 GPUs, H100)
+    "super": TierConfig(
+        tp=1, etp=1, ep=8, pp=1,
+        extra_args=["--inference-dynamic-batching-buffer-size-gb", "10"],
+    ),
+    # 8B MOE on GB200 (4 GPUs/node) - 4 nodes
+    "ultra": TierConfig(
+        tp=1, etp=1, ep=16, pp=1,
+        extra_args=[
+            "--inference-dynamic-batching-buffer-size-gb", "10",
+            "--mlp-chunks-for-prefill", "4",
+            "--inference-dynamic-batching-max-requests", "24",
+        ],
+    ),
+    # pre-vlm-05 3B VLM checkpoints - 2 nodes (16 GPUs, H100)
+    "vlm3b": TierConfig(
+        tp=2, etp=1, ep=8, pp=1,
+        extra_args=[
+            "--inference-dynamic-batching-buffer-size-gb", "10",
+            "--mlp-chunks-for-prefill", "4",
+            "--inference-dynamic-batching-max-requests", "24",
+        ],
+        default_moe_dispatcher="alltoall",
+        default_dtype="bf16",
+        inference_moe_dispatcher="nccl",
+    ),
+}
+
+
+# ---------------------------------------------------------------------------
+# NCCL env
+# ---------------------------------------------------------------------------
+NCCL_ENV = {
+    "NCCL_IB_SL": "1",
+    "NCCL_IB_TIMEOUT": "19",
+    "UB_TIMEOUT": "720",
+    "CUDA_DEVICE_MAX_CONNECTIONS": "1",
+    "NVTE_FWD_LAYERNORM_SM_MARGIN": "16",
+    "NVTE_BWD_LAYERNORM_SM_MARGIN": "16",
+    "NCCL_P2P_NET_CHUNKSIZE": "2097152",
+    "NCCL_DEBUG": "WARN",
+    "TORCHINDUCTOR_WORKER_START": "fork",
+    "NCCL_SHM_DISABLE": "1",
+    "NCCL_PROTO": "simple",
+}
+
+
+# ---------------------------------------------------------------------------
+# Port derivation
+# ---------------------------------------------------------------------------
+def derive_ports(base_port: int) -> dict[str, int | str]:
+    import subprocess
+
+    coordinator_port = int(os.environ.get("COORDINATOR_PORT", base_port + 1))
+    master_port = int(os.environ.get("MASTER_PORT", 0)) or (hash(os.urandom(4)) % 10000 + 20000)
+
+    # Priority: MASTER_ADDR env (set by sbatch) > scontrol > localhost
+    master_addr = os.environ.get("MASTER_ADDR", "")
+    if not master_addr:
+        nodelist = os.environ.get("SLURM_NODELIST", "")
+        if nodelist:
+            r = subprocess.run(["scontrol", "show", "hostnames", nodelist],
+                               capture_output=True, text=True)
+            master_addr = r.stdout.strip().split("\n")[0] if r.returncode == 0 else "localhost"
+        else:
+            master_addr = "localhost"
+
+    return {
+        "http_port": base_port,
+        "coordinator_port": coordinator_port,
+        "master_port": master_port,
+        "master_addr": master_addr,
+    }
+
+
+# ---------------------------------------------------------------------------
+# serve
+# ---------------------------------------------------------------------------
+def resolve_megatron_path(args: argparse.Namespace) -> str:
+    mlm_path = args.megatron_path or os.environ.get("MEGATRON_PATH", "")
+    if mlm_path:
+        return mlm_path
+
+    for candidate in [
+        "/opt/megatron-lm",
+        "/workspace/megatron-lm",
+    ]:
+        if os.path.isdir(os.path.join(candidate, "tools")):
+            return candidate
+    return ""
+
+
+def load_checkpoint_args(checkpoint_path: str, ckpt_step: str | None, mlm_path: str) -> dict[str, object]:
+    if not mlm_path:
+        return {}
+
+    probe = r"""
+import contextlib
+import json
+import sys
+
+mlm_path, checkpoint_path, ckpt_step = sys.argv[1], sys.argv[2], sys.argv[3]
+sys.path.insert(0, mlm_path)
+sys.path.append(mlm_path + "/examples/multimodal")
+
+from megatron.training.checkpointing import load_args_from_checkpoint
+
+class Args:
+    def __init__(self):
+        self.load = checkpoint_path
+        self.ckpt_step = int(ckpt_step) if ckpt_step else None
+        self.finetune = False
+        self.no_load_optim = True
+        self.no_load_rng = True
+        self.non_persistent_global_ckpt_dir = None
+        self.non_persistent_ckpt_type = None
+        self.exit_on_missing_checkpoint = False
+        self.auto_detect_ckpt_format = False
+        self.ckpt_format = "torch_dist"
+        self.ckpt_convert_format = None
+        self.ckpt_convert_save = None
+        self.distributed_backend = "nccl"
+        self.rank = 0
+        self.use_tokenizer_model_from_checkpoint_args = True
+        self.use_mp_args_from_checkpoint_args = False
+
+    def __getattr__(self, name):
+        return None
+
+args = Args()
+with contextlib.redirect_stdout(sys.stderr):
+    result = load_args_from_checkpoint(args)
+ckpt_args = result[1] if isinstance(result, tuple) else args
+
+names = [
+    "language_model_type",
+    "tokenizer_prompt_format",
+    "transformer_impl",
+    "use_te",
+    "bf16",
+    "fp16",
+    "sequence_parallel",
+    "moe_router_dtype",
+    "moe_token_dispatcher_type",
+]
+print(json.dumps({name: getattr(ckpt_args, name, None) for name in names}, default=str))
+"""
+    try:
+        result = subprocess.run(
+            [sys.executable, "-c", probe, mlm_path, checkpoint_path, str(ckpt_step or "")],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        print(f"Warning: unable to read checkpoint args: {exc}", file=sys.stderr)
+        return {}
+    for line in reversed(result.stdout.splitlines()):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            return json.loads(line)
+        except json.JSONDecodeError:
+            continue
+
+    print(
+        "Warning: checkpoint-arg probe did not emit JSON; continuing without "
+        "checkpoint-derived CLI seed args",
+        file=sys.stderr,
+    )
+    if result.stderr.strip():
+        print(result.stderr.strip(), file=sys.stderr)
+    return {}
+
+
+def add_flag_if_value(args: list[str], flag: str, value: object) -> None:
+    if value is not None:
+        args.extend([flag, str(value)])
+
+
+def cmd_serve(args: argparse.Namespace) -> None:
+    # --- Resolve tier ---
+    if not args.tier:
+        print("Error: --tier is required (nano|super|ultra|vlm3b)", file=sys.stderr)
+        sys.exit(1)
+    tier_name = args.tier
+    tier = TIERS[tier_name]
+
+    # --- Overrides ---
+    tp = args.tp if args.tp is not None else tier.tp
+    etp = args.etp if args.etp is not None else tier.etp
+    ep = args.ep if args.ep is not None else tier.ep
+    pp = args.pp if args.pp is not None else tier.pp
+
+    nnodes = args.nnodes or int(os.environ.get("SLURM_JOB_NUM_NODES", 1))
+    nproc = args.nproc or int(os.environ.get("SLURM_GPUS_ON_NODE",
+                              os.environ.get("GPUS_PER_NODE", 8)))
+    node_rank = int(os.environ.get("SLURM_NODEID", 0))
+
+    ports = derive_ports(args.port)
+
+    # Resolve Megatron-LM path before command construction so parser-required
+    # seed args can be read from the checkpoint instead of hardcoded here.
+    mlm_path = resolve_megatron_path(args)
+    checkpoint_args = load_checkpoint_args(args.checkpoint_path, args.iter, mlm_path)
+
+    # --- Resolve tokenizer ---
+    ckpt_path = Path(args.checkpoint_path)
+    bundled = ckpt_path / "tokenizer"
+    tokenizer_path = DEFAULT_TOKENIZER
+    if not os.path.exists(tokenizer_path):
+        candidates = list(bundled.glob("*.json")) if bundled.is_dir() else []
+        if candidates:
+            tokenizer_path = str(candidates[0])
+            print(f"Using bundled tokenizer: {tokenizer_path}")
+        else:
+            print(f"Warning: tokenizer not found at {DEFAULT_TOKENIZER} "
+                  "or in checkpoint", file=sys.stderr)
+    # VLM uses MultimodalTokenizer; fall back to TikTokenizer for text-only
+    # serving if no multimodal tokenizer directory is available.
+    vlm_tokenizer = args.tokenizer or (str(bundled) if bundled.is_dir() else None)
+    if vlm_tokenizer and os.path.isdir(vlm_tokenizer):
+        tokenizer_args = [
+            "--tokenizer-type", "MultimodalTokenizer",
+            "--tokenizer-model", vlm_tokenizer,
+        ]
+    else:
+        tokenizer_args = [
+            "--tokenizer-type", "TikTokenizer",
+            "--tokenizer-model", tokenizer_path,
+            "--no-use-tokenizer-model-from-checkpoint-args",
+        ]
+
+    # --- Set NCCL env ---
+    for k, v in NCCL_ENV.items():
+        os.environ.setdefault(k, v)
+
+    # --- Build server args ---
+    server_args = [
+        "--tensor-model-parallel-size", str(tp),
+        "--expert-tensor-parallel-size", str(etp),
+        "--expert-model-parallel-size", str(ep),
+        "--pipeline-model-parallel-size", str(pp),
+        "--inference-max-seq-length", str(args.max_seq_len),
+        "--load", args.checkpoint_path,
+        "--micro-batch-size", "1",
+        "--moe-pad-experts-for-cuda-graph-inference",
+        "--use-checkpoint-args",
+        "--no-load-optim",
+        "--no-load-rng",
+        "--attention-backend", "flash",
+        "--te-rng-tracker",
+        "--inference-rng-tracker",
+        *tokenizer_args,
+        *tier.extra_args,
+        "--inference-coordinator-port", str(ports["coordinator_port"]),
+        "--port", str(ports["http_port"]),
+    ]
+
+    if args.iter:
+        server_args += ["--ckpt-step", args.iter]
+
+    # These are checkpoint/model recipe values. They are passed only when the
+    # current VLM entrypoint or Megatron defaults need a CLI value before the
+    # checkpoint args are copied into the global args namespace.
+    add_flag_if_value(server_args, "--language-model-type", checkpoint_args.get("language_model_type"))
+    add_flag_if_value(server_args, "--tokenizer-prompt-format", checkpoint_args.get("tokenizer_prompt_format"))
+    add_flag_if_value(server_args, "--transformer-impl", checkpoint_args.get("transformer_impl"))
+    add_flag_if_value(server_args, "--moe-router-dtype", checkpoint_args.get("moe_router_dtype"))
+    add_flag_if_value(
+        server_args,
+        "--moe-token-dispatcher-type",
+        checkpoint_args.get("moe_token_dispatcher_type") or tier.default_moe_dispatcher,
+    )
+    if checkpoint_args.get("use_te"):
+        server_args.append("--use-te")
+    if checkpoint_args.get("bf16"):
+        server_args.append("--bf16")
+    elif checkpoint_args.get("fp16"):
+        server_args.append("--fp16")
+    elif tier.default_dtype == "bf16":
+        server_args.append("--bf16")
+    elif tier.default_dtype == "fp16":
+        server_args.append("--fp16")
+
+    add_flag_if_value(
+        server_args,
+        "--inference-moe-token-dispatcher-type",
+        tier.inference_moe_dispatcher,
+    )
+
+    if args.use_checkpoint_sequence_parallel and checkpoint_args.get("sequence_parallel"):
+        server_args.append("--sequence-parallel")
+
+    # Passthrough args after --
+    if args.extra:
+        server_args += args.extra
+
+    # --- Build torchrun command ---
+    cmd = [
+        "torchrun",
+        "--nnodes", str(nnodes),
+        "--nproc_per_node", str(nproc),
+        "--node_rank", str(node_rank),
+        "--master_addr", str(ports["master_addr"]),
+        "--master_port", str(ports["master_port"]),
+        "-m", "tools.run_dynamic_vlm_server",
+        *server_args,
+    ]
+
+    # --- Print & exec ---
+    topo = f"TP={tp} ETP={etp} EP={ep} PP={pp} | {nnodes}x{nproc} GPUs"
+    print(f"=== nemotron-vlm-serve ({tier_name}) ===")
+    print(f"Checkpoint: {args.checkpoint_path}")
+    print(f"Iter:       {args.iter or 'latest'}")
+    print(f"Topology:   {topo}")
+    print(f"Endpoint:   http://{ports['master_addr']}:{ports['http_port']}")
+    print("========================")
+
+    if mlm_path:
+        print(f"Megatron-LM: {mlm_path}")
+        if checkpoint_args:
+            print("Checkpoint-derived CLI seed args: "
+                  f"language_model_type={checkpoint_args.get('language_model_type')}, "
+                  f"tokenizer_prompt_format={checkpoint_args.get('tokenizer_prompt_format')}")
+    else:
+        print("Warning: Megatron-LM path not set. Use --megatron-path or "
+              "set MEGATRON_PATH env var.", file=sys.stderr)
+
+    if args.dry_run:
+        # Pretty-print: group flag + value pairs on the same line
+        parts = [cmd[0]]
+        i = 1
+        while i < len(cmd):
+            token = cmd[i]
+            if token.startswith("-") and i + 1 < len(cmd) and not cmd[i + 1].startswith("-"):
+                parts.append(f"{token} {cmd[i + 1]}")
+                i += 2
+            else:
+                parts.append(token)
+                i += 1
+        print(" \\\n  ".join(parts))
+        return
+
+    if mlm_path:
+        os.chdir(mlm_path)
+    os.execvp("torchrun", cmd)
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+def main():
+    parser = argparse.ArgumentParser(
+        prog="nemotron-vlm-serve",
+        description="Launch Nemotron VLM dynamic inference server",
+    )
+    parser.add_argument("checkpoint_path", help="Path to checkpoint directory")
+    parser.add_argument("--tier", choices=["nano", "super", "ultra", "vlm3b"], required=True,
+                        help="Model tier")
+    parser.add_argument("--iter", help="Checkpoint iteration")
+    parser.add_argument("--port", type=int, default=5000, help="HTTP port (default: 5000)")
+    parser.add_argument("--max-seq-len", type=int, default=8192,
+                        help="Max sequence length (default: 8192)")
+
+    # Parallelism overrides
+    parser.add_argument("--tp", type=int, help="Override tensor parallelism")
+    parser.add_argument("--etp", type=int, help="Override expert tensor parallelism")
+    parser.add_argument("--ep", type=int, help="Override expert parallelism")
+    parser.add_argument("--pp", type=int, help="Override pipeline parallelism")
+
+    # Torchrun overrides
+    parser.add_argument("--nnodes", type=int, help="Number of nodes (default: from SLURM or 1)")
+    parser.add_argument("--nproc", type=int, help="GPUs per node (default: from SLURM or 8)")
+
+    parser.add_argument("--tokenizer", help="Path to multimodal tokenizer directory")
+    parser.add_argument("--megatron-path", help="Path to Megatron-LM source (or set MEGATRON_PATH)")
+    parser.add_argument(
+        "--use-checkpoint-sequence-parallel",
+        action="store_true",
+        help="Opt in to checkpoint sequence_parallel for inference",
+    )
+    parser.add_argument("--dry-run", action="store_true", help="Print command without executing")
+
+    args, extra = parser.parse_known_args()
+    args.extra = extra
+    cmd_serve(args)
+
+
+if __name__ == "__main__":
+    main()

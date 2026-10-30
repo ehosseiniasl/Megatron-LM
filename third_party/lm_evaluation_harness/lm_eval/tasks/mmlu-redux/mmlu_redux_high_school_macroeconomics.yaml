@@ -1,0 +1,46 @@
+task: mmlu_redux_high_school_macroeconomics
+task_alias: high_school_macroeconomics
+dataset_name: high_school_macroeconomics
+description: 'The following are multiple choice questions (with answers) about high school macroeconomics.
+
+
+  '
+include: _mmlu_redux_template_yaml
+fewshot_config:
+  sampler: first_n
+  samples:
+  - question: Which of the following is not included in the U.S. GDP?
+    choices:
+    - The U.S. military opens a new base in a foreign country with 1000 U.S. personnel.
+    - Japanese consumers buy thousands of CDs produced in the United States.
+    - An American pop singer performs a sold-out concert in Paris.
+    - A French theatrical production tours dozens of American cities.
+    answer: 2
+  - question: The short-run Phillips curve indicates a
+    choices:
+    - direct relation between unemployment and inflation
+    - direct relation between price and quantity demanded
+    - inverse relation between price and quantity demanded
+    - inverse relation between unemployment and inflation
+    answer: 3
+  - question: A federal deficit occurs when
+    choices:
+    - exports exceed imports.
+    - imports exceed exports.
+    - federal tax collections exceed spending.
+    - federal spending exceeds federal tax revenues.
+    answer: 3
+  - question: Holding all else equal which of the following monetary policies would be used to boost U.S. exports?
+    choices:
+    - Increasing the discount rate
+    - Increasing the reserve ratio
+    - Buying government securities
+    - Lowering tariffs
+    answer: 2
+  - question: Which of the following policies best describes supply-side fiscal policy?
+    choices:
+    - An increase in the money supply
+    - Increased government spending
+    - Lower taxes on research and development of new technology
+    - Higher taxes on household income
+    answer: 2

@@ -1,0 +1,44 @@
+include: aqua-rat_cot.yaml
+description: "The following are multiple choice questions (with answers) from Law School Admission Test (LSAT), testing the logical reasoning capability. It requires
+               understanding a given text at a logical level and performing logical inference to deduce implications from asserted ones. 
+               Think step by step and then finish your answer with \"The answer is (X)\" where X is the correct letter choice.\n"
+
+task: agieval_lsat_lr_cot
+dataset_path: hails/agieval-lsat-lr
+
+num_fewshot: 3
+fewshot_config:
+  doc_to_text: !function utils.cot_fewshot_to_text
+  doc_to_target: !function utils.empty_str
+
+  sampler: first_n
+  samples:
+    - query: "    Question: The statement that the law should require explicit safety labels on toys serves which one of the following functions in the consumer advocate's argument? \nOptions: \nA. It is a general principle supporting the conclusion of the argument.\nB. It is a proposed compromise between two conflicting goals.\nC. It is the conclusion of the argument.\nD. It is evidence that must be refuted in order to establish the conclusion of the argument.\nE. It is a particular instance of the general position under discussion.\n"
+      explanation: "The consumer advocate in the passage argues that the toy-labeling law should require manufacturers to provide explicit safety labels on toys to indicate what hazards the toys pose. The advocate notes that the only labels currently required by law are labels indicating the age range for which a toy is intended, and argues that although the current toy-labeling law has reduced the incidence of injuries to children from toys, parents could prevent such injuries almost entirely if toy labels provided explicit safety information. The question asks which function the statement that the law should require explicit safety labels on toys serves in the consumer advocate's argument. (A) The statement is not a general principle supporting the conclusion of the argument. The advocate does not argue based on a general principle, but rather specific recommendations for toy-labeling laws.
+                  (B) The statement is not a proposed compromise between two conflicting goals. There are no conflicting goals presented in the passage that require a compromise.
+                  (C) The statement is the conclusion of the argument. This is the correct answer. The consumer advocate's argument builds up to the recommendation that the law should require explicit safety labels on toys, which is the conclusion of the argument.
+                  (D) The statement is not evidence that must be refuted in order to establish the conclusion of the argument. The statement is the conclusion of the argument, not evidence. 
+                  (E) The statement is not a particular instance of the general position under discussion. The advocate does not present a general position in the passage. Instead, the advocate argues for a specific recommendation for toy-labeling laws.. The answer is (C)."
+      gold: [ "C" ]
+      few_shot: 1
+    - query: "    Question: Which one of the following is an assumption on which the argument depends? \nOptions: \nA. It will eventually be possible to breed strains of bananas that are resistant to Sigatoka disease.\nB. Large plantations produce most or all of the world's bananas.\nC. Sigatoka disease spreads more slowly on large plantations than in small banana groves.\nD. Sigatoka disease is the only disease that threatens bananas on a worldwide scale.\nE. Most of the banana trees that have not been exposed to the Sigatoka fungus grow in small banana groves.\n"
+      explanation: "The question asks for the premise that is necessary for the argument's validity. 
+                  Option A, breeding Sigatoka-resistant bananas, is not relevant. 
+                  Option B, large plantations producing most bananas, is necessary. 
+                  Option C and D, Sigatoka spread and other diseases, are not mentioned and not relevant. 
+                  Option E, banana tree exposure, is not necessary.. The answer is (B)."
+      gold: [ "B" ]
+      few_shot: 1
+    - query: "    Question: Which one of the following is an assumption on which the argument depends? \nOptions: \nA. Passengers feel no safer on airplanes equipped with the radar system than on comparable airplanes not so equipped.\nB. Warnings given by a collision-avoidance system about phantom airplanes are not caused by distorted radar signals.\nC. The frequency of invalid warnings will not cause pilots routinely to disregard the system's warnings.\nD. Commercial passenger airplanes are not the only planes that can be equipped with a collision-avoidance system\nE. The greatest safety risk for passengers traveling on commercial passenger airplanes is that of a midair collision.\n"
+      explanation: "The passage discusses how commercial passenger airplanes equipped with a collision-avoidance radar system make passengers safer even though the system frequently warns pilots about phantom airplanes. The question asks which assumption the argument depends on.
+                  Option (A), which states that passengers do not feel any safer on airplanes equipped with the radar system, is irrelevant to the argument and can be eliminated.
+                  Option (B), which concerns the cause of warnings about phantom airplanes, is also irrelevant to the argument, as the passage already acknowledges that such warnings occur.
+                  Option (C), which states that the frequency of invalid warnings will not cause pilots to routinely disregard the system's warnings, is a crucial assumption of the argument. The argument depends on the assumption that pilots will continue to take evasive action when the system warns them, despite the frequency of invalid warnings.
+                  Option (D), which discusses whether commercial passenger airplanes are the only planes that can be equipped with a collision-avoidance system, is also irrelevant to the argument and can be eliminated.
+                  Option (E), which states that midair collision is the greatest safety risk for passengers on commercial passenger airplanes, is also irrelevant to the argument and can be eliminated.. The answer is (C)."
+      gold: [ "C" ]
+      few_shot: 1
+
+
+      
+

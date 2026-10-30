@@ -1,0 +1,8 @@
+task: mmlu_redux_cot_human_aging
+task_alias: human_aging
+dataset_name: human_aging
+description: 'The following are multiple choice questions (with answers) about human aging.
+
+
+  '
+include: _mmlu_redux_cot_template_yaml

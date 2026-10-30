@@ -1,0 +1,16 @@
+group: adlr_include # adlr because, we select a subset of languages
+task:
+  - include_base_44_spanish
+  - include_base_44_german
+  - include_base_44_french
+  - include_base_44_chinese
+  - include_base_44_japanese
+  - include_base_44_russian
+  - include_base_44_italian
+  - include_base_44_portuguese
+  - include_base_44_korean
+aggregate_metric_list:
+  - metric: acc
+    weight_by_size: True
+metadata:
+  version: 0.0

@@ -1,0 +1,27 @@
+include: aqua-rat_cot.yaml
+description: "The following are multiple choice questions (with answers) from Law School Admission Test (LSAT), testing the analytical reasoning capability. It requires analyzing a scenario involving a set of particular circumstances and performs reasoning over
+              it to make conclusions. Think step by step and then finish your answer with \"The answer is (X)\" where X is the correct letter choice.\n"
+
+task: agieval_lsat_ar_cot
+dataset_path: hails/agieval-lsat-ar
+
+num_fewshot: 3
+fewshot_config:
+  doc_to_text: !function utils.cot_fewshot_to_text
+  doc_to_target: !function utils.empty_str
+
+  sampler: first_n
+  samples:
+    - query: "    Question: If J, O, and Y are the first three concertos to be played, not necessarily in the order given, which one of the following is a concerto that CANNOT be played on the fifth Sunday? \nOptions: \nA. H\nB. K\nC. N\nD. P\nE. X\n"
+      explanation: "We know that J and O have already been played, so they cannot be played on the fifth Sunday. Similarly, Y has already been played, so it cannot be played again. This leaves us with the following options for the fifth Sunday: H, K, N, P, and X. We also know that X cannot be played on the fifth Sunday unless one of Rodrigo's concertos is played on the first Sunday. Since we do not know which concerto was played on the first Sunday, we cannot determine whether X can be played on the fifth Sunday. However, we can eliminate the other options based on the given conditions. We know that if N is selected, then J is also selected. Since J has already been played, we can eliminate N as an option for the fifth Sunday. We also know that if M is selected, then neither J nor O can be selected. Since both J and O have already been played, we can eliminate M as an option for the fifth Sunday. We do not have any conditions that eliminate H, K, or P as options for the fifth Sunday. Therefore, the answer is (E)X, because X cannot be played on the fifth Sunday unless one of Rodrigo's concertos is played on the first Sunday, and we do not know whether that condition has been met.. The answer is (E)."
+      gold: [ "E" ]
+      few_shot: 1
+    - query: "    Question: If N is the second book discussed and it is not summarized, which one of the following could be true? \nOptions: \nA. F is summarized.\nB. K is summarized.\nC. O is summarized.\nD. T is discussed earlier than F.\nE. The third book discussed is not summarized.\n"
+      explanation: "Since N is the second book discussed, it cannot be summarized, and neither can the book discussed in the first week (since no two books that are summarized can be discussed in consecutive weeks). Therefore, if F is summarized, it must be discussed in either the third or fourth week. The conditions also state that F is discussed earlier than O, and O is discussed earlier than both K and R. Therefore, if F is discussed in the third week, then O must be discussed in the fourth week, K must be discussed in the fifth week, and R must be discussed in the sixth week. This satisfies all the conditions. Therefore, (A)F is summarized is the correct answer.. The answer is (A)."
+      gold: [ "A" ]
+      few_shot: 1
+    - query: "    Question: Which one of the following is a pair of products that could be advertised during the same week as each other? \nOptions: \nA. G and H\nB. H and J\nC. H and O\nD. K and O\nE. M and O\n"
+      explanation: "We know that O is advertised during week 3, and K is advertised during one of the first two weeks. This means that K cannot be paired with O, and so options (A), (B), and (D) can be eliminated. We also know that one of the products will be advertised during two of the weeks, but not during week 3. Since K cannot be paired with O, the only remaining options are G, H, J, L, and M. However, we know that J cannot be advertised unless H was advertised during the immediately preceding week. This means that J and H must be paired together, leaving G, L, and M as the remaining options. Finally, we know that G cannot be advertised unless either J or O is also advertised that week. Since J is already paired with H, this means that G must be paired with O. Therefore, the pair of products that could be advertised during the same week as each other is M and O, making option (E) the correct answer.. The answer is (E)."
+      gold: [ "E" ]
+      few_shot: 1
+

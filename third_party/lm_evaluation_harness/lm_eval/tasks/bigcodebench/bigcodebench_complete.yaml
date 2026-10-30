@@ -1,0 +1,3 @@
+include: _sample_config
+task: bigcodebench_complete
+dataset_path: bigcode/bigcodebench

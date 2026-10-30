@@ -1,0 +1,28 @@
+from . import multiple_utils
+
+LANGUAGES = [
+    "py",
+    "sh",
+    "clj",
+    "cpp",
+    "cs",
+    "d",
+    "dart",
+    "elixir",
+    "go",
+    "hs",
+    "java",
+    "js",
+    "jl",
+    "lua",
+    "ml",
+    "pl",
+    "php",
+    "r",
+    "rkt",
+    "rb",
+    "rs",
+    "scala",
+    "swift",
+    "ts",
+]

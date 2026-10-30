@@ -1,0 +1,11 @@
+include: _default_template.yaml
+task: multiple-php
+dataset_name: humaneval-php
+generation_kwargs:
+  until:
+    - "\nfunction"
+    - "\n?>"
+    - "\n//"
+    - "\n#"
+metadata:
+  language: php

@@ -1,0 +1,28 @@
+task: gpqa_diamond_cot_n_shot_sampled
+include: _gpqa_cot_n_shot_yaml
+dataset_name: gpqa_diamond
+num_fewshot: 0
+description: "Answer the following multiple choice question. Think step by step and conclude with \"The answer is (X)\" where X is the correct letter.\n\n"
+process_results: !function utils.exact_match_passk
+filter_list:
+  - name: "flexible-extract"
+    filter:
+      - function: "multi_choice_regex"
+        group_select: -1
+        ignore_case: true
+        ignore_punctuation: true
+        regex_pattern: "(\\([A-Z]\\))"
+generation_kwargs:
+  until:
+    - "</s>"
+    - "Question:"
+    - "Q:"
+    - "<|im_end|>"
+    - "<|endoftext|>"
+    - "<|eot_id|>"
+    - "<extra_id_1>"
+  max_gen_toks: 2048
+  do_sample: true
+  temperature: 0.7
+repeats: 8
+metric_list: []

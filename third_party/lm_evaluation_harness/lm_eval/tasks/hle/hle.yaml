@@ -1,0 +1,3 @@
+group: hle
+task:
+  - hle_text

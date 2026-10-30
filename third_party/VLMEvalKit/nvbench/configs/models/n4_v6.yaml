@@ -1,0 +1,13 @@
+schema_version: 1
+model:
+  name: n4_v6
+  tokenizer:
+    repository: nvidia/n4-v6-262k
+    revision: 8f5dd326777cbdd5c018d92ba35f473d971e121d
+  server:
+    overrides:
+      tokenizer-prompt-format: mistral
+      vlm-language-transformer-impl: inference_optimized
+      vlm-image-preprocess-preset: mistral-crawl-eval
+      moe-router-dtype: fp32
+      inference-moe-token-dispatcher-type: nccl

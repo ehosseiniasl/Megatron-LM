@@ -1,0 +1,3 @@
+include: _sample_config
+task: comp_math_24_25
+dataset_path: gitlab:comp_math_24_25/test.parquet

@@ -1,0 +1,3 @@
+extends: nvidia_data_sharing_1t_4096_MISTRAL.yaml
+interdocument_masking: false
+original_seq_len: 8192

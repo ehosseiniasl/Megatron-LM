@@ -1,0 +1,14 @@
+version: 1
+tokenizer_path: /scratch/fsw/portfolios/nemotron/projects/nemotron_n4_pre/shared/tokenizers/lobstenizer_hf
+jsonl_root_data_dir: /lustre/fsw/portfolios/nemotron/users/thib.ma/data/debug_pr214_document_filters/raw
+sources:
+  - jsonl_dir: /lustre/fsw/portfolios/nemotron/users/thib.ma/data/debug_pr214_document_filters/raw/wikibooks_2chunks
+    weight: 1.0
+    percentage_data: 1.0
+    sample_type: pretrain
+    image_transform_type: null
+    filter: multimodal_v4__lobstral
+    rare_token_filter: null
+    pds_filter: null
+    masking_strategy: null
+    bad_document_filter: nvidia_bad_documents_DEBUG

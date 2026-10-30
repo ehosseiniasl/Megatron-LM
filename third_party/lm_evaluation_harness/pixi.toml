@@ -1,0 +1,37 @@
+[project]
+name = "lm-eval-multiple"
+version = "0.1.0"
+description = "Language compilers for MultiPL-E benchmark evaluation"
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64"]
+
+[dependencies]
+nodejs = ">=18"
+typescript = "*"
+openjdk = ">=17"
+go = ">=1.21"
+rust = ">=1.70"
+ruby = ">=3"
+r-base = ">=4"
+lua = ">=5.4"
+perl = ">=5"
+perl-test-deep = "*"
+cxx-compiler = "*"
+
+# Linux-only dependencies (not available on osx-arm64 via conda-forge)
+[target.linux-64.dependencies]
+php = ">=8"
+julia = ">=1.9"
+
+[tasks]
+# Run lm_eval with code compilers available (uses existing env/bin/activate)
+lm_eval_code = { cmd = "bash -c 'source env/bin/activate && lm_eval \"$@\"' --", description = "Run lm_eval with code compilers in PATH" }
+
+# Run arbitrary Python scripts with compilers available
+python = { cmd = "bash -c 'source env/bin/activate && python \"$@\"' --", description = "Run Python with compilers in PATH" }
+
+# Test the MultiPL-E evaluation pipeline
+test_multiple = { cmd = "bash -c 'source env/bin/activate && python lm_eval/tasks/multiple/test_multiple.py'", description = "Test MultiPL-E evaluation" }
+
+# Rescore MultiPL-E samples from a previous evaluation run
+rescore_multiple = { cmd = "bash -c 'source env/bin/activate && python lm_eval/tasks/multiple/rescore_multiple.py \"$@\"' --", description = "Rescore MultiPL-E samples" }

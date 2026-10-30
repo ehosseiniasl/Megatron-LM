@@ -1,0 +1,45 @@
+dataset_path: m-a-p/SuperGPQA
+tag: supergpqa
+output_type: generate_until
+process_docs: !function utils.process_docs
+training_split: train
+# Because huggingface dataset only has train split
+validation_split: train
+test_split: null
+doc_to_text: |
+    Answer the following multiple choice question. There is only one correct answer. The last line of your response should be in the format 'Answer: $LETTER' (without quotes), where LETTER is one of {% for choice in choices %}{% if loop.index0 > 0 %}{% if loop.last %} or {% else %}, {% endif %}{% endif %}{{ "ABCDEFGHIJ"[loop.index0] }}{% endfor %}.
+
+    Question:
+    {{Question}}
+    {% for choice in choices %}{{ "ABCDEFGHIJ"[loop.index0] }}) {{ choice }}
+    {% endfor %}
+    Answer: Let's think step by step.
+doc_to_target: answer
+filter_list:
+  - name: "strict-match"
+    filter:
+      - function: "regex"
+        regex_pattern: "(?<=The answer is )(.*)(?=.)"
+      - function: "take_first"
+  - name: "flexible-extract"
+    filter:
+      - function: "multi_choice_regex"
+        group_select: -1
+        ignore_case: true
+        ignore_punctuation: true
+        regex_pattern: "(\\([A-Z]\\))"
+      - function: "take_first"
+generation_kwargs:
+  until:
+    - "</s>"
+  do_sample: false
+  temperature: 0.0
+num_fewshot: 0
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+    ignore_case: true
+    ignore_punctuation: true
+metadata:
+  version: 1.0

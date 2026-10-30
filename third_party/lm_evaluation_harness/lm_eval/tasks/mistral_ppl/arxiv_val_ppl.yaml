@@ -1,0 +1,5 @@
+task: mistral_ppl_arxiv_val_ppl
+dataset_name: arxiv_val_ppl
+dataset_kwargs:
+  subset: arxiv_val_ppl
+include: _base_config.yaml

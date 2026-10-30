@@ -1,0 +1,48 @@
+# TODO(sanjeev): Include the few-shot prompt as in the repo.
+task: agieval_aqua_rat
+dataset_path: hails/agieval-aqua-rat
+dataset_name: null
+output_type: multiple_choice
+training_split: null
+validation_split: null
+test_split: test
+doc_to_target: "{{gold}}"
+doc_to_text: !function utils.doc_to_text
+doc_to_choice: ["Answer: A",
+    "Answer: B",
+    "Answer: C",
+    "Answer: D",
+    "Answer: E"]
+process_results: !function utils.process_results_mcqa
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+  - metric: acc_norm
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
+
+num_fewshot: 5
+fewshot_config:
+  sampler: first_n
+  samples:
+    - query: "    A cycled from P to Q at 10 kmph and returned at the rate of 9 kmph. B cycled both ways at 12 kmph. In the whole journey B took 10 minutes less than A. Find the distance between P and Q. \n   A. 1.75km\n   B. 2.75km\n   C. 3.75km\n   D. 4.75km\n   E. 5.75km\n"
+      gold: [ "Answer: C" ]
+      few_shot: 1
+    - query: "    In a poll of 45,000 dentists, only 30 percent responded; of these, 20 percent claimed to prefer Toothpaste A. How many of the dentists who responded did not claim a preference for Toothpaste A? \n   A. 2,200\n   B. 2,640\n   C. 6,160\n   D. 8,800\n   E. 10,800\n"
+      gold: [ "Answer: E" ]
+      few_shot: 1
+    - query: "    In a shipment of 120 machine parts, 5 percent were defective. In a shipment of 80 machine parts, 10 percent were defective. For the two shipments combined, what percent of the machine parts were defective? \n   A. 6.5%\n   B. 7.0%\n   C. 7.5%\n   D. 8.0%\n   E. 8.5%\n"
+      gold: [ "Answer: C" ]
+      few_shot: 1
+    - query: "    In recent Malta elections, in a particular constituency, 100,000 votes were cast and each vote was cast for either Candidate A or Candidate B. If candidate A has won by 500 votes, what percent of the 100,000 votes were cast for Candidate A? \n   A. 50.05%\n   B. 50.25%\n   C. 50.5%\n   D. 51%\n   E. 52.5%\n"
+      gold: [ "Answer: B" ]
+      few_shot: 1
+    - query: "    In 4 years, Raj's father will be double Raj's age then. Two years ago, while his mother was twice his age that time. If Raj is going to be 32 years old 8 years from now, then what is the sum of his parents age now? \n   A. 97\n   B. 98\n   C. 99\n   D. 100\n   E. 101\n"
+      gold: [ "Answer: B" ]
+      few_shot: 1
+
+
+
